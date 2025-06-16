@@ -3,6 +3,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.shape.Circle;
 
 public class AppliLib extends Application {
 
@@ -14,10 +15,15 @@ public class AppliLib extends Application {
 
     @Override
     public void init() {
+        Circle shapOfButt = new Circle(5);
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
         this.menuAcc = new MenuAcceuil(this.btnQuitte, this.connexion, this.creeCompte);
+        this.btnQuitte.setShape(shapOfButt);
+        bt.setMinSize(35 * 1.5, 20 * 1.5);
+        bt.setMaxSize(35 * 1.5, 20 * 1.5);
+
     }
 
     @Override

@@ -25,6 +25,7 @@ public class MenuAcceuil extends BorderPane {
 
     public HBox top() {
         HBox hb = new HBox(5);
+        hb.setFillHeight(false);
         Text txt = new Text("Livre Expresss");
         txt.setFont(Font.font("Arial", 30));
         ImageView logo = new ImageView("../img/logo_placeholder.png");
