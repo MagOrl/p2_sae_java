@@ -44,7 +44,6 @@ public class AppliLib extends Application {
         this.creeCompte.setMinHeight(40);
         this.creeCompte.setMinWidth(90);
         this.menuAcc = new MenuAcceuil(this.btnQuitte, this.connexion, this.creeCompte);
-        this.setPadding(new Insets(10));
 
     }
 
