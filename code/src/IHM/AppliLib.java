@@ -2,35 +2,34 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.Group;
-import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.paint.Color;
-import javafx.geometry.Pos;
-import javafx.scene.text.Font;
-import javafx.geometry.Orientation;
-import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Background;
-import javafx.event.EventHandler;
 
 public class AppliLib extends Application {
 
+    private Scene scene;
+    private Button btnQuitte;
+    private Button creeCompte;
+    private Button connexion;
+    private MenuAcceuil menuAcc;
+
     @Override
     public void init() {
-        
+        this.btnQuitte = new Button("Quitter");
+        this.connexion = new Button("Connexion");
+        this.creeCompte = new Button("Créer compte");
+        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.connexion, this.creeCompte);
     }
 
     @Override
     public void start(Stage stg) {
+        this.scene = new Scene(this.menuAcc);
+        stg.setScene(this.scene);
+        stg.setTitle("Menu principale");
+        stg.show();
+    }
 
+    public void afficheMenuAcceuil() {
+        this.scene.setRoot(new MenuAcceuil(this.btnQuitte, this.connexion, this.creeCompte));
     }
 
 }
