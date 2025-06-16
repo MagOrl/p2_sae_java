@@ -12,6 +12,15 @@ public class AppliLib extends Application {
     private Button creeCompte;
     private Button connexion;
     private MenuAcceuil menuAcc;
+    public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
+            "-fx-border-radius: 50; " +
+            "-fx-background-radius: 20;" +
+            "-fx-border-color:rgb(32, 33, 32);" +
+            "-fx-border-width: 2;" +
+            "-fx-text-fill: white;";
+    public static String styleBanniere = "-fx-border-radius: 15;" +
+            "-fx-border-color:rgb(0, 0, 0);" +
+            "-fx-border-width: 3;"+"-fx-background-color: #0b7f94;" +"-fx-border-insets: -2.5px;" ;
 
     @Override
     public void init() {
@@ -19,12 +28,14 @@ public class AppliLib extends Application {
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
         this.menuAcc = new MenuAcceuil(this.btnQuitte, this.connexion, this.creeCompte);
-        this.btnQuitte.setStyle("-fx-background-color: #4CAF50;" +
-                "-fx-border-radius: 50; " +
-                "-fx-background-radius: 20;" +
-                "-fx-border-color: #388E3C;" +
-                "-fx-border-width: 2;" +
-                "-fx-text-fill: white;");
+        this.btnQuitte.setStyle(styleBouton);
+        this.connexion.setStyle(styleBouton);
+        this.creeCompte.setStyle(styleBouton);
+        this.connexion.setMinHeight(40);        
+        this.connexion.setMinWidth(90);
+
+        this.btnQuitte.setMinHeight(40);
+        this.btnQuitte.setMinWidth(90);
     }
 
     @Override
