@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": [
+        "src",
+        "src/modele"
+    ],
+    "java.project.referencedLibraries": [
+        "/usr/share/openjfx/lib/javafx.controls.jar"
+    ]
+}
