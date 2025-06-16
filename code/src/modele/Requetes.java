@@ -324,9 +324,7 @@ public class Requetes {
 
             }
         }
-        for (Integer idmag : livreMag.keySet()) {
-            livreMag.remove(idmag);
-        }
+        livreMag.clear();
     }
 
     /**
