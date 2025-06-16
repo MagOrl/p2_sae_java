@@ -1,4 +1,6 @@
 ./src/IHM/AppliLib.java
+./src/IHM/MenuCreaCompte.java
+./src/IHM/MenuAcceuil.java
 ./src/modele/Administrateur.java
 ./src/modele/AdministrateurBD.java
 ./src/modele/Auteur.java
