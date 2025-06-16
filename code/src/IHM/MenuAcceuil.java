@@ -2,6 +2,8 @@
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.text.Font;
 import javafx.scene.image.Image;
@@ -23,15 +25,27 @@ public class MenuAcceuil extends BorderPane {
         this.setRight(right());
     }
 
-    public HBox top() {
-        HBox hb = new HBox(5);
+    public BorderPane top() {
+        BorderPane bp = new BorderPane();
+        // bp.setFillHeight(false);
+
         Text txt = new Text("Livre Expresss");
         txt.setFont(Font.font("Arial", 30));
         ImageView logo = new ImageView("../img/logo_placeholder.png");
         logo.setFitHeight(48);
         logo.setFitWidth(48);
-        hb.getChildren().addAll(txt, logo, creeCompte, btnQuitte);
-        return hb;
+
+        HBox hbleft = new HBox(10);
+        HBox hbright = new HBox(10);
+        hbleft.getChildren().addAll(txt, logo);
+        hbright.getChildren().addAll(this.creeCompte, this.btnQuitte);
+        bp.setLeft(hbleft);
+        bp.setRight(hbright);
+
+        bp.setStyle(AppliLib.styleBanniere);
+        bp.setPadding(new Insets(20));
+
+        return bp;
     }
 
     public Pane center() {
