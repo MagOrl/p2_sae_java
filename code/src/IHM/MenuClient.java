@@ -18,7 +18,8 @@ import javafx.scene.text.Text;
 import java.util.Map;
 import java.util.HashMap;
 import java.sql.SQLException;
-import javax.swing.text.html.ImageView;
+import java.util.Random;
+import java.lang.Math;
 
 public class MenuClient extends BorderPane {
 
@@ -30,6 +31,8 @@ public class MenuClient extends BorderPane {
 
     private Map<Integer, List<List<Livre>>> recommandations;
 
+    private List<Livre> listeRecommandes;
+
     public MenuClient(AppliLib appli) {
         super();
 
@@ -37,9 +40,10 @@ public class MenuClient extends BorderPane {
         this.clientBD = this.appli.getClientBD();
         this.client = (Client) this.appli.getUtilisateur();
         this.recommandations = lesRecommandations();
+        this.listeRecommandes = livresRecommandes();
 
         this.setTop(this.ajouteTop());
-        // this.setLeft(this.ajouteLeft());
+        this.setLeft(this.ajouteLeft());
         // this.setCenter(this.ajouteRight());
     }
 
@@ -125,14 +129,27 @@ public class MenuClient extends BorderPane {
         return top;
     }
 
-    public VBox setLeft() {
+    public VBox ajouteLeft() {
         VBox left = new VBox();
 
         VBox blocObservable = new VBox();
         ImageView liv = new ImageView(new Image("../logo.png"));
         liv.setFitHeight(200);
         liv.setFitWidth(200);
-        Text titre = new Text();
+        int i = (int) Math.round(Math.random()*this.livresRecommandes().size());
+        Text titre = new Text(this.listeRecommandes.get(i).getTitre());
+        HBox blocA = new HBox();
+        Text date = new Text(this.listeRecommandes.get(i).getDatePubli());
+        Text prix = new Text(""+this.listeRecommandes.get(i).getPrix());
+        blocA.getChildren().addAll(date,prix);
+        blocObservable.getChildren().addAll(liv,titre,blocA);
+        Button consulter = new Button("Consulter");
+        //consulter.setOnAction(new ControleurConsulter(this.appli, this));
+        consulter.setStyle(AppliLib.styleBouton);
+        consulter.setMinHeight(40);
+        consulter.setMinWidth(90);
+        consulter.setSkin(new MyButtonSkin(consulter));
+        left.getChildren().addAll(blocObservable,consulter);
         return left;
     }
 
@@ -152,6 +169,16 @@ public class MenuClient extends BorderPane {
             this.appli.popUpPasDeMagasins();
         }
         return recommendations;
+    }
+
+    public List<Livre> livresRecommandes(){
+        List<Livre> livres = new ArrayList<>();
+        for (List<List<Livre>> listes : this.recommandations.values()){
+            for (List<Livre> petiteListe : listes){
+                livres.addAll(petiteListe);
+            }
+        }
+        return livres;
     }
 
 }
