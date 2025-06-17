@@ -168,8 +168,8 @@ public class MenuGererStocksGlobaux extends BorderPane{
         barreDeRecherche.setStyle(AppliLib.styleTextField);
         //--------------------------------------------------------
 
-        bandeau.setLeft(vbLeft);
         bandeau.setRight(btDeconexion);
+        bandeau.setLeft(vbLeft);
         
         bandeau.setStyle(AppliLib.styleBanniere);
         bandeau.setPadding(new Insets(20));
