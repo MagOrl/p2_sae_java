@@ -1,9 +1,12 @@
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.shape.Circle;
 
 public class AppliLib extends Application {
@@ -28,6 +31,10 @@ public class AppliLib extends Application {
             "-fx-border-color:rgb(32, 33, 32);" +
             "-fx-border-width: 2;" +
             "-fx-text-fill: white;";
+    public static String styleTextField = "    -fx-background-color: #dbb1b1, #fff0f0;\n" +
+            "    -fx-background-radius: 15;\n" +
+            "    -fx-border-radius: 15;\n" +
+            "    -fx-border-color: black;";
 
     @Override
     public void init() {
@@ -43,7 +50,8 @@ public class AppliLib extends Application {
         this.btnQuitte.setMinWidth(90);
         this.creeCompte.setMinHeight(40);
         this.creeCompte.setMinWidth(90);
-        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.connexion, this.creeCompte);
+        this.btnQuitte.setOnAction(new ControlleurQuitter(this));
+        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion);
 
     }
 
@@ -57,5 +65,16 @@ public class AppliLib extends Application {
 
     public void afficheMenuAcceuil() {
         this.scene.setRoot(this.menuAcc);
+    }
+
+    public void quitte() {
+        Platform.exit();
+    }
+
+    public Alert popUpQuitte() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Êtes vous sûr de quitter ?", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Attention");
+        return alert;
     }
 }

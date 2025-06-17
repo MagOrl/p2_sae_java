@@ -4,6 +4,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -30,16 +31,17 @@ public class MenuAcceuil extends BorderPane {
         this.tfID = new TextField();
         this.pf = new PasswordField();
         this.cb = new ComboBox<>();
+        this.cb.getItems().addAll("Client", "Vendeur", "Administrateur");
+
+        this.tfID.setStyle(AppliLib.styleTextField);
+        this.pf.setStyle(AppliLib.styleTextField);
+        this.cb.setStyle(AppliLib.styleTextField);
+
         this.btnQuitte = btnQuitte;
         this.connexion = connexion;
         this.creeCompte = creeCompte;
-        ImageView logo = new ImageView("../img/PileOfBooks.png");
-        logo.setFitHeight(400);
-        logo.setFitWidth(200);
         this.setTop(top());
-        this.setLeft(left());
-        this.setRight(logo);
-
+        this.setCenter(left());
     }
 
     public BorderPane top() {
@@ -60,9 +62,11 @@ public class MenuAcceuil extends BorderPane {
         return bp;
     }
 
-    public GridPane left() {
+    public HBox left() {
+        HBox hb = new HBox(100);
         GridPane gp = new GridPane();
         Text txt = new Text("Se connecter"); // c r c r
+        txt.setFont(Font.font("Arial", FontWeight.BOLD, 25));
         gp.add(new Label("Identifiant : "), 0, 1);
         gp.add(new Label("Mot de passe : "), 0, 2);
         gp.add(new Label("Compte : "), 0, 3);
@@ -75,9 +79,13 @@ public class MenuAcceuil extends BorderPane {
         gp.setPadding(new Insets(20));
         gp.setVgap(20.0);
         gp.setHgap(50.0);
-
-        return gp;
-
+        ImageView logo = new ImageView("../img/PileOfBooks.png");
+        logo.setFitHeight(400);
+        logo.setFitWidth(200);
+        hb.getChildren().addAll(gp, logo);
+        hb.setPadding(new Insets(10));
+        hb.setAlignment(Pos.BOTTOM_LEFT);
+        return hb;
     }
 
 }
