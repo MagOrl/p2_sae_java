@@ -65,6 +65,9 @@ public class AppliLib extends Application {
         this.creeCompte.setMinWidth(90);
         this.btnQuitte.setOnAction(new ControlleurQuitter(this));
         this.connexion.setOnAction(new ControlleurConnexion(this));
+        this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
+        this.connexion.setSkin(new MyButtonSkin(this.connexion));
+        this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
         this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion);
 
     }
