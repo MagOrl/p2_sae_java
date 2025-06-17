@@ -1,5 +1,6 @@
 ./src/IHM/MenuCreaCompte.java
 ./src/IHM/MenuAcceuil.java
+./src/IHM/ControleurUtilisateur.java
 ./src/IHM/MyButtonSkin.java
 ./src/IHM/ControlleurConnexion.java
 ./src/IHM/AppliLib.java

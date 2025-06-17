@@ -26,11 +26,13 @@ public class MenuAcceuil extends BorderPane {
     private TextField tfID;
     private PasswordField pf;
     private ComboBox<String> cb;
+    private ComboBox<String> nomMag;
 
-    public MenuAcceuil(Button btnQuitte, Button creeCompte, Button connexion) {
+    public MenuAcceuil(Button btnQuitte, Button creeCompte, Button connexion,ComboBox<String> nomMag) {
         this.tfID = new TextField();
         this.pf = new PasswordField();
         this.cb = new ComboBox<>();
+        this.nomMag = nomMag;
         this.cb.getItems().addAll("Client", "Vendeur", "Administrateur");
         this.tfID.setStyle(AppliLib.styleTextField);
         this.pf.setStyle(AppliLib.styleTextField);
@@ -73,11 +75,14 @@ public class MenuAcceuil extends BorderPane {
         gp.add(this.tfID, 1, 1);
         gp.add(this.pf, 1, 2);
         gp.add(this.cb, 1, 3);
-        gp.add(this.connexion, 1, 4, 6, 1);
+        gp.add(this.connexion, 1, 5, 6, 1);
         gp.setStyle(AppliLib.styleDefaultContainer);
         gp.setPadding(new Insets(20));
         gp.setVgap(20.0);
         gp.setHgap(50.0);
+        
+        this.cb.valueProperty().addListener(new ControleurUtilisateur(gp,nomMag));
+
         ImageView logo = new ImageView("../img/PileOfBooks.png");
         logo.setFitHeight(400);
         logo.setFitWidth(200);
@@ -99,9 +104,15 @@ public class MenuAcceuil extends BorderPane {
         return this.pf.getText();
     }
 
-    public void resetFields(){
+    public void resetFields() {
         this.tfID.setText("");
         this.pf.setText("");
+    }
+
+    public void setError() {
+        this.tfID.setStyle("-fx-border-color: red;");
+        this.pf.setStyle("-fx-border-color: red;");
+
     }
 
 }

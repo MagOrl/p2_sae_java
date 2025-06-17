@@ -1,4 +1,7 @@
 
+import java.sql.SQLException;
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -7,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.shape.Circle;
 
 public class AppliLib extends Application {
@@ -21,6 +25,8 @@ public class AppliLib extends Application {
     private ClientBD clientBD;
     private Personne utilisateur;
     private ConnexionMySQL connexionSQL;
+    private ComboBox<String> nomMag;
+
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
             "-fx-background-radius: 20;" +
@@ -51,6 +57,12 @@ public class AppliLib extends Application {
         this.clientBD = new ClientBD(this.connexionSQL);
         this.adminBD = new AdministrateurBD(this.connexionSQL);
         this.vendeurBD = new VendeurBD(this.connexionSQL);
+        this.nomMag = new ComboBox<>();
+        try {
+            this.nomMag.getItems().addAll(this.vendeurBD.choixLibrairie());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
@@ -68,7 +80,7 @@ public class AppliLib extends Application {
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
         this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
-        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion);
+        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion,this.nomMag);
 
     }
 
@@ -131,5 +143,8 @@ public class AppliLib extends Application {
 
     public void setUtilisateur(Personne pers) {
         this.utilisateur = pers;
+    }
+    public String getValMag(){
+        return this.nomMag.getValue();
     }
 }

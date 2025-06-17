@@ -13,12 +13,13 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent arg0) {
+        String tf = this.app.getMenuAcc().getValTfID();
+        String pf = this.app.getMenuAcc().getValPf();
         switch (this.app.getMenuAcc().getValComboBox()) {
             case "Client":
                 try {
-                    if (this.app.getClientBD().connectClient(this.app.getMenuAcc().getValTfID(),
-                            this.app.getMenuAcc().getValPf())) {
-
+                    if (this.app.getClientBD().connectClient(tf, pf)) {
+                        Client cli = this.app.getClientBD().trouveClient(tf, pf);
                     } else {
                         this.app.getMenuAcc().resetFields();
                         this.app.popUpMauvaiseSaisie().showAndWait();
@@ -30,9 +31,8 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
                 break;
             case "Vendeur":
                 try {
-                    if (this.app.getVendeurBD().connectVendeur(this.app.getMenuAcc().getValTfID(),
-                            this.app.getMenuAcc().getValPf())) {
-
+                    if (this.app.getVendeurBD().connectVendeur(tf,pf)) {
+                        Vendeur vend = this.app.getVendeurBD().trouveVendeur(tf, pf,this.app.getValMag());
                     } else {
                         this.app.getMenuAcc().resetFields();
                         this.app.popUpMauvaiseSaisie().showAndWait();
@@ -45,9 +45,8 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
                 break;
             case "Administrateur":
                 try {
-                    if (this.app.getAdminBD().connectAdmin(this.app.getMenuAcc().getValTfID(),
-                            this.app.getMenuAcc().getValPf())) {
-
+                    if (this.app.getAdminBD().connectAdmin(tf,pf)) {
+                        Administrateur admin = this.app.getAdminBD().trouveAdmin(tf, pf);
                     } else {
                         this.app.getMenuAcc().resetFields();
                         this.app.popUpMauvaiseSaisie().showAndWait();
