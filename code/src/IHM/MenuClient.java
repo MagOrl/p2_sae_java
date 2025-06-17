@@ -9,13 +9,16 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import java.util.Map;
 import java.util.HashMap;
-
+import java.sql.SQLException;
+import javax.swing.text.html.ImageView;
 
 public class MenuClient extends BorderPane {
 
@@ -23,67 +26,132 @@ public class MenuClient extends BorderPane {
 
     private Client client;
 
+    private ClientBD clientBD;
 
-    public MenuClient(AppliLib appli){
+    private Map<Integer, List<List<Livre>>> recommandations;
+
+    public MenuClient(AppliLib appli) {
         super();
 
+        this.appli = appli;
         this.clientBD = this.appli.getClientBD();
-        this.client = this.appli.getUtilisateur();
+        this.client = (Client) this.appli.getUtilisateur();
+        this.recommandations = lesRecommandations();
 
         this.setTop(this.ajouteTop());
-        this.setLeft(this.ajouteLeft());
-        this.setCenter(this.ajouteRight());
+        // this.setLeft(this.ajouteLeft());
+        // this.setCenter(this.ajouteRight());
     }
 
-    public HBox ajouteTop(){
+    public HBox ajouteTop() {
         HBox top = new HBox();
 
-        VBox blocA = new VBox();
+        VBox blocA = new VBox(10);
         Text titre = new Text("Livre Express");
-        Text nomCli = new Text(this.client.getNom()+" "+this.client.getPrenom());
-        blocA.getChildren().addAll(titre,nomCli);
+        titre.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+        Text nomCli = new Text(this.client.getNom() + " " + this.client.getPrenom());
+        nomCli.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+        blocA.getChildren().addAll(titre, nomCli);
 
-        ImageView logo = new ImageView(new Image("../../img/logo.png"));
-        Button recherche = new Button("", new ImageView(new Image("../../img/loupe.png")));
+        ImageView logo = new ImageView(new Image("../img/logo.png"));
+        logo.setFitHeight(96);
+        logo.setFitWidth(96);
+        ImageView loupe = new ImageView(new Image("../img/loupe.png"));
+        loupe.setFitHeight(65);
+        loupe.setFitWidth(65);
+        Button recherche = new Button("", loupe);
+        recherche.setStyle(AppliLib.styleBoutonImg);
+        recherche.setMinHeight(40);
+        recherche.setMinWidth(90);
+        recherche.setSkin(new MyButtonSkin(recherche));
 
-        Text themeRech = new Text("Thêmes");
         VBox lesThemes = new VBox();
-        Map<Integer,String> themesBD = this.appli.afficheThemes();
-        for (String theme : themesBD.values()){
-            RadioButton t = new RadioButton(theme);
-            t.setOnAction(new ControleurTheme());
-            lesThemes.getChildren().add(t);
+        ToggleGroup groupTheme = new ToggleGroup();
+        try {
+            Map<Integer, String> themesBD = this.clientBD.afficheThemes();
+            for (String theme : themesBD.values()) {
+                RadioButton t = new RadioButton(theme);
+                t.setToggleGroup(groupTheme);
+                // t.setOnAction(new ControleurTheme());
+                lesThemes.getChildren().add(t);
+            }
+        } catch (Exception e) {
+            this.appli.popUpPasDeThemes();
         }
-        TitledPane themes = new TitledPane(themeRech, lesThemes);
+        TitledPane themes = new TitledPane("Thêmes", lesThemes);
 
         VBox blocB = new VBox();
-        Button accesPanier = new Button("", new ImageView(new Image("../../img/panier.png")));
-        Button histori = new Button("", new ImageView(new Image("../../img/historique.png")));
-        accesPanier.setOnAction(new ControleurPanier());
-        histori.setOnAction(new ControleurHistorique());
-        blocB.getChildren().addAll(accesPanier,histori);
+        ImageView pan = new ImageView(new Image("../img/panier.png"));
+        pan.setFitHeight(65);
+        pan.setFitWidth(65);
+        Button accesPanier = new Button("", pan);
+        accesPanier.setStyle(AppliLib.styleBoutonImg);
+        accesPanier.setMinHeight(40);
+        accesPanier.setMinWidth(90);
+        accesPanier.setSkin(new MyButtonSkin(accesPanier));
+        ImageView histo = new ImageView(new Image("../img/historique.png"));
+        histo.setFitHeight(65);
+        histo.setFitWidth(65);
+        Button histori = new Button("", histo);
+        histori.setStyle(AppliLib.styleBoutonImg);
+        histori.setMinHeight(40);
+        histori.setMinWidth(90);
+        histori.setSkin(new MyButtonSkin(histori));
+        // accesPanier.setOnAction(new ControleurPanier());
+        // histori.setOnAction(new ControleurHistorique());
+        blocB.getChildren().addAll(accesPanier, histori);
 
-        VBox blocC = new VBox();
+        VBox blocC = new VBox(10);
         Button deco = new Button("Déconnexion");
+        deco.setStyle(AppliLib.styleBouton);
+        deco.setMinHeight(40);
+        deco.setMinWidth(90);
+        deco.setSkin(new MyButtonSkin(deco));
         Button infosPerso = new Button("Informations personelles");
-        deco.setOnAction(new ControleurDeconnexion());
-        infosPerso.setOnAction(new ControleurInfosPersos());
-        blocB.getChildren().addAll(deco,infosPerso);
+        infosPerso.setStyle(AppliLib.styleBouton);
+        infosPerso.setMinHeight(40);
+        infosPerso.setMinWidth(90);
+        infosPerso.setSkin(new MyButtonSkin(infosPerso));
+        deco.setOnAction(new ControleurDeconnexion(this.appli));
+        // infosPerso.setOnAction(new ControleurInfosPersos());
+        blocC.getChildren().addAll(deco, infosPerso);
 
-        top.getChildren().addAll(blocA,logo,recherche,themes,blocB,blocC);
+        top.getChildren().addAll(blocA, logo, recherche, themes, blocB, blocC);
+
+        top.setAlignment(Pos.BASELINE_CENTER);
+
+        top.setStyle(AppliLib.styleBanniere);
+        top.setPadding(new Insets(20));
         return top;
     }
 
-    public VBox setLeft(){
+    public VBox setLeft() {
         VBox left = new VBox();
 
         VBox blocObservable = new VBox();
-
+        ImageView liv = new ImageView(new Image("../logo.png"));
+        liv.setFitHeight(200);
+        liv.setFitWidth(200);
+        Text titre = new Text();
+        return left;
     }
 
-    public Map<Integer,List<List<Livre>>> lesRecommendations(){
-        Map<Integer,List<List<Livre>>> recommendations = new HashMap<>();
-        for 
+    public Map<Integer, List<List<Livre>>> lesRecommandations() {
+        Map<Integer, List<List<Livre>>> recommendations = new HashMap<>();
+        Integer i = 0;
+        try {
+            for (Magasin mag : this.clientBD.afficheMagasin().values()) {
+                try {
+                    recommendations.put(i, this.clientBD.onVousRecommande(this.client, mag));
+                } catch (SQLException e) {
+                    this.appli.popUpPasDeRecommandations();
+                }
+                i++;
+            }
+        } catch (Exception e) {
+            this.appli.popUpPasDeMagasins();
+        }
+        return recommendations;
     }
 
 }

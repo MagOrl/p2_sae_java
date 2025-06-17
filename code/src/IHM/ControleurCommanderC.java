@@ -1,16 +1,16 @@
-import javafx.event.EventHandler;
-import javafx.event.ActionEvent;
+// import javafx.event.EventHandler;
+// import javafx.event.ActionEvent;
 
-public class ControleurCommanderC implements EventHandler<ActionEvent> {
+// public class ControleurCommanderC implements EventHandler<ActionEvent> {
 
-    private 
+//     private 
 
-    public ControleurCommanderC(){
+//     public ControleurCommanderC(){
         
-    }
+//     }
 
 
-    public void handle(ActionEvent event){
+//     public void handle(ActionEvent event){
 
-    }
-}
+//     }
+// }

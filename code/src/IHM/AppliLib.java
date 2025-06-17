@@ -24,6 +24,7 @@ public class AppliLib extends Application {
     private VendeurBD vendeurBD;
     private ClientBD clientBD;
     private Personne utilisateur;
+    private MenuClient menuCli;
     private ConnexionMySQL connexionSQL;
     private ComboBox<String> nomMag;
 
@@ -46,6 +47,8 @@ public class AppliLib extends Application {
             "    -fx-background-radius: 15;\n" +
             "    -fx-border-radius: 15;\n" +
             "    -fx-border-color: black;";
+    
+    public static String styleBoutonImg = "-fx-background-color: transparent;";
 
     @Override
     public void init() {
@@ -98,7 +101,10 @@ public class AppliLib extends Application {
 
 
     public void afficheMenuClient() {
-        this.scene.setRoot(new MenuClient(this));
+        if(this.menuCli == null)
+        this.menuCli = new MenuClient(this);
+        
+        this.scene.setRoot(this.menuCli);
     }
 
 
@@ -124,6 +130,27 @@ public class AppliLib extends Application {
         Alert alert = new Alert(Alert.AlertType.WARNING,
                 "Vous avez mal saisie votre identifiant ou votre mot de passe ", ButtonType.YES);
         alert.setTitle("Erreur");
+        return alert;
+    }
+
+    public Alert popUpPasDeRecommandations() {
+        Alert alert = new Alert(Alert.AlertType.WARNING, 
+            "Pas de recommandations pour vous.",ButtonType.YES);
+        alert.setTitle("Aucune recommandation");
+        return alert;
+    }
+
+    public Alert popUpPasDeThemes() {
+        Alert alert = new Alert(Alert.AlertType.WARNING, 
+            "Pas de thêmes existants.",ButtonType.YES);
+        alert.setTitle("Aucun thême");
+        return alert;
+    }
+
+    public Alert popUpPasDeMagasins() {
+        Alert alert = new Alert(Alert.AlertType.WARNING, 
+            "Pas de magasins existants.",ButtonType.YES);
+        alert.setTitle("Aucun magasin");
         return alert;
     }
 
