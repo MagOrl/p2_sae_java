@@ -1,4 +1,5 @@
 
+
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -13,13 +14,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
+import javax.security.auth.login.AppConfigurationEntry;
 
 
 public class MenuGererStocksGlobaux extends BorderPane{
     private Button btDeconexion;
     private Text prenom;
     private Text nom;
-    private String btRechercheStyle = "-fx-background-color : #0b7f94;";
+    private String btRechercheStyle = "-fx-background-color : rgb(255,255,255);";
 
     
     public MenuGererStocksGlobaux(Button bouton){
@@ -28,6 +30,7 @@ public class MenuGererStocksGlobaux extends BorderPane{
         this.nom = new Text();
         this.setTop(top());
         this.setLeft(left());
+        this.setCenter(center());
         
     }
 
@@ -177,13 +180,20 @@ public class MenuGererStocksGlobaux extends BorderPane{
     }
 
     public VBox center(){
-
+        
+        VBox vBoxCenter = new VBox();
+        VBox vBoxAfficheStock = new VBox();
 
         HBox top = new HBox();
         Text librairieActuelle = new Text("librairie actuelle : Cap au Sud");
-        Button changeLibrairie = new Button("Changer de librairie");
-        top.getChildren().addAll(librairieActuelle, changeLibrairie);
+        librairieActuelle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
+        Button changeLibrairie = new Button("Changer de librairie");
+        changeLibrairie.setSkin(new MyButtonSkin(changeLibrairie));
+        top.getChildren().addAll(librairieActuelle, changeLibrairie);
+        top.setMargin(changeLibrairie, new Insets(4,0,0,110));
+
+        
 
         HBox hbCenter = new HBox(10);
 
@@ -192,10 +202,70 @@ public class MenuGererStocksGlobaux extends BorderPane{
         imgwRecherche.setFitHeight(20);
         imgwRecherche.setFitWidth(20);
         Button recherche = new Button("",imgwRecherche);
-        recherche.setStyle(btRechercheStyle);
+        recherche.setStyle(AppliLib.styleBouton);
         recherche.setSkin(new MyButtonSkin(recherche));
 
-        return new VBox();
+        TextField barreDeRecherche = new TextField();
+        barreDeRecherche.setStyle(AppliLib.styleTextField);
+        hbCenter.getChildren().addAll(recherche, barreDeRecherche);
+
+        GridPane gpStocks = new GridPane();
+        
+        Text livre0 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
+        Text livre1 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
+        Text livre2 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
+        Text livre3 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
+        Text livre4 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
+
+
+        ImageView imgwSuppr = new ImageView();
+        imgwSuppr.setImage(new Image("../img/croix.png"));
+        imgwSuppr.setFitHeight(20);
+        imgwSuppr.setFitWidth(20);
+        Button btSuppr0 = new Button("",imgwSuppr);
+        btSuppr0.setStyle(AppliLib.styleBouton);
+        btSuppr0.setSkin(new MyButtonSkin(btSuppr0));
+
+        Button btSuppr1 = new Button("",imgwSuppr);
+        btSuppr1.setStyle(AppliLib.styleBouton);
+        btSuppr1.setSkin(new MyButtonSkin(btSuppr1));
+
+        Button btSuppr2 = new Button("",imgwSuppr);
+        btSuppr2.setStyle(AppliLib.styleBouton);
+        btSuppr2.setSkin(new MyButtonSkin(btSuppr2));
+
+
+        Button btSuppr3 = new Button("",imgwSuppr);
+        btSuppr3.setStyle(AppliLib.styleBouton);
+        btSuppr3.setSkin(new MyButtonSkin(btSuppr3));
+
+        Button btSuppr4 = new Button("",imgwSuppr);
+        btSuppr4.setStyle(AppliLib.styleBouton);
+        btSuppr4.setSkin(new MyButtonSkin(btSuppr4));
+
+
+        gpStocks.add(livre0, 0, 0);
+        gpStocks.add(livre1, 0, 1);
+        gpStocks.add(livre2, 0, 2);
+        gpStocks.add(livre3, 0, 3);
+        gpStocks.add(livre4, 0, 4);
+
+        gpStocks.add(btSuppr0, 1, 0);
+        gpStocks.add(btSuppr1, 1, 1);
+        gpStocks.add(btSuppr2, 1, 2);
+        gpStocks.add(btSuppr3, 1, 3);
+        gpStocks.add(btSuppr4, 1, 4);
+        
+        gpStocks.setVgap(2.0);
+        gpStocks.setHgap(5.0);
+        vBoxCenter.setStyle(AppliLib.styleDefaultContainer);
+        vBoxCenter.setPadding(new Insets(7));
+        vBoxCenter.getChildren().addAll(gpStocks);
+
+        VBox vBoxCenterPrincipal = new VBox();
+        vBoxCenterPrincipal.getChildren().addAll(top, hbCenter, vBoxCenter);
+        vBoxCenterPrincipal.setMargin(vBoxCenter, new Insets(14));
+        return vBoxCenterPrincipal;
 
 
     }
