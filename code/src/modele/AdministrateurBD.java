@@ -23,7 +23,7 @@ public class AdministrateurBD{
             // laConnexion.connecter("localhost", "Librairie", "root", "mypassword");
             // laConnexion.connecter("servinfo-maria", "DBarsamerzoev", "arsamerzoev",
             // "arsamerzoev");
-            File cache = new File("cachePourBaseDeDonne");
+            File cache = new File(".cachePourBaseDeDonne");
             Scanner reader = new Scanner(cache);
             while (reader.hasNextLine()) {
                 data.add(reader.nextLine());

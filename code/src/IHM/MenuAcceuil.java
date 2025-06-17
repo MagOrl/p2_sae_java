@@ -32,11 +32,10 @@ public class MenuAcceuil extends BorderPane {
         this.pf = new PasswordField();
         this.cb = new ComboBox<>();
         this.cb.getItems().addAll("Client", "Vendeur", "Administrateur");
-
         this.tfID.setStyle(AppliLib.styleTextField);
         this.pf.setStyle(AppliLib.styleTextField);
         this.cb.setStyle(AppliLib.styleTextField);
-
+        this.cb.setValue("");
         this.btnQuitte = btnQuitte;
         this.connexion = connexion;
         this.creeCompte = creeCompte;
@@ -86,6 +85,23 @@ public class MenuAcceuil extends BorderPane {
         hb.setPadding(new Insets(10));
         hb.setAlignment(Pos.BOTTOM_LEFT);
         return hb;
+    }
+
+    public String getValComboBox() {
+        return this.cb.getValue();
+    }
+
+    public String getValTfID() {
+        return this.tfID.getText();
+    }
+
+    public String getValPf() {
+        return this.pf.getText();
+    }
+
+    public void resetFields(){
+        this.tfID.setText("");
+        this.pf.setText("");
     }
 
 }

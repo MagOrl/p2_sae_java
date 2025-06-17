@@ -1,5 +1,6 @@
 ./src/IHM/MenuCreaCompte.java
 ./src/IHM/MenuAcceuil.java
+./src/IHM/ControlleurConnexion.java
 ./src/IHM/AppliLib.java
 ./src/IHM/ControlleurQuitter.java
 ./src/modele/QuitterExecption.java
@@ -8,13 +9,13 @@
 ./src/modele/Classification.java
 ./src/modele/VendeurBD.java
 ./src/modele/Vendeur.java
+./src/modele/ClientBD.java
 ./src/modele/Magasin.java
 ./src/modele/Administrateur.java
 ./src/modele/AdministrateurBD.java
 ./src/modele/Auteur.java
 ./src/modele/DetailCommande.java
 ./src/modele/QteInfAZeroException.java
-./src/modele/Requetes.java
 ./src/modele/TopDeLivreException.java
 ./src/modele/Livre.java
 ./src/modele/Client.java

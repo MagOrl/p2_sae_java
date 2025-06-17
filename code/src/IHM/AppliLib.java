@@ -16,6 +16,11 @@ public class AppliLib extends Application {
     private Button creeCompte;
     private Button connexion;
     private MenuAcceuil menuAcc;
+    private AdministrateurBD adminBD;
+    private VendeurBD vendeurBD;
+    private ClientBD clientBD;
+    private Personne utilisateur;
+    private ConnexionMySQL connexionSQL;
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
             "-fx-background-radius: 20;" +
@@ -38,6 +43,14 @@ public class AppliLib extends Application {
 
     @Override
     public void init() {
+        try {
+            this.connexionSQL = new ConnexionMySQL();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        this.clientBD = new ClientBD(this.connexionSQL);
+        this.adminBD = new AdministrateurBD(this.connexionSQL);
+        this.vendeurBD = new VendeurBD(this.connexionSQL);
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
@@ -51,6 +64,7 @@ public class AppliLib extends Application {
         this.creeCompte.setMinHeight(40);
         this.creeCompte.setMinWidth(90);
         this.btnQuitte.setOnAction(new ControlleurQuitter(this));
+        this.connexion.setOnAction(new ControlleurConnexion(this));
         this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion);
 
     }
@@ -76,5 +90,43 @@ public class AppliLib extends Application {
                 "Êtes vous sûr de quitter ?", ButtonType.YES, ButtonType.NO);
         alert.setTitle("Attention");
         return alert;
+    }
+
+    public Alert popUpPasMitDeUser() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Vous avez pas mit d'utilisateur", ButtonType.YES);
+        alert.setTitle("Pas d'utilisateur");
+        return alert;
+    }
+
+    public Alert popUpMauvaiseSaisie() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Vous avez mal saisie votre identifiant ou votre mot de passe ", ButtonType.YES);
+        alert.setTitle("Erreur");
+        return alert;
+    }
+
+    public VendeurBD getVendeurBD() {
+        return this.vendeurBD;
+    }
+
+    public AdministrateurBD getAdminBD() {
+        return this.adminBD;
+    }
+
+    public ClientBD getClientBD() {
+        return this.clientBD;
+    }
+
+    public MenuAcceuil getMenuAcc() {
+        return this.menuAcc;
+    }
+
+    public Personne getUtilisateur() {
+        return this.utilisateur;
+    }
+
+    public void setUtilisateur(Personne pers) {
+        this.utilisateur = pers;
     }
 }
