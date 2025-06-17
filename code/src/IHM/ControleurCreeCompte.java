@@ -10,7 +10,7 @@ public class ControleurCreeCompte implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent arg0) {
-        throw new UnsupportedOperationException("Unimplemented method 'handle'");
+       return;
     }
 
 }

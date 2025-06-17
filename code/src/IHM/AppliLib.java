@@ -96,7 +96,7 @@ public class AppliLib extends Application {
         this.connexion.setOnAction(new ControlleurConnexion(this));
         this.creeCompte.setOnAction(new ControleurCreationCompte(this));
         this.quitteCrea.setOnAction(new ControleurQuitteCreaCompte(this));
-        this.creeCompte.setOnAction(new ControleurCreeCompte(this));
+        this.confirmCrea.setOnAction(new ControleurCreeCompte(this));
 
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
