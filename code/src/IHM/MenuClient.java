@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TitledPane;
 import javafx.scene.text.Font;
 import javafx.scene.image.Image;
@@ -14,13 +15,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import java.util.Map;
 import java.util.HashMap;
+import javax.swing.text.html.ImageView;
 
 
 public class MenuClient extends BorderPane {
 
     private AppliLib appli;
 
-    private Map<int,List<Livre>> panier;
+    private Map<Integer,List<Livre>> panier;
 
     private Personne client;
 
@@ -36,8 +38,8 @@ public class MenuClient extends BorderPane {
         this.setCenter(this.ajouteRight());
     }
 
-    public BorderPane ajouteTop(){
-        BorderPane top = new BorderPane();
+    public HBox ajouteTop(){
+        HBox top = new HBox();
 
         VBox blocA = new VBox();
         Text titre = new Text("Livre Express");
@@ -47,11 +49,32 @@ public class MenuClient extends BorderPane {
         ImageView logo = new ImageView(new Image("../../img/logo.png"));
         Button recherche = new Button("", new ImageView(new Image("../../img/loupe.png")));
 
-        Text themeRech = new Text("Thême");
+        Text themeRech = new Text("Thêmes");
         VBox lesThemes = new VBox();
         Map<Integer,String> themesBD = this.appli.afficheThemes();
-        
-        TitledPane themes = new TitledPane();
+        for (String theme : themesBD.values()){
+            RadioButton t = new RadioButton(theme);
+            t.setOnAction(new ControleurTheme());
+            lesThemes.getChildren().add(t);
+        }
+        TitledPane themes = new TitledPane(themeRech,lesThemes);
+
+        VBox blocB = new VBox();
+        Button accesPanier = new Button("", new ImageView(new Image("../../img/panier.png")));
+        Button histori = new Button("", new ImageView(new Image("../../img/historique.png")));
+        accesPanier.setOnAction(new ControleurPanier());
+        histori.setOnAction(new ControleurHistorique());
+        blocB.getChildren().addAll(accesPanier,histori);
+
+        VBox blocC = new VBox();
+        Button deco = new Button("Déconnexion");
+        Button infosPerso = new Button("Informations personelles");
+        deco.setOnAction(new ControleurDeconnexion());
+        infosPerso.setOnAction(new ControleurInfosPersos());
+        blocB.getChildren().addAll(deco,infosPerso);
+
+        top.getChildren().addAll(blocA,logo,recherche,themes,blocB,blocC);
+        return top;
     }
 
 }

@@ -50,4 +50,8 @@ public class AppliLib extends Application {
         this.scene.setRoot(new MenuAcceuil(this.btnQuitte, this.connexion, this.creeCompte));
     }
 
+    public void afficheMenuClient() {
+        this.scene.setRoot(new MenuClient(this));
+    }
+
 }
