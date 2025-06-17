@@ -5,7 +5,7 @@ La partie 2 de la SAE java
 # FOUCHER Mattéo 
 # DANZIN Titouan 
 # APAYDIN Arif 
-# Drame Zakharia
+# DRAME Zakharia
 
 ## Lien du github : 
 https://github.com/MagOrl/p2_sae_java
