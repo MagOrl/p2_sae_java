@@ -26,6 +26,9 @@ public class AppliLib extends Application {
     private Personne utilisateur;
     private ConnexionMySQL connexionSQL;
     private ComboBox<String> nomMag;
+    private MenuCreaCompte menuCrea;
+    private Button confirmCrea;
+    private Button quitteCrea;
 
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
@@ -66,21 +69,44 @@ public class AppliLib extends Application {
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
+        this.confirmCrea = new Button("Confirmer");
+        this.quitteCrea = new Button("Quitter");
+
         this.btnQuitte.setStyle(styleBouton);
         this.connexion.setStyle(styleBouton);
         this.creeCompte.setStyle(styleBouton);
+        this.confirmCrea.setStyle(styleBouton);
+        this.quitteCrea.setStyle(styleBouton);
+        this.confirmCrea.setStyle(styleBouton);
+
         this.connexion.setMinHeight(40);
         this.connexion.setMinWidth(90);
         this.btnQuitte.setMinHeight(40);
         this.btnQuitte.setMinWidth(90);
         this.creeCompte.setMinHeight(40);
         this.creeCompte.setMinWidth(90);
+        this.quitteCrea.setMinHeight(40);
+        this.quitteCrea.setMinWidth(90);
+        this.confirmCrea.setMinHeight(40);
+        this.confirmCrea.setMinWidth(90);
+        this.quitteCrea.setMinHeight(40);
+        this.quitteCrea.setMinWidth(90);
+
         this.btnQuitte.setOnAction(new ControlleurQuitter(this));
         this.connexion.setOnAction(new ControlleurConnexion(this));
+        this.creeCompte.setOnAction(new ControleurCreationCompte(this));
+        this.quitteCrea.setOnAction(new ControleurQuitteCreaCompte(this));
+        this.creeCompte.setOnAction(new ControleurCreeCompte(this));
+
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
         this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
-        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion,this.nomMag);
+        this.quitteCrea.setSkin(new MyButtonSkin(this.quitteCrea));
+        this.confirmCrea.setSkin(new MyButtonSkin(this.confirmCrea));
+
+
+        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag);
+        this.menuCrea = new MenuCreaCompte(this.quitteCrea, this.confirmCrea);
 
     }
 
@@ -94,6 +120,10 @@ public class AppliLib extends Application {
 
     public void afficheMenuAcceuil() {
         this.scene.setRoot(this.menuAcc);
+    }
+
+    public void afficheMenuCreaCompte() {
+        this.scene.setRoot(this.menuCrea);
     }
 
     public void quitte() {
@@ -144,7 +174,8 @@ public class AppliLib extends Application {
     public void setUtilisateur(Personne pers) {
         this.utilisateur = pers;
     }
-    public String getValMag(){
+
+    public String getValMag() {
         return this.nomMag.getValue();
     }
 }

@@ -28,7 +28,7 @@ public class MenuAcceuil extends BorderPane {
     private ComboBox<String> cb;
     private ComboBox<String> nomMag;
 
-    public MenuAcceuil(Button btnQuitte, Button creeCompte, Button connexion,ComboBox<String> nomMag) {
+    public MenuAcceuil(Button btnQuitte, Button creeCompte, Button connexion, ComboBox<String> nomMag) {
         this.tfID = new TextField();
         this.pf = new PasswordField();
         this.cb = new ComboBox<>();
@@ -68,9 +68,18 @@ public class MenuAcceuil extends BorderPane {
         GridPane gp = new GridPane();
         Text txt = new Text("Se connecter"); // c r c r
         txt.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        gp.add(new Label("Identifiant : "), 0, 1);
-        gp.add(new Label("Mot de passe : "), 0, 2);
-        gp.add(new Label("Compte : "), 0, 3);
+
+        Text txtLab1 = new Text("Identifiant : ");
+        Text txtLab2 = new Text("Mot de passe : ");
+        Text txtLab3 = new Text("Compte : ");
+
+        txtLab1.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        txtLab2.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        txtLab3.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+
+        gp.add(txtLab1, 0, 1);
+        gp.add(txtLab2, 0, 2);
+        gp.add(txtLab3, 0, 3);
         gp.add(txt, 1, 0, 6, 1);
         gp.add(this.tfID, 1, 1);
         gp.add(this.pf, 1, 2);
@@ -80,8 +89,8 @@ public class MenuAcceuil extends BorderPane {
         gp.setPadding(new Insets(20));
         gp.setVgap(20.0);
         gp.setHgap(50.0);
-        
-        this.cb.valueProperty().addListener(new ControleurUtilisateur(gp,nomMag));
+
+        this.cb.valueProperty().addListener(new ControleurUtilisateur(gp, nomMag));
 
         ImageView logo = new ImageView("../img/PileOfBooks.png");
         logo.setFitHeight(400);
