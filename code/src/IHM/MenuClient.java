@@ -15,22 +15,19 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import java.util.Map;
 import java.util.HashMap;
-import javax.swing.text.html.ImageView;
 
 
 public class MenuClient extends BorderPane {
 
     private AppliLib appli;
 
-    private Map<Integer,List<Livre>> panier;
-
-    private Personne client;
+    private Client client;
 
 
     public MenuClient(AppliLib appli){
         super();
 
-        this.panier = new HashMap<>();
+        this.clientBD = this.appli.getClientBD();
         this.client = this.appli.getUtilisateur();
 
         this.setTop(this.ajouteTop());
@@ -57,7 +54,7 @@ public class MenuClient extends BorderPane {
             t.setOnAction(new ControleurTheme());
             lesThemes.getChildren().add(t);
         }
-        TitledPane themes = new TitledPane(themeRech,lesThemes);
+        TitledPane themes = new TitledPane(themeRech, lesThemes);
 
         VBox blocB = new VBox();
         Button accesPanier = new Button("", new ImageView(new Image("../../img/panier.png")));
@@ -86,6 +83,7 @@ public class MenuClient extends BorderPane {
 
     public Map<Integer,List<List<Livre>>> lesRecommendations(){
         Map<Integer,List<List<Livre>>> recommendations = new HashMap<>();
+        for 
     }
 
 }

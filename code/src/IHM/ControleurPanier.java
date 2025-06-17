@@ -3,14 +3,13 @@ import javafx.event.ActionEvent;
 
 public class ControleurPanier implements EventHandler<ActionEvent> {
 
-    private 
+    private AppliLib appli;
 
     public ControleurPanier(){
-        
+        this.appli = appli;
     }
 
-
     public void handle(ActionEvent event){
-
+        this.appli.afficheMenuPanier();
     }
 }
