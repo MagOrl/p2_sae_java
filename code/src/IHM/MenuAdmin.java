@@ -23,7 +23,7 @@ public class MenuAdmin extends BorderPane{
     Button bAjouter;
     Button bGererStocks;
     Button bAfficherStat;
-    ComboBox cb;
+    ComboBox<String> cb;
 
     public MenuAdmin(Button quitter) {
         this.bDeconnexion = new Button("Deconnexion");
@@ -63,6 +63,7 @@ public class MenuAdmin extends BorderPane{
         HBox hbright = new HBox(10);
         hbleft.getChildren().addAll(txt, logo);
         hbright.getChildren().add(this.bDeconnexion);
+        // bDeconnexion.setOnAction(new ControleurDeco());
         bp.setLeft(hbleft);
         bp.setRight(hbright);
 
@@ -109,7 +110,7 @@ public class MenuAdmin extends BorderPane{
         t2.setFont(Font.font("Arial",FontWeight.BOLD, 20));
 
 
-        ComboBox cb = new ComboBox<>(FXCollections.observableArrayList(
+        ComboBox<String> cb = new ComboBox<>(FXCollections.observableArrayList(
             "Nombre de livres vendus par magasin par année",
             "CA par thème pour une année",
             "Évolution des CA des magasins par mois pour une année",
@@ -122,15 +123,15 @@ public class MenuAdmin extends BorderPane{
         cb.setMaxWidth(200);
 
         vb1.getChildren().addAll(t1, hb1, hb2, this.bAjouter);
+        // bAjouter.setOnAction(new ControleurAjouter());
         vb1.setStyle(AppliLib.styleDefaultContainer);
         vb1.setAlignment(Pos.BASELINE_CENTER);
 
         vb2.getChildren().addAll(t2, cb, this.bAfficherStat);
+        // bAfficherStat.setOnAction(new ControleurAfficherStat());
         vb2.setStyle(AppliLib.styleDefaultContainer);
         vb2.setAlignment(Pos.BASELINE_CENTER);
         vb2.setPrefHeight(150);
-
-        // Padding / Marging
 
         vbMain.getChildren().addAll(vb1, vb2);
         
@@ -141,7 +142,6 @@ public class MenuAdmin extends BorderPane{
         VBox vbMain = new VBox(10);
         HBox hb = new HBox(10);
         vbMain.setPrefHeight(350);
-
         // Margin = out
         // Padding = in
         // Insets(top, right, bottom, left);
