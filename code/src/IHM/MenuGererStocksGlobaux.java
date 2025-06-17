@@ -1,5 +1,5 @@
 
-
+import java.awt.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
@@ -33,37 +34,120 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
     public VBox left(){
         VBox vbLeft = new VBox();
+        VBox vbAjouteLivre = new VBox();
 
         TextField isbn = new TextField();
-        TextField titre = new TextField();
-        TextField datePubli = new TextField();
-        TextField nbPages = new TextField();
-        TextField qte = new TextField();
-        TextField prix = new TextField();
+        isbn.setStyle(AppliLib.styleTextField);
 
-        Text isbnText = new Text();
-        Text titreText = new Text();
-        Text datePubliText = new Text();
-        Text qteText = new Text();
-        Text prixText = new Text();
+        TextField titre = new TextField();
+        titre.setStyle(AppliLib.styleTextField);
+
+        TextField datePubli = new TextField();
+        datePubli.setStyle(AppliLib.styleTextField);
+
+        TextField nbPages = new TextField();
+        nbPages.setStyle(AppliLib.styleTextField);
+
+        TextField qte = new TextField();
+        qte.setStyle(AppliLib.styleTextField);
+
+        TextField prix = new TextField();
+        prix.setStyle(AppliLib.styleTextField);
+
+
+        Text isbnText = new Text("ISBN :");
+        isbnText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+        Text titreText = new Text("Titre :");
+        titreText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+        Text datePubliText = new Text("date de publication :");
+        datePubliText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+        Text nbPagesText = new Text("nombre de pages :");
+        nbPagesText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+        Text qteText = new Text("quantité :");
+        qteText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+        Text prixText = new Text("prix :");
+        prixText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
 
         GridPane gpTop = new GridPane();
-        gpTop.add(isbnText, 0,0);
-        gpTop.add(titreText, 1,0);
-        gpTop.add(datePubliText, 2,0);
-        gpTop.add(qteText, 3,0);
-        gpTop.add(prixText, 4,0);
+        gpTop.add(isbnText, 0,1);
+        gpTop.add(titreText, 0,2);
+        gpTop.add(datePubliText, 0,3);
+        gpTop.add(nbPagesText, 0,4);
+        gpTop.add(qteText, 0,5);
+        gpTop.add(prixText, 0,6);
 
         gpTop.add(isbn, 1,1);
-        gpTop.add(titre, 2,1);
-        gpTop.add(datePubli, 3,1);
-        gpTop.add(nbPages, 4,1);
-        gpTop.add(qte, 5,1);
-        gpTop.add(prix, 6,1);
+        gpTop.add(titre, 1,2);
+        gpTop.add(datePubli, 1,3);
+        gpTop.add(nbPages, 1,4);
+        gpTop.add(qte, 1,5);
+        gpTop.add(prix, 1,6);
 
-        vbLeft.getChildren().addAll(gpTop);
-        vbLeft.setStyle(AppliLib.styleDefaultContainer);
+        gpTop.setMargin(isbnText, new Insets(10));
+        gpTop.setMargin(titreText, new Insets(10));
+        gpTop.setMargin(datePubliText, new Insets(10));
+        gpTop.setMargin(nbPagesText, new Insets(10));
+        gpTop.setMargin(qteText, new Insets(10));
+        gpTop.setMargin(prixText, new Insets(10));
+        gpTop.setPadding(new Insets(10));
 
+        VBox vbBouton = new VBox();
+        Button bAjouterLivre = new Button("Ajouter");
+        bAjouterLivre.setStyle(AppliLib.styleBouton);
+        bAjouterLivre.setSkin(new MyButtonSkin(bAjouterLivre));
+        vbBouton.getChildren().addAll(bAjouterLivre);
+        vbBouton.setAlignment(Pos.BOTTOM_CENTER);
+        vbBouton.setPadding(new Insets(10));
+
+        vbAjouteLivre.getChildren().addAll(gpTop, vbBouton);
+        vbAjouteLivre.setStyle(AppliLib.styleDefaultContainer);
+
+        VBox vbMajQte = new VBox();
+
+        GridPane gpQte = new GridPane();
+        TextField isbnQte = new TextField();
+        isbnQte.setStyle(AppliLib.styleTextField);
+
+        TextField nouvQte = new TextField();
+        nouvQte.setStyle(AppliLib.styleTextField);
+        
+        Text isbnQteText = new Text("ISBN :");
+        isbnQteText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+        Text majQteText = new Text("Quantité :");
+        majQteText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+        gpQte.add(isbnQte, 1, 0);
+        gpQte.add(nouvQte, 1, 1);
+
+        gpQte.add(isbnQteText, 0,0);
+        gpQte.add(majQteText, 0, 1);
+
+        gpQte.setMargin(isbnQteText, new Insets(10));
+        gpQte.setMargin(majQteText, new Insets(10));
+        gpQte.setPadding(new Insets(10));
+
+        VBox vBoxBtQte = new VBox();
+        Button btAjouterQte = new Button("Mettre a jour");
+        btAjouterQte.setStyle(AppliLib.styleBouton);
+        btAjouterQte.setSkin(new MyButtonSkin(btAjouterQte));
+        vBoxBtQte.getChildren().addAll(btAjouterQte);
+        vBoxBtQte.setAlignment(Pos.BOTTOM_CENTER);
+        vBoxBtQte.setPadding(new Insets(10));
+
+        vbMajQte.getChildren().addAll(gpQte, vBoxBtQte);
+        vbMajQte.setStyle(AppliLib.styleDefaultContainer);
+        vbMajQte.setAlignment(Pos.TOP_CENTER);
+        vbLeft.getChildren().addAll(vbAjouteLivre, vbMajQte);
+        vbLeft.setPadding(new Insets(7));
+        vbLeft.setMargin(vbAjouteLivre, new Insets(5));
+        vbLeft.setMargin(vbMajQte, new Insets(5));
         return vbLeft;
     }
 
@@ -94,6 +178,13 @@ public class MenuGererStocksGlobaux extends BorderPane{
     }
 
     public VBox center(){
+
+
+        HBox top = new HBox();
+        Text librairieActuelle = new Text("librairie actuelle : Cap au Sud");
+        Button changeLibrairie = new Button("Changer de librairie");
+        top.getChildren().addAll(librairieActuelle, changeLibrairie);
+
 
         HBox hbCenter = new HBox(10);
 
