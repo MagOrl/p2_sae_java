@@ -6,8 +6,10 @@
 ./src/IHM/ControleurCreeCompte.java
 ./src/IHM/ControleurUtilisateur.java
 ./src/IHM/MyButtonSkin.java
+./src/IHM/ControleurCodePostal.java
 ./src/IHM/ControlleurConnexion.java
 ./src/IHM/AppliLib.java
+./src/IHM/ControleurTextFieldTel.java
 ./src/IHM/ControlleurQuitter.java
 ./src/modele/QuitterExecption.java
 ./src/modele/Editeur.java

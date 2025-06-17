@@ -8,6 +8,11 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.ParallelCamera;
@@ -15,6 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.image.ImageView;
 
 public class MenuCreaCompte extends BorderPane {
     private Button quitteCrea;
@@ -56,9 +63,14 @@ public class MenuCreaCompte extends BorderPane {
         this.tfCodePostal.setStyle(AppliLib.styleTextField);
         this.tfTel.setStyle(AppliLib.styleTextField);
 
+        this.tfTel.textProperty().addListener(new ControleurTextFieldTel(tfTel));
+        this.tfCodePostal.textProperty().addListener(new ControleurCodePostal(this.tfCodePostal));
+        
+
         this.setTop(top());
         this.setBottom(bottom());
-        this.setCenter(center());
+        this.setLeft(center());
+        this.setCenter(new ImageView("../img/livreCreaCompte.gif"));
 
     }
 
@@ -123,7 +135,7 @@ public class MenuCreaCompte extends BorderPane {
         gp.setPadding(new Insets(30));
         gp.setVgap(20.0);
         gp.setHgap(50.0);
-        
+
         return gp;
     }
 
@@ -134,4 +146,22 @@ public class MenuCreaCompte extends BorderPane {
         hb.setPadding(new Insets(30));
         return hb;
     }
+
+    public Boolean isPwdSame() {
+        return this.pf.getText().equals(this.pfConfirm.getText());
+    }
+
+    public List<String> getListDeFields() {
+        return Arrays.asList(this.tfId.getText(), this.pf.getText(), this.pfConfirm.getText(), this.tfMail.getText(),
+                this.tfNom.getText(), this.tfPrenom.getText(), this.tfAddress.getText(),
+                this.tfVille.getText(), this.tfCodePostal.getText(), this.tfTel.getText());
+    }
+
+    public void setPwdOnError(boolean b) {
+        if (b==true)
+            this.pfConfirm.setStyle(AppliLib.styleTextField + " -fx-border-color: red;");
+        else
+            this.pfConfirm.setStyle(AppliLib.styleTextField);
+    }
+
 }

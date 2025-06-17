@@ -121,7 +121,6 @@ public class MenuAcceuil extends BorderPane {
     public void setError() {
         this.tfID.setStyle("-fx-border-color: red;");
         this.pf.setStyle("-fx-border-color: red;");
-
     }
 
 }

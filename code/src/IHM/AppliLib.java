@@ -104,7 +104,6 @@ public class AppliLib extends Application {
         this.quitteCrea.setSkin(new MyButtonSkin(this.quitteCrea));
         this.confirmCrea.setSkin(new MyButtonSkin(this.confirmCrea));
 
-
         this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag);
         this.menuCrea = new MenuCreaCompte(this.quitteCrea, this.confirmCrea);
 
@@ -151,6 +150,27 @@ public class AppliLib extends Application {
         return alert;
     }
 
+    public Alert popUpPasMemeMotDePasse() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Le mot de passe de confirmation ne correspond pas", ButtonType.YES);
+        alert.setTitle("Erreur");
+        return alert;
+    }
+
+    public Alert popUpMettreToutesLesVal() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Un ou plusieurs champs n'ont pas été complété.", ButtonType.YES);
+        alert.setTitle("Erreur");
+        return alert;
+    }
+
+    public Alert popUpCompteCree(String prenom) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Compte à bien été créé, bienvenue "+prenom, ButtonType.YES);
+        alert.setTitle("Tout est bon "+prenom);
+        return alert;
+    }
+
     public VendeurBD getVendeurBD() {
         return this.vendeurBD;
     }
@@ -177,5 +197,9 @@ public class AppliLib extends Application {
 
     public String getValMag() {
         return this.nomMag.getValue();
+    }
+
+    public MenuCreaCompte getMenuCreaCompte() {
+        return this.menuCrea;
     }
 }
