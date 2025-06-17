@@ -9,7 +9,6 @@ public class ControleurAjouterPanier implements EventHandler<ActionEvent> {
         this.menu = menu;
     }
 
-
     public void handle(ActionEvent event){
         
     }
