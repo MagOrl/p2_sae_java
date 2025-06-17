@@ -5,26 +5,62 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+
+import java.io.BufferedReader;
+import java.util.Scanner;
+
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
-import javax.security.auth.login.AppConfigurationEntry;
 
 
 public class MenuGererStocksGlobaux extends BorderPane{
     private Button btDeconexion;
     private Text prenom;
     private Text nom;
-    private String btRechercheStyle = "-fx-background-color : rgb(255,255,255);";
+    private Text librairieActuelle;
+    private ComboBox<String> choixLibrairie;
+    private ObservableList<String> lesLibrairies; 
+    private Button btAjouterLivre;
+    private TextField isbn;
+    private TextField titre;
+    private TextField datePubli;
+    private TextField nbPages;  
+    private TextField qte;
+    private TextField prix;
+    private AdministrateurBD modele;
+    private static ConnexionMySQL connexion;
 
     
     public MenuGererStocksGlobaux(Button bouton){
+        try{
+            connexion = new ConnexionMySQL();
+            modele = new AdministrateurBD(connexion);
+        }    
+        catch(ClassNotFoundException e){
+            System.out.println("Nous n'avons pas pu connecter l'application à la base de données");
+        }
+        this.librairieActuelle = new Text();
+        this.lesLibrairies = FXCollections.observableArrayList("Cap au Sud", "Loire et livres");
+        this.choixLibrairie = new ComboBox<>(lesLibrairies);
+        this.btAjouterLivre = new Button("");
+        this.isbn = new TextField();
+        this.titre = new TextField();
+        this.datePubli = new TextField();
+        this.nbPages = new TextField();
+        this.qte = new TextField();
+        this.prix = new TextField();
         this.btDeconexion = bouton;
         this.prenom = new Text();
         this.nom = new Text();
@@ -38,23 +74,22 @@ public class MenuGererStocksGlobaux extends BorderPane{
         VBox vbLeft = new VBox();
         VBox vbAjouteLivre = new VBox();
 
-        TextField isbn = new TextField();
-        isbn.setStyle(AppliLib.styleTextField);
+        this.isbn.setStyle(AppliLib.styleTextField);
+        this.isbn.focusedProperty().addListener(new ControleurISBN(isbn, this));
 
-        TextField titre = new TextField();
-        titre.setStyle(AppliLib.styleTextField);
+        this.titre.setStyle(AppliLib.styleTextField);
 
-        TextField datePubli = new TextField();
-        datePubli.setStyle(AppliLib.styleTextField);
+        this.datePubli.setStyle(AppliLib.styleTextField);
+        this.datePubli.focusedProperty().addListener(new ControleurDate(datePubli, this));
 
-        TextField nbPages = new TextField();
-        nbPages.setStyle(AppliLib.styleTextField);
+        this.nbPages.setStyle(AppliLib.styleTextField);
+        this.nbPages.focusedProperty().addListener(new ControleurNbPages(nbPages, this));
 
-        TextField qte = new TextField();
-        qte.setStyle(AppliLib.styleTextField);
+        this.qte.setStyle(AppliLib.styleTextField);
+        this.qte.focusedProperty().addListener(new ControleurQuantite(qte, this));
 
-        TextField prix = new TextField();
-        prix.setStyle(AppliLib.styleTextField);
+        this.prix.setStyle(AppliLib.styleTextField);
+        this.prix.focusedProperty().addListener(new ControleurPrix(prix, this));
 
 
         Text isbnText = new Text("ISBN :");
@@ -100,10 +135,17 @@ public class MenuGererStocksGlobaux extends BorderPane{
         gpTop.setPadding(new Insets(10));
 
         VBox vbBouton = new VBox();
-        Button bAjouterLivre = new Button("Ajouter");
-        bAjouterLivre.setStyle(AppliLib.styleBouton);
-        bAjouterLivre.setSkin(new MyButtonSkin(bAjouterLivre));
-        vbBouton.getChildren().addAll(bAjouterLivre);
+        this.btAjouterLivre.setStyle(AppliLib.styleBouton);
+        this.btAjouterLivre.setSkin(new MyButtonSkin(btAjouterLivre));
+        this.btAjouterLivre.disableProperty().bind(isbn.textProperty().isEmpty().or(datePubli.textProperty().isEmpty().
+                                                    or(nbPages.textProperty().isEmpty().
+                                                    or(qte.textProperty().isEmpty().   
+                                                    or(prix.textProperty().isEmpty().
+                                                    or(titre.textProperty().isEmpty()))))));
+
+        
+        //desactiverBtAjouter();
+        vbBouton.getChildren().addAll(this.btAjouterLivre);
         vbBouton.setAlignment(Pos.BOTTOM_CENTER);
         vbBouton.setPadding(new Insets(10));
 
@@ -115,9 +157,11 @@ public class MenuGererStocksGlobaux extends BorderPane{
         GridPane gpQte = new GridPane();
         TextField isbnQte = new TextField();
         isbnQte.setStyle(AppliLib.styleTextField);
+        isbnQte.focusedProperty().addListener(new ControleurISBN(isbnQte, this));
 
         TextField nouvQte = new TextField();
         nouvQte.setStyle(AppliLib.styleTextField);
+        nouvQte.focusedProperty().addListener(new ControleurQuantite(nouvQte, this));
         
         Text isbnQteText = new Text("ISBN :");
         isbnQteText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -185,11 +229,15 @@ public class MenuGererStocksGlobaux extends BorderPane{
         VBox vBoxAfficheStock = new VBox();
 
         HBox top = new HBox();
-        Text librairieActuelle = new Text("librairie actuelle : Cap au Sud");
-        librairieActuelle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        Text placeHolder = new Text("librairie actuelle : ");
+        this.librairieActuelle = new Text("Cap au Sud");
+        
+        placeHolder.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        this.librairieActuelle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
-        Button changeLibrairie = new Button("Changer de librairie");
-        changeLibrairie.setSkin(new MyButtonSkin(changeLibrairie));
+        
+        this.choixLibrairie.setValue("test");
+
         top.getChildren().addAll(librairieActuelle, changeLibrairie);
         top.setMargin(changeLibrairie, new Insets(4,0,0,110));
 
@@ -262,13 +310,49 @@ public class MenuGererStocksGlobaux extends BorderPane{
         vBoxCenter.setPadding(new Insets(7));
         vBoxCenter.getChildren().addAll(gpStocks);
 
+        ImageView imgwSuiv = new ImageView();
+        imgwSuiv.setImage(new Image("../img/croix.png"));
+        imgwSuiv.setFitHeight(20);
+        imgwSuiv.setFitWidth(20);
+        Button pageSuivante = new Button("", imgwSuiv);
+
+        ImageView imgwPrec = new ImageView();
+        imgwPrec.setImage(new Image("../img/croix.png"));
+        imgwPrec.setFitHeight(20);
+        imgwPrec.setFitWidth(20);
+        Button pagePrecedente = new Button("", imgwPrec);
+
+        HBox passerPages = new HBox();
+        passerPages.getChildren().addAll(pagePrecedente, pageSuivante);
+
+
+
         VBox vBoxCenterPrincipal = new VBox();
-        vBoxCenterPrincipal.getChildren().addAll(top, hbCenter, vBoxCenter);
+
+        vBoxCenterPrincipal.getChildren().addAll(top, hbCenter, vBoxCenter, passerPages);
         vBoxCenterPrincipal.setMargin(vBoxCenter, new Insets(14));
+
+
         return vBoxCenterPrincipal;
 
 
     }
+
+    public void desactiverBtAjouter(){
+        Text texteBouton = new Text("Ajouter");
+        texteBouton.setStrikethrough(true);
+        this.btAjouterLivre.setGraphic(texteBouton);
+        this.btAjouterLivre.setDisable(true);
+    }
+
+    public void activerBtajouter(){
+        Text texteBouton = new Text("Ajouter");
+        texteBouton.setStyle("-fx-text-fill: white;");
+        this.btAjouterLivre.setGraphic(texteBouton);
+        this.btAjouterLivre.setDisable(false);
+    }
+
+    
 
     public void setNom(String nom){
         this.nom.setText(nom);
@@ -284,5 +368,20 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
     public String getNom(){
         return this.nom.getText();
+    }
+
+    public void resetTFAjouterLivre(){
+        this.isbn.setText("");
+        this.titre.setText("");
+        this.datePubli.setText("");
+        this.nbPages.setText("");
+        this.qte.setText("");
+        this.prix.setText("");
+    }
+
+    public Alert popUpAjouterLivreSQLException(){
+        // A implementer    
+        Alert alert = new Alert(Alert.AlertType.ERROR, "Une erreur est survenue lors de l'ajout du livre");
+        return alert;
     }
 }
