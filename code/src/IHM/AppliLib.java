@@ -20,9 +20,8 @@ public class AppliLib extends Application {
     private Button creeCompte;
     private Button connexion;
     private MenuAcceuil menuAcc;
-<<<<<<< HEAD
     private MenuVendeur menuVend;
-=======
+
     private AdministrateurBD adminBD;
     private VendeurBD vendeurBD;
     private ClientBD clientBD;
@@ -30,7 +29,6 @@ public class AppliLib extends Application {
     private ConnexionMySQL connexionSQL;
     private ComboBox<String> nomMag;
 
->>>>>>> main
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
             "-fx-background-radius: 20;" +
@@ -77,10 +75,10 @@ public class AppliLib extends Application {
         this.connexion.setMinWidth(90);
         this.btnQuitte.setMinHeight(40);
         this.btnQuitte.setMinWidth(90);
-<<<<<<< HEAD
+
 
         this.menuVend = new MenuVendeur();
-=======
+
         this.creeCompte.setMinHeight(40);
         this.creeCompte.setMinWidth(90);
         this.btnQuitte.setOnAction(new ControlleurQuitter(this));
@@ -90,7 +88,7 @@ public class AppliLib extends Application {
         this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
         this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion,this.nomMag);
 
->>>>>>> main
+
     }
 
     @Override
@@ -105,7 +103,6 @@ public class AppliLib extends Application {
         this.scene.setRoot(this.menuAcc);
     }
 
-<<<<<<< HEAD
     public void afficheMenuVendeur() {
         this.scene.setRoot(new MenuVendeur());
     }
@@ -118,7 +115,7 @@ public class AppliLib extends Application {
 
     public void afficheHistorique(){}
 
-=======
+
     public void quitte() {
         Platform.exit();
     }
@@ -170,5 +167,4 @@ public class AppliLib extends Application {
     public String getValMag(){
         return this.nomMag.getValue();
     }
->>>>>>> main
 }
