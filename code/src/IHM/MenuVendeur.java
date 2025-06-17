@@ -5,6 +5,7 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -37,6 +38,13 @@ public class MenuVendeur extends BorderPane{
         this.btnAjouter.setStyle(AppliLib.styleBouton);
         this.btnCommander.setStyle(AppliLib.styleBouton);
         this.btnVerif.setStyle(AppliLib.styleBouton);
+
+        this.btnTransferer.setSkin(new MyButtonSkin(btnTransferer));
+        this.btnMettreAJour.setSkin(new MyButtonSkin(btnMettreAJour));
+        this.btnDeconnexion.setSkin(new MyButtonSkin(btnDeconnexion));
+        this.btnAjouter.setSkin(new MyButtonSkin(btnAjouter));
+        this.btnCommander.setSkin(new MyButtonSkin(btnCommander));
+        this.btnVerif.setSkin(new MyButtonSkin(btnVerif));
     }
 
     public BorderPane top() {
@@ -102,7 +110,7 @@ public class MenuVendeur extends BorderPane{
         HBox hb2 = new HBox(10);
         Text txtMdp = new Text("Mot de passe :");
         txtMdp.setFont(Font.font("Arial",FontWeight.BOLD, 20));
-        TextField mdp = new TextField();
+        PasswordField mdp = new PasswordField();
         mdp.setFont(Font.font("Arial",15));
         mdp.setStyle(AppliLib.styleTextField);
 
