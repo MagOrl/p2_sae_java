@@ -7,19 +7,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-public class Requetes {
+public class ClientBD {
 
     private ConnexionMySQL laConnexion;
     private Statement st;
 
-    public Requetes(ConnexionMySQL laConnexion) {
+    public ClientBD(ConnexionMySQL laConnexion) {
         this.laConnexion = laConnexion;
         try {
             List<String> data = new ArrayList<>();
             // laConnexion.connecter("localhost", "Librairie", "root", "mypassword");
             // laConnexion.connecter("servinfo-maria", "DBarsamerzoev", "arsamerzoev",
             // "arsamerzoev");
-            File cache = new File("cachePourBaseDeDonne");
+            File cache = new File(".cachePourBaseDeDonne");
             Scanner reader = new Scanner(cache);
             while (reader.hasNextLine()) {
                 data.add(reader.nextLine());
