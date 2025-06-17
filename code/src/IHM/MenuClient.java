@@ -77,4 +77,15 @@ public class MenuClient extends BorderPane {
         return top;
     }
 
+    public VBox setLeft(){
+        VBox left = new VBox();
+
+        VBox blocObservable = new VBox();
+
+    }
+
+    public Map<Integer,List<List<Livre>>> lesRecommendations(){
+        Map<Integer,List<List<Livre>>> recommendations = new HashMap<>();
+    }
+
 }
