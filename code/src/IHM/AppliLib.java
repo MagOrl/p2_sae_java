@@ -76,7 +76,6 @@ public class AppliLib extends Application {
         this.btnQuitte.setMinHeight(40);
         this.btnQuitte.setMinWidth(90);
 
-
         this.menuVend = new MenuVendeur();
 
         this.creeCompte.setMinHeight(40);
@@ -86,8 +85,7 @@ public class AppliLib extends Application {
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
         this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
-        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion,this.nomMag);
-
+        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag);
 
     }
 
@@ -108,13 +106,28 @@ public class AppliLib extends Application {
     }
 
     public void afficheMenuClient() {
+        //A implementer
     }
 
     public void afficheInfosPersos() {
+        //A implementer
     }
 
-    public void afficheHistorique(){}
+    public void afficheHistorique() {
+//A implementer
+    }
 
+    public void afficheFenetreMajQte() {
+//A implementer
+    }
+
+    public void afficheFenetreTransfererLivre() {
+//A implementer
+    }
+
+    public void afficheFenetreVerifDispo() {
+//A implementer
+    }
 
     public void quitte() {
         Platform.exit();
@@ -164,7 +177,8 @@ public class AppliLib extends Application {
     public void setUtilisateur(Personne pers) {
         this.utilisateur = pers;
     }
-    public String getValMag(){
+
+    public String getValMag() {
         return this.nomMag.getValue();
     }
 }
