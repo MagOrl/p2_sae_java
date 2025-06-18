@@ -21,6 +21,7 @@ public class ControleurAjouterLibrairie implements EventHandler<ActionEvent> {
         this.adminBD = adminBD;
         this.tfNom = tfNom;
         this.tfVille = tfVille;
+        this.tfIdmag = tfIdmag;
     }
 
     public void handle(ActionEvent event){

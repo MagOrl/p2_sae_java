@@ -14,10 +14,12 @@
 ./src/IHM/ControlleurQuitter.java
 ./src/IHM/MenuAcceuil.java
 ./src/IHM/MenuClient.java
-./src/IHM/ControleurAjouterLibrairie.java
 ./src/IHM/ControleurCreerCompteVendeur.java
 ./src/IHM/ControleurGererStock.java
 ./src/IHM/ControleurAfficherStats.java
+./src/IHM/MenuAdminV2.java
+./src/IHM/ControleurAfficherAjouterLibrairie.java
+./src/IHM/ControleurAjouterLibrairie.java
 ./src/modele/Administrateur.java
 ./src/modele/Auteur.java
 ./src/modele/Classification.java
