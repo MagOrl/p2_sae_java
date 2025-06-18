@@ -18,6 +18,7 @@
 ./src/IHM/MenuHistorique.java
 ./src/IHM/ControleurTextDynamique.java
 ./src/IHM/RecomDynamique.java
+./src/IHM/MenuPanier.java
 ./src/modele/Administrateur.java
 ./src/modele/Auteur.java
 ./src/modele/Classification.java

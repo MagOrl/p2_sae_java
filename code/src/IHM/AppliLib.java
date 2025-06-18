@@ -27,6 +27,7 @@ public class AppliLib extends Application {
     private MenuClient menuCli;
     private MenuInfosPersos menuInfos;
     private MenuHistorique menuHistorique;
+    private MenuPanier menuPanier;
     private ConnexionMySQL connexionSQL;
     private ComboBox<String> nomMag;
 
@@ -121,6 +122,13 @@ public class AppliLib extends Application {
         this.menuHistorique = new MenuHistorique(this);
         
         this.scene.setRoot(this.menuHistorique);
+    }
+
+    public void afficheMenuPanier() {
+        if(this.menuPanier == null)
+        this.menuPanier = new MenuPanier(this, this.getUtilisateur());
+        
+        this.scene.setRoot(this.menuPanier);
     }
 
 

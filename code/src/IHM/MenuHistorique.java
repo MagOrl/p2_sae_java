@@ -9,6 +9,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import java.sql.SQLException;
+import javafx.geometry.Insets;
 
 public class MenuHistorique extends BorderPane {
 
@@ -23,6 +24,8 @@ public class MenuHistorique extends BorderPane {
 
         this.appli = appli;
         this.client = (Client) this.appli.getUtilisateur();
+        this.setStyle(AppliLib.styleBanniere);
+        this.setPadding(new Insets(20));
         try{
             this.historique = this.appli.getClientBD().historiqueCommande(this.client); 
         }catch (SQLException e){
@@ -35,8 +38,6 @@ public class MenuHistorique extends BorderPane {
 
         VBox center = new VBox(10);
         for (String key : this.historique.keySet()){
-            Text titreCom = new Text(key);
-            titreCom.setFont(Font.font("Arial", FontWeight.BOLD, 25));
             VBox lesLivres = new VBox(5);
             for (String value : this.historique.get(key)){
                 Text ligne = new Text(value);
@@ -44,8 +45,10 @@ public class MenuHistorique extends BorderPane {
                 lesLivres.getChildren().add(ligne);
             }
             TitledPane commande = new TitledPane(key, lesLivres);
+            commande.setStyle(AppliLib.styleTextField);
             center.getChildren().add(commande);
         }
+        center.setPadding(new Insets(20));
 
         Button retour = new Button("Retour");
         retour.setOnAction(new ControleurRetour(this.appli));

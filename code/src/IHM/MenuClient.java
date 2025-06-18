@@ -79,7 +79,7 @@ public class MenuClient extends BorderPane {
             for (String theme : themesBD.values()) {
                 RadioButton t = new RadioButton(theme);
                 t.setToggleGroup(groupTheme);
-                // t.setOnAction(new ControleurTheme());
+                t.setOnAction(new ControleurThemes(this));
                 lesThemes.getChildren().add(t);
             }
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class MenuClient extends BorderPane {
         histori.setMinHeight(40);
         histori.setMinWidth(90);
         histori.setSkin(new MyButtonSkin(histori));
-        // accesPanier.setOnAction(new ControleurPanier());
+        accesPanier.setOnAction(new ControleurPanier(this.appli));
         histori.setOnAction(new ControleurHistorique(this.appli));
         VBox blocA = new VBox(10);
         blocA.getChildren().addAll(accesPanier, histori);
@@ -152,7 +152,7 @@ public class MenuClient extends BorderPane {
 
         blocObservable.getChildren().addAll(liv,this.livreDyna);
         blocObservable.setAlignment(Pos.CENTER);
-        
+        blocObservable.setPadding(new Insets(20));
 
         HBox bottom = new HBox(10);
         Button consulter = new Button("Consulter");
