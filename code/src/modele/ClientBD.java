@@ -168,13 +168,14 @@ public class ClientBD {
      *         moment" si l'utilisateur n'a toujours pas fait de commandes
      * @throws SQLException
      */
-    public String afficheHistoriqueCommande(Client cli) throws SQLException {
+    public String historiqueCommande(Client cli) throws SQLException {
         this.st = laConnexion.createStatement();
+        Map<String,String> historique;
         ResultSet rs = this.st.executeQuery(
                 "select numcom,numlig,datecom, enligne, livraison,titre,qte,prixvente FROM COMMANDE NATURAL JOIN DETAILCOMMANDE NATURAL JOIN LIVRE WHERE idcli = "
                         + cli.getNumCompte() + " ORDER BY datecom");
         if (!rs.next()) {
-            return "Aucune commande effectuer pour le moment";
+            return historique;
         }
         rs.beforeFirst();
         int numcomSave = -1;
@@ -182,7 +183,7 @@ public class ClientBD {
         int cpt = 0;
         while (rs.next()) {
             String enligne = rs.getString("enLigne").equals("O") ? "en ligne" : "en magasin";
-            String livraison = rs.getString("livraison").equals("M") ? "récuperer au magasin" : "livrer au domicile";
+            String livraison = rs.getString("livraison").equals("M") ? "Récuperé au magasin" : "Livré au domicile";
             if (rs.getInt("numcom") == numcomSave) {
                 res += "\n" + rs.getString("numlig") + "  " + rs.getString("titre") + "  " + rs.getInt("prixvente")
                         + "€  quantité : " + rs.getInt("qte");
@@ -194,9 +195,9 @@ public class ClientBD {
                 }
                 numcomSave = rs.getInt("numcom");
                 res += "\n \nLa commande " + rs.getInt("numcom") + "\n"
-                        + "le " + rs.getString("datecom") + " " + enligne + " " + livraison + "\n";
-                res += rs.getString("numlig") + "  " + rs.getString("titre") + "  " + rs.getInt("prixvente")
-                        + "€  quantité : " + rs.getInt("qte");
+                        + "Le " + rs.getString("datecom") + " effectuée " + enligne + "\n" + livraison + " ";
+                res += rs.getString("numlig") + " \nLivre : " + rs.getString("titre") + "\nPrix : " + rs.getInt("prixvente")
+                        + "€  \nQuantité : " + rs.getInt("qte");
                 cpt = cpt + (rs.getInt("prixvente") * rs.getInt("qte"));
             }
         }
