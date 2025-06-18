@@ -32,7 +32,8 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
             case "Vendeur":
                 try {
                     if (this.app.getVendeurBD().connectVendeur(tf,pf)) {
-                        Vendeur vend = this.app.getVendeurBD().trouveVendeur(tf, pf,this.app.getValMag());
+                        
+                        this.app.afficheMenuVendeur(this.app.getVendeurBD().trouveVendeur(tf, pf,this.app.getValMag()));
                     } else {
                         this.app.getMenuAcc().resetFields();
                         this.app.popUpMauvaiseSaisie().showAndWait();

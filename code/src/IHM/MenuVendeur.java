@@ -30,11 +30,11 @@ public class MenuVendeur extends BorderPane {
     private Text textLibrairie;
     private Vendeur vendeur;
 
-    public MenuVendeur(Vendeur vend) {
+    public MenuVendeur(Vendeur vend,AppliLib app) {
         
 
         this.vendeur = vend ;
-
+        this.appli = app;
         this.btnTransferer = new Button("Transférer \n    Livre");
         this.btnMettreAJour = new Button("Mettre à jour \n   Quantité");
         this.btnDeconnexion = new Button("Déconnexion");
