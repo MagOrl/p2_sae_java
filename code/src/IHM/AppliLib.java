@@ -29,6 +29,7 @@ public class AppliLib extends Application {
     private MenuCreaCompte menuCrea;
     private Button confirmCrea;
     private Button quitteCrea;
+    private Button changeInfoBD;
 
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
@@ -57,20 +58,22 @@ public class AppliLib extends Application {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        this.clientBD = new ClientBD(this.connexionSQL);
-        this.adminBD = new AdministrateurBD(this.connexionSQL);
-        this.vendeurBD = new VendeurBD(this.connexionSQL);
-        this.nomMag = new ComboBox<>();
         try {
+            this.clientBD = new ClientBD(this.connexionSQL);
+            this.adminBD = new AdministrateurBD(this.connexionSQL);
+            this.vendeurBD = new VendeurBD(this.connexionSQL);
             this.nomMag.getItems().addAll(this.vendeurBD.choixLibrairie());
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("pas bonne infos");
         }
+        this.nomMag = new ComboBox<>();
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
         this.confirmCrea = new Button("Confirmer");
         this.quitteCrea = new Button("Quitter");
+        this.changeInfoBD = new Button("Paramètre");
 
         this.btnQuitte.setStyle(styleBouton);
         this.connexion.setStyle(styleBouton);
@@ -78,6 +81,7 @@ public class AppliLib extends Application {
         this.confirmCrea.setStyle(styleBouton);
         this.quitteCrea.setStyle(styleBouton);
         this.confirmCrea.setStyle(styleBouton);
+        this.changeInfoBD.setStyle(styleBouton);
 
         this.connexion.setMinHeight(40);
         this.connexion.setMinWidth(90);
@@ -91,20 +95,24 @@ public class AppliLib extends Application {
         this.confirmCrea.setMinWidth(90);
         this.quitteCrea.setMinHeight(40);
         this.quitteCrea.setMinWidth(90);
+        this.changeInfoBD.setMinHeight(40);
+        this.changeInfoBD.setMinWidth(90);
 
         this.btnQuitte.setOnAction(new ControlleurQuitter(this));
         this.connexion.setOnAction(new ControlleurConnexion(this));
         this.creeCompte.setOnAction(new ControleurCreationCompte(this));
         this.quitteCrea.setOnAction(new ControleurQuitteCreaCompte(this));
         this.confirmCrea.setOnAction(new ControleurCreeCompte(this));
+        this.changeInfoBD.setOnAction(new ControleurChangeInfoBD(this));
 
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
         this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
         this.quitteCrea.setSkin(new MyButtonSkin(this.quitteCrea));
         this.confirmCrea.setSkin(new MyButtonSkin(this.confirmCrea));
+        this.changeInfoBD.setSkin(new MyButtonSkin(this.changeInfoBD));
 
-        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag);
+        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag, this.changeInfoBD);
         this.menuCrea = new MenuCreaCompte(this.quitteCrea, this.confirmCrea);
 
     }
@@ -123,6 +131,10 @@ public class AppliLib extends Application {
 
     public void afficheMenuCreaCompte() {
         this.scene.setRoot(this.menuCrea);
+    }
+
+    public void afficheInfoBD() {
+        this.scene.setRoot(new MenuChangeInfoBD(this.quitteCrea));
     }
 
     public void quitte() {
@@ -166,8 +178,8 @@ public class AppliLib extends Application {
 
     public Alert popUpCompteCree(String prenom) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Compte à bien été créé, bienvenue "+prenom, ButtonType.YES);
-        alert.setTitle("Tout est bon "+prenom);
+                "Compte à bien été créé, bienvenue " + prenom, ButtonType.YES);
+        alert.setTitle("Tout est bon " + prenom);
         return alert;
     }
 
@@ -202,4 +214,5 @@ public class AppliLib extends Application {
     public MenuCreaCompte getMenuCreaCompte() {
         return this.menuCrea;
     }
+
 }

@@ -1,3 +1,4 @@
+./src/IHM/ControleurConfModif.java
 ./src/IHM/ControleurCreationCompte.java
 ./src/IHM/MenuCreaCompte.java
 ./src/IHM/ControleurRetour.java
@@ -7,10 +8,13 @@
 ./src/IHM/ControleurUtilisateur.java
 ./src/IHM/MyButtonSkin.java
 ./src/IHM/ControleurCodePostal.java
+./src/IHM/ControleurInfoBDTxtField.java
 ./src/IHM/ControlleurConnexion.java
+./src/IHM/MenuChangeInfoBD.java
 ./src/IHM/AppliLib.java
 ./src/IHM/ControleurTextFieldTel.java
 ./src/IHM/ControlleurQuitter.java
+./src/IHM/ControleurChangeInfoBD.java
 ./src/modele/QuitterExecption.java
 ./src/modele/Editeur.java
 ./src/modele/MauvaiseQuantiteException.java

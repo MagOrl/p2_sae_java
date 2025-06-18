@@ -27,12 +27,13 @@ public class MenuAcceuil extends BorderPane {
     private PasswordField pf;
     private ComboBox<String> cb;
     private ComboBox<String> nomMag;
-
-    public MenuAcceuil(Button btnQuitte, Button creeCompte, Button connexion, ComboBox<String> nomMag) {
+    private Button changeInfoBD;
+    public MenuAcceuil(Button btnQuitte, Button creeCompte, Button connexion, ComboBox<String> nomMag,Button changeInfoBD) {
         this.tfID = new TextField();
         this.pf = new PasswordField();
         this.cb = new ComboBox<>();
         this.nomMag = nomMag;
+        this.changeInfoBD = changeInfoBD;
         this.cb.getItems().addAll("Client", "Vendeur", "Administrateur");
         this.tfID.setStyle(AppliLib.styleTextField);
         this.pf.setStyle(AppliLib.styleTextField);
@@ -44,6 +45,7 @@ public class MenuAcceuil extends BorderPane {
         this.creeCompte = creeCompte;
         this.setTop(top());
         this.setCenter(left());
+        
     }
 
     public BorderPane top() {
@@ -56,7 +58,7 @@ public class MenuAcceuil extends BorderPane {
         HBox hbleft = new HBox(10);
         HBox hbright = new HBox(10);
         hbleft.getChildren().addAll(txt, logo);
-        hbright.getChildren().addAll(this.creeCompte, this.btnQuitte);
+        hbright.getChildren().addAll(this.changeInfoBD,this.creeCompte, this.btnQuitte);
         bp.setLeft(hbleft);
         bp.setRight(hbright);
         bp.setStyle(AppliLib.styleBanniere);
