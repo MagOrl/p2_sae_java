@@ -30,6 +30,7 @@ public class AppliLib extends Application {
     private Button confirmCrea;
     private Button quitteCrea;
     private Button changeInfoBD;
+    private Button quitteInfo;
 
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
@@ -53,6 +54,8 @@ public class AppliLib extends Application {
 
     @Override
     public void init() {
+        this.nomMag = new ComboBox<>();
+
         try {
             this.connexionSQL = new ConnexionMySQL();
         } catch (ClassNotFoundException e) {
@@ -67,13 +70,13 @@ public class AppliLib extends Application {
         } catch (SQLException e) {
             System.out.println("pas bonne infos");
         }
-        this.nomMag = new ComboBox<>();
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
         this.confirmCrea = new Button("Confirmer");
         this.quitteCrea = new Button("Quitter");
         this.changeInfoBD = new Button("Paramètre");
+        this.quitteInfo = new Button("Quitter");
 
         this.btnQuitte.setStyle(styleBouton);
         this.connexion.setStyle(styleBouton);
@@ -82,6 +85,7 @@ public class AppliLib extends Application {
         this.quitteCrea.setStyle(styleBouton);
         this.confirmCrea.setStyle(styleBouton);
         this.changeInfoBD.setStyle(styleBouton);
+        this.quitteInfo.setStyle(styleBouton);
 
         this.connexion.setMinHeight(40);
         this.connexion.setMinWidth(90);
@@ -97,6 +101,8 @@ public class AppliLib extends Application {
         this.quitteCrea.setMinWidth(90);
         this.changeInfoBD.setMinHeight(40);
         this.changeInfoBD.setMinWidth(90);
+        this.quitteInfo.setMinHeight(40);
+        this.quitteInfo.setMinWidth(90);
 
         this.btnQuitte.setOnAction(new ControlleurQuitter(this));
         this.connexion.setOnAction(new ControlleurConnexion(this));
@@ -104,6 +110,7 @@ public class AppliLib extends Application {
         this.quitteCrea.setOnAction(new ControleurQuitteCreaCompte(this));
         this.confirmCrea.setOnAction(new ControleurCreeCompte(this));
         this.changeInfoBD.setOnAction(new ControleurChangeInfoBD(this));
+        this.quitteInfo.setOnAction(new ControleurQuitteCreaCompte(this));
 
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
@@ -111,7 +118,8 @@ public class AppliLib extends Application {
         this.quitteCrea.setSkin(new MyButtonSkin(this.quitteCrea));
         this.confirmCrea.setSkin(new MyButtonSkin(this.confirmCrea));
         this.changeInfoBD.setSkin(new MyButtonSkin(this.changeInfoBD));
-
+        this.quitteInfo.setSkin(new MyButtonSkin(this.quitteInfo));
+        
         this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag, this.changeInfoBD);
         this.menuCrea = new MenuCreaCompte(this.quitteCrea, this.confirmCrea);
 
@@ -134,7 +142,7 @@ public class AppliLib extends Application {
     }
 
     public void afficheInfoBD() {
-        this.scene.setRoot(new MenuChangeInfoBD(this.quitteCrea));
+        this.scene.setRoot(new MenuChangeInfoBD(this.quitteInfo));
     }
 
     public void quitte() {

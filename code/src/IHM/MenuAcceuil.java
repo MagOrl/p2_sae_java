@@ -100,7 +100,7 @@ public class MenuAcceuil extends BorderPane {
         logo.setFitWidth(200);
         hb.getChildren().addAll(gp, logo);
         hb.setPadding(new Insets(10));
-        hb.setAlignment(Pos.BOTTOM_LEFT);
+        hb.setAlignment(Pos.CENTER_LEFT);
         return hb;
     }
 
