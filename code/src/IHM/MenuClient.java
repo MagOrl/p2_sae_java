@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.sql.SQLException;
 import java.util.Random;
 import java.lang.Math;
+import javafx.scene.layout.GridPane;
+import javax.swing.border.Border;
 
 public class MenuClient extends BorderPane {
 
@@ -47,15 +49,15 @@ public class MenuClient extends BorderPane {
         // this.setCenter(this.ajouteRight());
     }
 
-    public HBox ajouteTop() {
-        HBox top = new HBox();
+    public BorderPane ajouteTop() {
+        BorderPane top = new BorderPane();
 
-        VBox blocA = new VBox(10);
         Text titre = new Text("Livre Express");
         titre.setFont(Font.font("Arial", FontWeight.BOLD, 30));
         Text nomCli = new Text(this.client.getNom() + " " + this.client.getPrenom());
         nomCli.setFont(Font.font("Arial", FontWeight.BOLD, 30));
-        blocA.getChildren().addAll(titre, nomCli);
+        VBox left = new VBox(10);
+        left.getChildren().addAll(titre, nomCli);
 
         ImageView logo = new ImageView(new Image("../img/logo.png"));
         logo.setFitHeight(96);
@@ -69,7 +71,7 @@ public class MenuClient extends BorderPane {
         recherche.setMinWidth(90);
         recherche.setSkin(new MyButtonSkin(recherche));
 
-        VBox lesThemes = new VBox();
+        VBox lesThemes = new VBox(5);
         ToggleGroup groupTheme = new ToggleGroup();
         try {
             Map<Integer, String> themesBD = this.clientBD.afficheThemes();
@@ -83,19 +85,24 @@ public class MenuClient extends BorderPane {
             this.appli.popUpPasDeThemes();
         }
         TitledPane themes = new TitledPane("Thêmes", lesThemes);
+        BorderPane center = new BorderPane();
+        center.setLeft(logo);
+        HBox barreRecherche = new HBox(10);
+        barreRecherche.getChildren().addAll(recherche,themes);
+        center.setCenter(barreRecherche);
+        BorderPane.setAlignment(center, Pos.CENTER_RIGHT);
 
-        VBox blocB = new VBox();
         ImageView pan = new ImageView(new Image("../img/panier.png"));
-        pan.setFitHeight(65);
-        pan.setFitWidth(65);
+        pan.setFitHeight(35);
+        pan.setFitWidth(35);
         Button accesPanier = new Button("", pan);
         accesPanier.setStyle(AppliLib.styleBoutonImg);
         accesPanier.setMinHeight(40);
         accesPanier.setMinWidth(90);
         accesPanier.setSkin(new MyButtonSkin(accesPanier));
         ImageView histo = new ImageView(new Image("../img/historique.png"));
-        histo.setFitHeight(65);
-        histo.setFitWidth(65);
+        histo.setFitHeight(35);
+        histo.setFitWidth(35);
         Button histori = new Button("", histo);
         histori.setStyle(AppliLib.styleBoutonImg);
         histori.setMinHeight(40);
@@ -103,9 +110,9 @@ public class MenuClient extends BorderPane {
         histori.setSkin(new MyButtonSkin(histori));
         // accesPanier.setOnAction(new ControleurPanier());
         // histori.setOnAction(new ControleurHistorique());
-        blocB.getChildren().addAll(accesPanier, histori);
+        VBox blocA = new VBox(10);
+        blocA.getChildren().addAll(accesPanier, histori);
 
-        VBox blocC = new VBox(10);
         Button deco = new Button("Déconnexion");
         deco.setStyle(AppliLib.styleBouton);
         deco.setMinHeight(40);
@@ -118,11 +125,16 @@ public class MenuClient extends BorderPane {
         infosPerso.setSkin(new MyButtonSkin(infosPerso));
         deco.setOnAction(new ControleurDeconnexion(this.appli));
         // infosPerso.setOnAction(new ControleurInfosPersos());
-        blocC.getChildren().addAll(deco, infosPerso);
+        VBox blocB = new VBox(10);
+        blocB.getChildren().addAll(deco, infosPerso);
+        HBox right = new HBox(10);
+        right.getChildren().addAll(blocA, blocB);
+        right.setFillHeight(true);
+        right.setAlignment(Pos.CENTER);
 
-        top.getChildren().addAll(blocA, logo, recherche, themes, blocB, blocC);
-
-        top.setAlignment(Pos.BASELINE_CENTER);
+        top.setLeft(left);
+        top.setCenter(center);
+        top.setRight(right);
 
         top.setStyle(AppliLib.styleBanniere);
         top.setPadding(new Insets(20));
@@ -133,16 +145,22 @@ public class MenuClient extends BorderPane {
         VBox left = new VBox();
 
         VBox blocObservable = new VBox();
-        ImageView liv = new ImageView(new Image("../logo.png"));
+        ImageView liv = new ImageView(new Image("../img/logo.png"));
         liv.setFitHeight(200);
         liv.setFitWidth(200);
         int i = (int) Math.round(Math.random()*this.livresRecommandes().size());
         Text titre = new Text(this.listeRecommandes.get(i).getTitre());
-        HBox blocA = new HBox();
+        titre.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+        BorderPane blocA = new BorderPane();
         Text date = new Text(this.listeRecommandes.get(i).getDatePubli());
+        date.setFont(Font.font("Arial", FontWeight.BOLD, 10));
         Text prix = new Text(""+this.listeRecommandes.get(i).getPrix());
-        blocA.getChildren().addAll(date,prix);
+        prix.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+        blocA.setLeft(date);
+        blocA.setRight(prix);
+        blocA.setPadding(new Insets(20));
         blocObservable.getChildren().addAll(liv,titre,blocA);
+        blocObservable.setAlignment(Pos.CENTER);
         Button consulter = new Button("Consulter");
         //consulter.setOnAction(new ControleurConsulter(this.appli, this));
         consulter.setStyle(AppliLib.styleBouton);
@@ -150,7 +168,14 @@ public class MenuClient extends BorderPane {
         consulter.setMinWidth(90);
         consulter.setSkin(new MyButtonSkin(consulter));
         left.getChildren().addAll(blocObservable,consulter);
+        left.setStyle(AppliLib.styleDefaultContainer);
+        left.setAlignment(Pos.CENTER);
         return left;
+    }
+
+    public HBox ajouteCenter(){
+        HBox center = new HBox();
+        return center;
     }
 
     public Map<Integer, List<List<Livre>>> lesRecommandations() {
