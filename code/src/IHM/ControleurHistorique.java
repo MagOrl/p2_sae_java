@@ -13,7 +13,7 @@ public class ControleurHistorique implements EventHandler<ActionEvent>{
 
     @Override
     public void handle(ActionEvent event) { 
-        this.appli.afficheHistorique();
+        // this.appli.afficheHistorique();
     }
 
 }

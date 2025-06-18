@@ -12,7 +12,7 @@ public class ControleurInfosPersos implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-        this.appli.afficheInfosPersos();
+        // this.appli.afficheInfosPersos();
     }
 
 }

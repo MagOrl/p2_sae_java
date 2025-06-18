@@ -18,14 +18,17 @@ import javafx.scene.layout.BorderPane;
 
 
 public class MenuAdmin extends BorderPane{
-    Button bDeconnexion;
-    Button bCreerVendeur;
-    Button bAjouter;
-    Button bGererStocks;
-    Button bAfficherStat;
-    ComboBox<String> cb;
+    private AppliLib app;
+    private Button bDeconnexion;
+    private Button bCreerVendeur;
+    private Button bAjouter;
+    private Button bGererStocks;
+    private Button bAfficherStat;
+    private ComboBox<String> cb;
+    private AdministrateurBD adminBD;
 
-    public MenuAdmin(Button quitter) {
+    public MenuAdmin(AppliLib app, Button quitter) {
+        this.app = app;
         this.bDeconnexion = new Button("Deconnexion");
         this.bCreerVendeur = new Button("Créer compte vendeur");
         this.bAjouter = new Button("Ajouter");
@@ -110,7 +113,7 @@ public class MenuAdmin extends BorderPane{
         t2.setFont(Font.font("Arial",FontWeight.BOLD, 20));
 
 
-        ComboBox<String> cb = new ComboBox<>(FXCollections.observableArrayList(
+        this.cb = new ComboBox<>(FXCollections.observableArrayList(
             "Nombre de livres vendus par magasin par année",
             "CA par thème pour une année",
             "Évolution des CA des magasins par mois pour une année",
@@ -123,7 +126,7 @@ public class MenuAdmin extends BorderPane{
         cb.setMaxWidth(200);
 
         vb1.getChildren().addAll(t1, hb1, hb2, this.bAjouter);
-        // bAjouter.setOnAction(new ControleurAjouter());
+        bAjouter.setOnAction(new ControleurAjouterLibrairie(this.app,this.adminBD, tf1, tf2));
         vb1.setStyle(AppliLib.styleDefaultContainer);
         vb1.setAlignment(Pos.BASELINE_CENTER);
 

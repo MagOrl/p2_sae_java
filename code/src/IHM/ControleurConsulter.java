@@ -16,6 +16,6 @@ public class ControleurConsulter implements EventHandler<ActionEvent>{
     @Override
     public void handle(ActionEvent event) { 
         
-        this.appli.afficheMenuClient();
+        //this.appli.afficheMenuClient();
     }
 }

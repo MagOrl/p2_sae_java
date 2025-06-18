@@ -3,14 +3,13 @@ import javafx.event.ActionEvent;
 
 public class ControleurCommanderC implements EventHandler<ActionEvent> {
 
-    private 
+    private AppliLib apli;
 
-    public ControleurCommanderC(){
-        
+    public ControleurCommanderC(AppliLib apli){
+        this.apli = apli;
     }
 
-
     public void handle(ActionEvent event){
-
+        
     }
 }

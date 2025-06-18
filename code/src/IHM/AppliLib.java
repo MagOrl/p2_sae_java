@@ -70,7 +70,7 @@ public class AppliLib extends Application {
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
         this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag);
-        this.menuAdmin = new MenuAdmin(btnQuitte);
+        this.menuAdmin = new MenuAdmin(this, this.btnQuitte);
 
         this.btnQuitte.setStyle(styleBouton);
         this.connexion.setStyle(styleBouton);
@@ -103,7 +103,7 @@ public class AppliLib extends Application {
     }
 
     public void afficheMenuAdmin() {
-        this.scene.setRoot(new MenuAdmin(this.btnQuitte));
+        this.scene.setRoot(new MenuAdmin(this, this.btnQuitte));
     }
 
     public void quitte() {
@@ -131,8 +131,23 @@ public class AppliLib extends Application {
         return alert;
     }
 
+    public Alert popUpConfirmerLibrairie(String nom, String ville) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
+                "Voulez-vous vraiment ajouter la librairie " + nom + " qui se situe à " + ville + " ?", ButtonType.OK, ButtonType.CANCEL);
+        alert.setTitle("Confirmation");
+        return alert;
+    }
+
     public VendeurBD getVendeurBD() {
         return this.vendeurBD;
+    }
+
+    //enlever avant de pull
+    public Alert popUpMettreToutesLesVal() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Un ou plusieurs champs n'ont pas été complété.", ButtonType.YES);
+        alert.setTitle("Erreur");
+        return alert;
     }
 
     public AdministrateurBD getAdminBD() {

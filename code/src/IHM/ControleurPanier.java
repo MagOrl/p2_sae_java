@@ -3,10 +3,10 @@ import javafx.event.ActionEvent;
 
 public class ControleurPanier implements EventHandler<ActionEvent> {
 
-    private 
+    private AppliLib app;
 
-    public ControleurPanier(){
-        
+    public ControleurPanier(AppliLib app){
+        this.app = app;
     }
 
 
