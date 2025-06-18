@@ -16,6 +16,8 @@ public class Livre {
     this.qte = qte;
   };
 
+  public Livre(){}
+
   public String getIsbn() {
     return this.isbn;
   };

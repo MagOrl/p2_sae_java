@@ -14,7 +14,7 @@ public class ControleurTextDynamique implements EventHandler<ActionEvent> {
     /**
      * Vue du chronomètre
      */
-    private TextRecomDynamique txt;
+    private RecomDynamique txt;
 
     private List<Livre> lesRecomm;
 
@@ -29,7 +29,7 @@ public class ControleurTextDynamique implements EventHandler<ActionEvent> {
      * 
      * @param chrono Vue du chronomètre
      */
-    public ControleurTextDynamique(TextRecomDynamique txt, List<Livre> lesRecomm) {
+    public ControleurTextDynamique(RecomDynamique txt, List<Livre> lesRecomm) {
         this.lesRecomm = lesRecomm;
         this.premierInd = (int) Math.round(Math.random() * this.lesRecomm.size());
         this.indCour = premierInd;

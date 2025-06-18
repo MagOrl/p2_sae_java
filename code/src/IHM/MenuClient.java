@@ -21,8 +21,6 @@ import java.util.HashMap;
 import java.sql.SQLException;
 import java.util.Random;
 import java.lang.Math;
-import javafx.scene.layout.GridPane;
-import javax.swing.border.Border;
 
 public class MenuClient extends BorderPane {
 
@@ -36,7 +34,7 @@ public class MenuClient extends BorderPane {
 
     private List<Livre> listeRecommandes;
 
-    private TextRecomDynamique livreDyna;
+    private RecomDynamique livreDyna;
 
     public MenuClient(AppliLib appli) {
         super();
@@ -46,7 +44,7 @@ public class MenuClient extends BorderPane {
         this.client = (Client) this.appli.getUtilisateur();
         this.recommandations = lesRecommandations();
         this.listeRecommandes = livresRecommandes();
-        this.livreDyna = new TextRecomDynamique(this.listeRecommandes);
+        this.livreDyna = new RecomDynamique(this.listeRecommandes);
         this.setTop(this.ajouteTop());
         this.setLeft(this.ajouteLeft());
         this.setCenter(this.ajouteCenter());
@@ -154,6 +152,7 @@ public class MenuClient extends BorderPane {
 
         blocObservable.getChildren().addAll(liv,this.livreDyna);
         blocObservable.setAlignment(Pos.CENTER);
+        
 
         HBox bottom = new HBox(10);
         Button consulter = new Button("Consulter");

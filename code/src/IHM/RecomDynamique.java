@@ -10,8 +10,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
-public class TextRecomDynamique extends Text {
+public class RecomDynamique extends VBox {
     /**
      * timeline qui va gérer le temps
      */
@@ -25,15 +27,16 @@ public class TextRecomDynamique extends Text {
      */
     private ControleurTextDynamique actionTemps;
 
-    
+    private Livre livre;
 
     /**
      * Constructeur permettant de créer le chronomètre
      * avec un label initialisé à "0:0:0"
      * Ce constructeur créer la Timeline, la KeyFrame et le contrôleur
      */
-    public TextRecomDynamique(List<Livre> lesRecomm) {
-        this.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
+    public RecomDynamique(List<Livre> lesRecomm) {
+        super();
+        this.livre = new Livre();
         this.actionTemps = new ControleurTextDynamique(this,lesRecomm);
         this.keyFrame = new KeyFrame(Duration.seconds(10), this.actionTemps);
         this.timeline = new Timeline(this.keyFrame);
@@ -43,7 +46,22 @@ public class TextRecomDynamique extends Text {
 
 
     public void setRecom(Livre liv) {
-        this.setText("    "+liv.getTitre()+"\n"+ liv.getDatePubli()+"                     "+liv.getPrix());
+        this.livre = liv;
+        BorderPane dateEtPrix = new BorderPane();
+        Text date = new Text(liv.getDatePubli());
+        date.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
+        Text prix = new Text(liv.getPrix()+"");
+        prix.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
+        dateEtPrix.setLeft(date);
+        dateEtPrix.setRight(prix);
+        Text titre = new Text(liv.getTitre());
+        titre.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
+        this.getChildren().clear();
+        this.getChildren().addAll(titre, dateEtPrix);
+    }
+
+    public Livre getLivre(){
+        return this.livre;
     }
 
 

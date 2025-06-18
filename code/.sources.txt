@@ -16,8 +16,8 @@
 ./src/IHM/ControleurDeconnexion.java
 ./src/IHM/MenuInfosPersos.java
 ./src/IHM/MenuHistorique.java
-./src/IHM/TextRecomDynamique.java
 ./src/IHM/ControleurTextDynamique.java
+./src/IHM/RecomDynamique.java
 ./src/modele/Administrateur.java
 ./src/modele/Auteur.java
 ./src/modele/Classification.java
