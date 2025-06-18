@@ -5,24 +5,17 @@ import javafx.scene.control.Button;
 
 public class ControleurRetour implements EventHandler<ActionEvent>{
     
-    private MenuClient menu;
     private AppliLib appli;
     
 
-    public ControleurRetour(MenuClient menu, AppliLib appli) {
-        this.menu = menu;
+    public ControleurRetour(AppliLib appli) {
         this.appli = appli;
+        
     }
 
-    @Override
+     @Override
     public void handle(ActionEvent event) { 
-        
-        if (this.menu.instanceOf(MenuHistorique) || this.menu.instanceOf(MenuInfosPersos)) {
-          
-            this.appli.afficheMenuClient();
-        }else{
-            this.appli.afficheMenuVendeur();
-        }
+        // A implementé
     }
 
 }
