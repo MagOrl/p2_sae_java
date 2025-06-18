@@ -20,7 +20,7 @@ public class MenuClient extends BorderPane {
 
     private AppliLib appli;
 
-    private Map<int,List<Livre>> panier;
+    private Map<Integer,List<Livre>> panier;
 
     private Personne client;
 
@@ -32,8 +32,8 @@ public class MenuClient extends BorderPane {
         this.client = this.appli.getUtilisateur();
 
         this.setTop(this.ajouteTop());
-        this.setLeft(this.ajouteLeft());
-        this.setCenter(this.ajouteRight());
+        // this.setLeft(this.ajouteLeft());
+        // this.setCenter(this.ajouteRight());
     }
 
     public BorderPane ajouteTop(){
@@ -49,9 +49,10 @@ public class MenuClient extends BorderPane {
 
         Text themeRech = new Text("Thême");
         VBox lesThemes = new VBox();
-        Map<Integer,String> themesBD = this.appli.afficheThemes();
+        // Map<Integer,String> themesBD = this.appli.afficheThemes();
         
         TitledPane themes = new TitledPane();
+        return top;
     }
 
 }

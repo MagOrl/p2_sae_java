@@ -10,34 +10,32 @@ import javafx.event.ActionEvent;
 
 public class ControleurAjouterLibrairie implements EventHandler<ActionEvent> {
 
-    private AppliLib app;
+    private MenuAdmin vue;
     private AdministrateurBD adminBD;
-    private TextField tf1;
-    private TextField tf2;
+    private TextField tfIdmag;
+    private TextField tfNom;
+    private TextField tfVille;
 
-    public ControleurAjouterLibrairie(AppliLib app,AdministrateurBD adminBD, TextField tf1, TextField tf2){
-        this.app = app;
+    public ControleurAjouterLibrairie(MenuAdmin vue,AdministrateurBD adminBD, TextField tfIdmag, TextField tfNom, TextField tfVille){
+        this.vue = vue;
         this.adminBD = adminBD;
-        this.tf1 = tf1;
-        this.tf2 = tf2;
+        this.tfNom = tfNom;
+        this.tfVille = tfVille;
     }
 
     public void handle(ActionEvent event){
-        String nom = tf1.getText();
-        String ville = tf2.getText();
-        if (nom.equals("") || ville.equals("")) {
-            this.app.popUpMettreToutesLesVal().showAndWait();
-        } else {
-            try {
-                Alert alert = this.app.popUpConfirmerLibrairie(nom, ville);
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.OK) {
-                    this.adminBD.ajouteNouvelleLibrairie(nom, ville);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            
+        String nom = tfNom.getText();
+        String ville = tfVille.getText();
+        String idmag = tfIdmag.getText();
+
+        try {
+            Alert alert = this.vue.popUpConfirmerLibrairie(nom, ville);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.OK) {
+                this.adminBD.ajouteNouvelleLibrairie(nom, ville, idmag);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

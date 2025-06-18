@@ -3,10 +3,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.sql.SQLException;
+
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
@@ -18,7 +22,6 @@ import javafx.scene.layout.BorderPane;
 
 
 public class MenuAdmin extends BorderPane{
-    private AppliLib app;
     private Button bDeconnexion;
     private Button bCreerVendeur;
     private Button bAjouter;
@@ -26,14 +29,20 @@ public class MenuAdmin extends BorderPane{
     private Button bAfficherStat;
     private ComboBox<String> cb;
     private AdministrateurBD adminBD;
+    private static ConnexionMySQL connexion;
 
-    public MenuAdmin(AppliLib app, Button quitter) {
-        this.app = app;
+    public MenuAdmin(Button quitter) {
         this.bDeconnexion = new Button("Deconnexion");
         this.bCreerVendeur = new Button("Créer compte vendeur");
         this.bAjouter = new Button("Ajouter");
         this.bGererStocks = new Button("Gérer les stocks");
         this.bAfficherStat = new Button("Afficher");
+        try {
+            this.connexion = new ConnexionMySQL();
+            this.adminBD = new AdministrateurBD(connexion);
+        } catch (ClassNotFoundException e) {
+            System.out.println("");
+        }
 
         this.bDeconnexion.setStyle(AppliLib.styleBouton);
         this.bCreerVendeur.setStyle(AppliLib.styleBouton);
@@ -79,14 +88,20 @@ public class MenuAdmin extends BorderPane{
     public Pane left() {
         VBox vbMain = new VBox(10);
         vbMain.setPrefWidth(250);
-        vbMain.setPrefHeight(350);
+        vbMain.setPrefHeight(400);
         vbMain.setPadding(new Insets(10,0,0,0));
 
         VBox vb1 = new VBox(15);
-        vb1.setPrefHeight(200);
+        vb1.setPrefHeight(250);
         
         HBox hb1 = new HBox(10);
+        hb1.setPadding(new Insets(5,0,0,1));
+
         HBox hb2 = new HBox(10);
+        hb1.setPadding(new Insets(5,0,0,1));
+
+        HBox hb3 = new HBox(10);
+        hb1.setPadding(new Insets(5,0,0,1));
 
         Text t1 = new Text("Ajouter une librairie");
         t1.setFont(Font.font("Arial",FontWeight.BOLD, 20));
@@ -97,14 +112,21 @@ public class MenuAdmin extends BorderPane{
         Text ville = new Text("Ville :");
         ville.setFont(Font.font("Arial", 15));
         
-        TextField tf1 = new TextField();
-        TextField tf2 = new TextField();
+        Text idmag = new Text("Id :");
+        idmag.setFont(Font.font("Arial", 15)); 
+
+        TextField tfNom = new TextField();
+        TextField tfVille = new TextField();
+        TextField tfIdmag = new TextField();
         
-        tf1.setStyle(AppliLib.styleTextField);
-        tf2.setStyle(AppliLib.styleTextField);
+        tfNom.setStyle(AppliLib.styleTextField);
+        tfVille.setStyle(AppliLib.styleTextField);
+        tfIdmag.setStyle(AppliLib.styleTextField);
         
-        hb1.getChildren().addAll(nom, tf1);
-        hb2.getChildren().addAll(ville, tf2);
+        hb1.getChildren().addAll(nom, tfNom);
+        hb2.getChildren().addAll(ville, tfVille);
+        hb3.getChildren().addAll(idmag, tfIdmag);
+
 
         //Centrer bouton ajouter
 
@@ -125,8 +147,9 @@ public class MenuAdmin extends BorderPane{
         ));
         cb.setMaxWidth(200);
 
-        vb1.getChildren().addAll(t1, hb1, hb2, this.bAjouter);
-        bAjouter.setOnAction(new ControleurAjouterLibrairie(this.app,this.adminBD, tf1, tf2));
+        vb1.getChildren().addAll(t1, hb1, hb2, hb3, this.bAjouter);
+        this.bAjouter.setOnAction(new ControleurAjouterLibrairie(this, this.adminBD, tfNom, tfVille, tfIdmag));
+        this.bAjouter.disableProperty().bind(tfNom.textProperty().isEmpty().or(tfVille.textProperty().isEmpty()).or(tfIdmag.textProperty().isEmpty()));
         vb1.setStyle(AppliLib.styleDefaultContainer);
         vb1.setAlignment(Pos.BASELINE_CENTER);
 
@@ -164,6 +187,20 @@ public class MenuAdmin extends BorderPane{
 
         vbMain.getChildren().addAll(hb, vbStat);
         return vbMain;
+    }
+
+    public Alert popUpMettreToutesLesVal() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Un ou plusieurs champs n'ont pas été complété.", ButtonType.YES);
+        alert.setTitle("Erreur");
+        return alert;
+    }
+
+    public Alert popUpConfirmerLibrairie(String nom, String ville) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
+                "Voulez-vous vraiment ajouter la librairie " + nom + " qui se situe à " + ville + " ?", ButtonType.OK, ButtonType.CANCEL);
+        alert.setTitle("Confirmation");
+        return alert;
     }
 
 }
