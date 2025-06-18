@@ -1,16 +1,16 @@
-import javafx.event.EventHandler;
-import javafx.event.ActionEvent;
+// import javafx.event.EventHandler;
+// import javafx.event.ActionEvent;
 
-public class ControleurPanier implements EventHandler<ActionEvent> {
+// public class ControleurPanier implements EventHandler<ActionEvent> {
 
-    private 
+//     // private 
 
-    public ControleurPanier(){
+//     // public ControleurPanier(){
         
-    }
+//     // }
 
 
-    public void handle(ActionEvent event){
+//     // public void handle(ActionEvent event){
 
-    }
-}
+//     // }
+// }

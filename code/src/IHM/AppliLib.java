@@ -80,7 +80,6 @@ public class AppliLib extends Application {
         this.btnQuitte.setMinHeight(40);
         this.btnQuitte.setMinWidth(90);
 
-        this.menuVend = new MenuVendeur();
         this.fenetreMajQte = new FenetreMajQte();
         this.fenetreTransfererLivre = new FenetreTransfererLivre();
         this.fenetreVerifDispo = new FenetreVerifDispo();

@@ -30,12 +30,10 @@ public class MenuVendeur extends BorderPane {
     private Text textLibrairie;
     private Vendeur vendeur;
 
-    public MenuVendeur() {
-        // this.vendeur = null;
+    public MenuVendeur(Vendeur vend) {
+        
 
-        this.setTop(top());
-        this.setLeft(left());
-        this.setCenter(center());
+        this.vendeur = vend ;
 
         this.btnTransferer = new Button("Transférer \n    Livre");
         this.btnMettreAJour = new Button("Mettre à jour \n   Quantité");
@@ -65,6 +63,10 @@ public class MenuVendeur extends BorderPane {
         this.btnCommander.setOnAction(new ControleurCommanderV(appli));
         this.btnVerif.setOnAction(new ControleurVerifDispo(appli));
 
+
+        this.setTop(top());
+        this.setLeft(left());
+        this.setCenter(center());
     }
 
     public BorderPane top() {
@@ -84,7 +86,10 @@ public class MenuVendeur extends BorderPane {
         HBox hbleft = new HBox(10);
         HBox hbright = new HBox(10);
         hbleft.getChildren().addAll(vb, logo);
-        hbright.getChildren().addAll(this.btnTransferer, this.btnMettreAJour, this.btnDeconnexion);
+        hbright.getChildren().addAll(
+                this.btnTransferer,
+                this.btnMettreAJour,
+                this.btnDeconnexion);
         bp.setLeft(hbleft);
         bp.setRight(hbright);
 

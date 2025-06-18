@@ -8,6 +8,8 @@
 ./src/IHM/ControlleurConnexion.java
 ./src/IHM/ControlleurQuitter.java
 ./src/IHM/MenuAcceuil.java
+./src/IHM/FenetreMajQte.java
+./src/IHM/FenetreVerifDispo.java
 ./src/IHM/AppliLib.java
 ./src/IHM/ControleurAjouterLivre.java
 ./src/IHM/ControleurCommanderV.java
@@ -19,9 +21,7 @@
 ./src/IHM/ControleurRetour.java
 ./src/IHM/ControleurTransfererLivre.java
 ./src/IHM/ControleurVerifDispo.java
-./src/IHM/FenetreMajQte.java
 ./src/IHM/FenetreTransfererLivre.java
-./src/IHM/FenetreVerifDispo.java
 ./src/IHM/MenuVendeur.java
 ./src/modele/Administrateur.java
 ./src/modele/Auteur.java
