@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -21,6 +22,7 @@ public class AppliLib extends Application {
     private Button connexion;
     private MenuAcceuil menuAcc;
     private MenuVendeur menuVend;
+    private FenetreMajQte fenetreMajQte;
 
     private AdministrateurBD adminBD;
     private VendeurBD vendeurBD;
@@ -77,6 +79,7 @@ public class AppliLib extends Application {
         this.btnQuitte.setMinWidth(90);
 
         this.menuVend = new MenuVendeur();
+        this.fenetreMajQte = new FenetreMajQte();
 
         this.creeCompte.setMinHeight(40);
         this.creeCompte.setMinWidth(90);
@@ -86,12 +89,12 @@ public class AppliLib extends Application {
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
         this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
         this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag);
-
+        
     }
 
     @Override
     public void start(Stage stg) {
-        this.scene = new Scene(this.menuVend);
+        this.scene = new Scene(this.fenetreMajQte);
         stg.setScene(this.scene);
         stg.setTitle("Menu principale");
         stg.show();
@@ -102,7 +105,7 @@ public class AppliLib extends Application {
     }
 
     public void afficheMenuVendeur() {
-        this.scene.setRoot(new MenuVendeur());
+        this.scene.setRoot(this.menuVend);
     }
 
     public void afficheMenuClient() {
@@ -118,7 +121,7 @@ public class AppliLib extends Application {
     }
 
     public void afficheFenetreMajQte() {
-//A implementer
+        this.scene.setRoot(this.fenetreMajQte);
     }
 
     public void afficheFenetreTransfererLivre() {
@@ -151,6 +154,15 @@ public class AppliLib extends Application {
         Alert alert = new Alert(Alert.AlertType.WARNING,
                 "Vous avez mal saisie votre identifiant ou votre mot de passe ", ButtonType.YES);
         alert.setTitle("Erreur");
+        return alert;
+    }
+
+    public static Alert popUpDeconnexion() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de déconnexion");
+        alert.setHeaderText("Voulez-vous vraiment vous déconnecter ?");
+        alert.setContentText("Cliquez sur OK pour vous déconnecter, ou Annuler pour rester.");
+
         return alert;
     }
 
