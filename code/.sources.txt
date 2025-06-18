@@ -13,6 +13,7 @@
 ./src/IHM/ControleurInfoBDTxtField.java
 ./src/IHM/ControleurRetour.java
 ./src/IHM/MenuAcceuil.java
+./src/IHM/ControleurRetourVendeur.java
 ./src/IHM/ControleurAjouterLivre.java
 ./src/IHM/ControleurCommanderC.java
 ./src/IHM/ControleurCommanderV.java

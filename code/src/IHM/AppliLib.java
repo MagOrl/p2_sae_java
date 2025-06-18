@@ -98,7 +98,7 @@ public class AppliLib extends Application {
         this.btnQuitte.setMinWidth(90);
 
         //this.fenetreMajQte = new FenetreMajQte();
-        this.fenetreTransfererLivre = new FenetreTransfererLivre();
+        this.fenetreTransfererLivre = new FenetreTransfererLivre(this);
         this.fenetreVerifDispo = new FenetreVerifDispo();
 
         this.creeCompte.setMinHeight(40);
@@ -171,6 +171,7 @@ public class AppliLib extends Application {
     public void afficheFenetreTransfererLivre() {
         this.scene.setRoot(this.fenetreTransfererLivre);
     }
+    
 
     public void afficheFenetreVerifDispo() {
         this.scene.setRoot(this.fenetreVerifDispo);

@@ -18,15 +18,16 @@ public class FenetreTransfererLivre extends VBox {
     private Button btnRetour;
     private TextField isbn;
     private TextField qte;
-    //private AppliLib appli;
+    private AppliLib appli;
+    private Vendeur vend;
 
-    public FenetreTransfererLivre() {
+    public FenetreTransfererLivre(AppliLib appli) {
 
         this.btnTransf = new Button("Transférer");
         this.btnRetour = new Button("Retour");
 
+        this.appli = appli;
         
-
         this.btnTransf.setStyle(AppliLib.styleBouton);
         this.btnRetour.setStyle(AppliLib.styleBouton);
 
@@ -34,7 +35,7 @@ public class FenetreTransfererLivre extends VBox {
         this.btnRetour.setSkin(new MyButtonSkin(this.btnRetour));
 
         //this.btnTransf.setOnAction(new ControleurTransferer());
-        //this.btnRetour.setOnAction(new ControleurRetour());
+        this.btnRetour.setOnAction(new ControleurRetourVendeur(this.appli));
 
         this.getChildren().add(trans());
     }

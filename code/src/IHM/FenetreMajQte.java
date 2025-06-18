@@ -30,7 +30,7 @@ public class FenetreMajQte extends VBox {
         this.btnRetour.setSkin(new MyButtonSkin(this.btnRetour));
 
         //this.btnMaj.setOnAction(new ControleurMaj(this.appli));
-        this.btnRetour.setOnAction(new Controleur());
+        this.btnRetour.setOnAction(new ControleurRetourVendeur(this.appli));
 
         this.getChildren().add(maj());
     }
