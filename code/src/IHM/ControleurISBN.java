@@ -3,24 +3,32 @@ import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-public class ControleurISBN implements ChangeListener<Boolean>{
-    private TextField isbn;
-    private MenuGererStocksGlobaux vue;
+public class ControleurISBN implements ChangeListener<String>{
+    private TextField tf;
 
-    public ControleurISBN(TextField tf, MenuGererStocksGlobaux vue){
-        this.isbn = tf;
-        this.vue = vue;
+    public ControleurISBN(TextField tf) {
+        this.tf = tf;
+    }
+
+    public boolean contientAutreQueChiffre(String input) {
+        for (char c : input.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue){
-        if(!newValue){
-            try{
-                Double.parseDouble(this.isbn.getText());
-            }catch(NumberFormatException e){
-                this.isbn.setText("");
-            }
+    public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+
+        if (!arg2.isBlank() && contientAutreQueChiffre(arg2)) {
+            tf.setText(arg1);
+            tf.setStyle(AppliLib.styleTextField + " -fx-border-color: red;");
+        } else {
+            tf.setStyle(AppliLib.styleTextField);
         }
+        
     }
 }
 

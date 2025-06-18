@@ -6,10 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
 
 public class AdministrateurBD{
 
@@ -23,7 +21,7 @@ public class AdministrateurBD{
             // laConnexion.connecter("localhost", "Librairie", "root", "mypassword");
             // laConnexion.connecter("servinfo-maria", "DBarsamerzoev", "arsamerzoev",
             // "arsamerzoev");
-            File cache = new File("cachePourBaseDeDonne");
+            File cache = new File(".cachePourBaseDeDonne");
             Scanner reader = new Scanner(cache);
             while (reader.hasNextLine()) {
                 data.add(reader.nextLine());
@@ -250,6 +248,7 @@ public class AdministrateurBD{
         psPosseder.setInt(1, mag.getId());
         psPosseder.setString(2, isbn);
         psPosseder.setInt(3, Integer.parseInt(qte));
+        psPosseder.executeUpdate();
 
         //PreparedStatement ps
         //System.out.println("Une erreur est survenue lors de l'ajout du livre veuillez réessayer");

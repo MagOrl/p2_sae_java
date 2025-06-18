@@ -33,6 +33,7 @@ public class MenuGererStocksGlobaux extends BorderPane{
     private ComboBox<String> choixLibrairie;
     private ObservableList<String> lesLibrairies; 
     private Button btAjouterLivre;
+    private Button btAjouterQte;
     private TextField isbn;
     private TextField titre;
     private TextField datePubli;
@@ -75,21 +76,21 @@ public class MenuGererStocksGlobaux extends BorderPane{
         VBox vbAjouteLivre = new VBox();
 
         this.isbn.setStyle(AppliLib.styleTextField);
-        this.isbn.focusedProperty().addListener(new ControleurISBN(isbn, this));
+        this.isbn.textProperty().addListener(new ControleurISBN(isbn));
 
         this.titre.setStyle(AppliLib.styleTextField);
 
         this.datePubli.setStyle(AppliLib.styleTextField);
-        this.datePubli.focusedProperty().addListener(new ControleurDate(datePubli, this));
+        this.datePubli.textProperty().addListener(new ControleurDate(datePubli));
 
         this.nbPages.setStyle(AppliLib.styleTextField);
-        this.nbPages.focusedProperty().addListener(new ControleurNbPages(nbPages, this));
+        this.nbPages.textProperty().addListener(new ControleurNbPages(nbPages));
 
         this.qte.setStyle(AppliLib.styleTextField);
-        this.qte.focusedProperty().addListener(new ControleurQuantite(qte, this));
+        this.qte.textProperty().addListener(new ControleurQuantite(qte));
 
         this.prix.setStyle(AppliLib.styleTextField);
-        this.prix.focusedProperty().addListener(new ControleurPrix(prix, this));
+        this.prix.textProperty().addListener(new ControleurPrix(prix));
 
 
         Text isbnText = new Text("ISBN :");
@@ -135,6 +136,7 @@ public class MenuGererStocksGlobaux extends BorderPane{
         gpTop.setPadding(new Insets(10));
 
         VBox vbBouton = new VBox();
+        this.btAjouterLivre.setOnAction(new ControleurBoutonAjouter(this, modele));
         this.btAjouterLivre.setStyle(AppliLib.styleBouton);
         this.btAjouterLivre.setSkin(new MyButtonSkin(btAjouterLivre));
         this.btAjouterLivre.disableProperty().bind(isbn.textProperty().isEmpty().or(datePubli.textProperty().isEmpty().
@@ -157,11 +159,13 @@ public class MenuGererStocksGlobaux extends BorderPane{
         GridPane gpQte = new GridPane();
         TextField isbnQte = new TextField();
         isbnQte.setStyle(AppliLib.styleTextField);
-        isbnQte.focusedProperty().addListener(new ControleurISBN(isbnQte, this));
+        isbnQte.textProperty().addListener(new ControleurISBN(isbnQte));
 
         TextField nouvQte = new TextField();
         nouvQte.setStyle(AppliLib.styleTextField);
-        nouvQte.focusedProperty().addListener(new ControleurQuantite(nouvQte, this));
+        nouvQte.textProperty().addListener(new ControleurQuantite(nouvQte));
+
+
         
         Text isbnQteText = new Text("ISBN :");
         isbnQteText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -181,8 +185,9 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
         VBox vBoxBtQte = new VBox();
         Button btAjouterQte = new Button("Mettre a jour");
-        btAjouterQte.setStyle(AppliLib.styleBouton);
-        btAjouterQte.setSkin(new MyButtonSkin(btAjouterQte));
+        this.btAjouterQte.setStyle(AppliLib.styleBouton);
+        this.btAjouterQte.setSkin(new MyButtonSkin(btAjouterQte));
+        this.btAjouterQte.disableProperty().bind(isbnQte.textProperty().isEmpty().or(nouvQte.textProperty().isEmpty()));
         vBoxBtQte.getChildren().addAll(btAjouterQte);
         vBoxBtQte.setAlignment(Pos.BOTTOM_CENTER);
         vBoxBtQte.setPadding(new Insets(10));
@@ -238,8 +243,8 @@ public class MenuGererStocksGlobaux extends BorderPane{
         
         this.choixLibrairie.setValue("test");
 
-        top.getChildren().addAll(librairieActuelle, changeLibrairie);
-        top.setMargin(changeLibrairie, new Insets(4,0,0,110));
+        top.getChildren().addAll(librairieActuelle, this.choixLibrairie);
+        top.setMargin(this.choixLibrairie, new Insets(4,0,0,110));
 
         
 
@@ -369,6 +374,35 @@ public class MenuGererStocksGlobaux extends BorderPane{
     public String getNom(){
         return this.nom.getText();
     }
+
+    public String getISBN(){
+        return this.isbn.getText();
+    }
+
+    public String getTitre(){
+        return this.titre.getText();
+    }
+
+    public String getDatePubli(){
+        return this.datePubli.getText();
+    }
+
+    public String getNbPages(){
+        return this.nbPages.getText();
+    }
+
+    public String getQuantite(){
+        return this.qte.getText();
+    }
+
+    public String getPrix(){
+        return this.prix.getText();
+    }
+
+    public String getLibrairieActuelle(){
+        return this.librairieActuelle.getText();
+    }
+
 
     public void resetTFAjouterLivre(){
         this.isbn.setText("");
