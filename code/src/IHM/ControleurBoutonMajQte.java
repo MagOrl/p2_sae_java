@@ -15,19 +15,20 @@ public class ControleurBoutonMajQte implements EventHandler<ActionEvent>{
     @Override
     public void handle(ActionEvent event){
         try{
-            if(modele.majQteLivre(this.vue.getISBN(), modele.trouveLibrairie(this.vue.getLibrairieActuelle()), Integer.parseInt(this.vue.getQuantite()))){
+            if(modele.majQteLivre(this.vue.getISBNQte(), modele.trouveLibrairie(this.vue.getLibrairieActuelle()), Integer.parseInt(this.vue.getNouvQte()))){
                 vue.resetTFMajQte();
-                vue.popUpQteMaj();
+                vue.popUpQteMaj().show();
             }else{
-                vue.popUpLivreInexistant();
+                vue.resetTFMajQte();
+                vue.popUpLivreInexistant().show();
             }
         }catch(NumberFormatException e){
-            vue.popUpNumberFormatException();
+            vue.popUpNumberFormatException().show();
         }catch(QteInfAZeroException e){
-            vue.popUpQteInfAZero();
+            vue.popUpQteInfAZero().show();
         }
         catch(SQLException e){
-            vue.popUpAjouterLivreSQLException();
+            vue.popUpAjouterLivreSQLException().show();
         }
     }
 }

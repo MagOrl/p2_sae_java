@@ -163,10 +163,10 @@ public class AdministrateurBD{
      * @param nommag : le nom de la librairie
      * @param villemag : la ville de la librairie 
      */
-    public void ajouteNouvelleLibrairie(String nommag, String villemag) throws SQLException{
-        Magasin magasin = new Magasin(idmagMax(), nommag, villemag);
+    public void ajouteNouvelleLibrairie(String nommag, String villemag, String idmag) throws SQLException{
+        Magasin magasin = new Magasin(Integer.parseInt(idmag), nommag, villemag);
         PreparedStatement ps = this.connexion.prepareStatement
-        ("insert into MAGASIN values(?,?,?)");
+        ("insert ignore into MAGASIN values(?,?,?)");
         ps.setInt(1, magasin.getId());
         ps.setString(2, magasin.getNom());
         ps.setString(3, magasin.getVille());

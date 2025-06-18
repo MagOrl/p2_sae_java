@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.BufferedReader;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import javafx.beans.Observable;
@@ -50,17 +51,25 @@ public class MenuGererStocksGlobaux extends BorderPane{
         try{
             connexion = new ConnexionMySQL();
             modele = new AdministrateurBD(connexion);
-        }    
-        catch(ClassNotFoundException e){
+            this.librairieActuelle = new Text();
+            this.lesLibrairies = FXCollections.observableArrayList();
+            for(String mag : this.modele.choixLibrairie()){
+                this.lesLibrairies.add(mag);
+            }
+        }catch(SQLException e){
+            popUpAjouterLivreSQLException().show();
+        }catch(ClassNotFoundException e){
             System.out.println("Nous n'avons pas pu connecter l'application à la base de données");
         }
-        this.librairieActuelle = new Text();
-        this.lesLibrairies = FXCollections.observableArrayList("Cap au Sud", "Loire et livres");
-        this.choixLibrairie = new ComboBox<>(lesLibrairies);
+        
+        this.choixLibrairie = new ComboBox<>();
+        this.choixLibrairie.setItems(lesLibrairies);
+        this.choixLibrairie.setValue("Changer de librairie");
+        this.choixLibrairie.valueProperty().addListener(new ControleurChoixLibrairie(librairieActuelle));
         this.btAjouterLivre = new Button("Ajouter");
         this.btAjouterLivre.setSkin(new MyButtonSkin(btAjouterLivre));
         this.btAjouterLivre.setStyle(AppliLib.styleBouton);
-        this.btAjouterQte = new Button("Mettre à jour");
+        this.btAjouterQte = new Button("Modifier quantité");
         this.btAjouterQte.setSkin(new MyButtonSkin(btAjouterQte));
         this.btAjouterQte.setStyle(AppliLib.styleBouton);
         this.isbn = new TextField();
@@ -169,7 +178,6 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
         this.nouvQte.setStyle(AppliLib.styleTextField);
         this.nouvQte.textProperty().addListener(new ControleurNouvQte(nouvQte));
-        this.btAjouterQte.setOnAction(new ControleurBoutonMajQte(this, modele));
 
 
         
@@ -190,10 +198,9 @@ public class MenuGererStocksGlobaux extends BorderPane{
         gpQte.setPadding(new Insets(10));
 
         VBox vBoxBtQte = new VBox();
-        this.btAjouterQte.setStyle(AppliLib.styleBouton);
-        this.btAjouterQte.setSkin(new MyButtonSkin(this.btAjouterQte));
         this.btAjouterQte.disableProperty().bind(isbnQte.textProperty().isEmpty().or(nouvQte.textProperty().isEmpty()));
-        vBoxBtQte.getChildren().addAll(btAjouterQte);
+        this.btAjouterQte.setOnAction(new ControleurBoutonMajQte(this, this.modele));
+        vBoxBtQte.getChildren().addAll(this.btAjouterQte);
         vBoxBtQte.setAlignment(Pos.BOTTOM_CENTER);
         vBoxBtQte.setPadding(new Insets(10));
 
@@ -240,15 +247,13 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
         HBox top = new HBox();
         Text placeHolder = new Text("librairie actuelle : ");
-        this.librairieActuelle = new Text("Cap au Sud");
-        
+
         placeHolder.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         this.librairieActuelle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
         
-        this.choixLibrairie.setValue("test");
 
-        top.getChildren().addAll(librairieActuelle, this.choixLibrairie);
+        top.getChildren().addAll(placeHolder, librairieActuelle, this.choixLibrairie);
         top.setMargin(this.choixLibrairie, new Insets(4,0,0,110));
 
         
@@ -348,6 +353,7 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
     }
 
+
     public void desactiverBtAjouter(){
         Text texteBouton = new Text("Ajouter");
         texteBouton.setStrikethrough(true);
@@ -406,6 +412,22 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
     public String getLibrairieActuelle(){
         return this.librairieActuelle.getText();
+    }
+
+    public String getNouvQte(){
+        return this.nouvQte.getText();
+    }
+
+    public String getISBNQte(){
+        return this.isbnQte.getText();
+    }
+
+    public ComboBox<String> getChoixLibrairie(){
+        return this.choixLibrairie;
+    }
+
+    public void setLibrairieActuelle(String librairie){
+        this.librairieActuelle.setText(librairie);
     }
 
 
