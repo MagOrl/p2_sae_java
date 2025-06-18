@@ -28,7 +28,9 @@ public class MenuAcceuil extends BorderPane {
     private ComboBox<String> cb;
     private ComboBox<String> nomMag;
     private Button changeInfoBD;
-    public MenuAcceuil(Button btnQuitte, Button creeCompte, Button connexion, ComboBox<String> nomMag,Button changeInfoBD) {
+
+    public MenuAcceuil(Button btnQuitte, Button creeCompte, Button connexion, ComboBox<String> nomMag,
+            Button changeInfoBD) {
         this.tfID = new TextField();
         this.pf = new PasswordField();
         this.cb = new ComboBox<>();
@@ -45,20 +47,20 @@ public class MenuAcceuil extends BorderPane {
         this.creeCompte = creeCompte;
         this.setTop(top());
         this.setCenter(left());
-        
+
     }
 
     public BorderPane top() {
         BorderPane bp = new BorderPane();
         Text txt = new Text("Livre Express");
         txt.setFont(Font.font("Arial", FontWeight.BOLD, 30));
-        ImageView logo = new ImageView("../img/logo_placeholder.png");
-        logo.setFitHeight(48);
-        logo.setFitWidth(48);
+        ImageView logo = new ImageView("../img/logo.png");
+        logo.setFitHeight(68);
+        logo.setFitWidth(68);
         HBox hbleft = new HBox(10);
         HBox hbright = new HBox(10);
         hbleft.getChildren().addAll(txt, logo);
-        hbright.getChildren().addAll(this.changeInfoBD,this.creeCompte, this.btnQuitte);
+        hbright.getChildren().addAll(this.creeCompte, this.changeInfoBD, this.btnQuitte);
         bp.setLeft(hbleft);
         bp.setRight(hbright);
         bp.setStyle(AppliLib.styleBanniere);
@@ -96,11 +98,11 @@ public class MenuAcceuil extends BorderPane {
         this.cb.valueProperty().addListener(new ControleurUtilisateur(gp, nomMag));
 
         ImageView logo = new ImageView("../img/PileOfBooks.png");
-        logo.setFitHeight(400);
-        logo.setFitWidth(200);
+        logo.setFitHeight(500);
+        logo.setFitWidth(250);
         hb.getChildren().addAll(gp, logo);
         hb.setPadding(new Insets(10));
-        hb.setAlignment(Pos.CENTER_LEFT);
+        hb.setAlignment(Pos.BOTTOM_LEFT);
         return hb;
     }
 

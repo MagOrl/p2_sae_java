@@ -78,7 +78,7 @@ public class AppliLib extends Application {
         this.changeInfoBD = new Button("Paramètre");
         this.quitteInfo = new Button("Quitter");
 
-        this.btnQuitte.setStyle(styleBouton);
+        this.btnQuitte.setStyle(styleBouton + "-fx-background-color:rgb(194, 60, 60);");
         this.connexion.setStyle(styleBouton);
         this.creeCompte.setStyle(styleBouton);
         this.confirmCrea.setStyle(styleBouton);
@@ -119,7 +119,7 @@ public class AppliLib extends Application {
         this.confirmCrea.setSkin(new MyButtonSkin(this.confirmCrea));
         this.changeInfoBD.setSkin(new MyButtonSkin(this.changeInfoBD));
         this.quitteInfo.setSkin(new MyButtonSkin(this.quitteInfo));
-        
+
         this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag, this.changeInfoBD);
         this.menuCrea = new MenuCreaCompte(this.quitteCrea, this.confirmCrea);
 

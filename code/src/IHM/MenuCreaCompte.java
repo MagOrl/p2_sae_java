@@ -70,7 +70,11 @@ public class MenuCreaCompte extends BorderPane {
         this.setTop(top());
         this.setBottom(bottom());
         this.setLeft(center());
-        this.setCenter(new ImageView("../img/livreCreaCompte.gif"));
+        ImageView img = new ImageView("../img/PileOfBooks.png");
+        img.setFitWidth(250);
+        img.setFitHeight(500);
+
+        this.setCenter(img);
 
     }
 
