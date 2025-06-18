@@ -69,8 +69,7 @@ public class Livre {
   @Override
   public String toString() {
     return getTitre() +
-        " (isbn: " + getIsbn() +
-        " nombre de pages: " + getNbPages() +
+        " (nombre de pages: " + getNbPages() +
         " date de publication: " + getDatePubli() +
         " prix: " + getPrix() + ")";
   }

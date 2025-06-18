@@ -36,6 +36,10 @@ public class MenuClient extends BorderPane {
 
     private RecomDynamique livreDyna;
 
+    private String theme;
+
+    private Livre livreSelectionne;
+
     public MenuClient(AppliLib appli) {
         super();
 
@@ -44,6 +48,7 @@ public class MenuClient extends BorderPane {
         this.client = (Client) this.appli.getUtilisateur();
         this.recommandations = lesRecommandations();
         this.listeRecommandes = livresRecommandes();
+        this.theme = "";
         this.livreDyna = new RecomDynamique(this.listeRecommandes);
         this.setTop(this.ajouteTop());
         this.setLeft(this.ajouteLeft());
@@ -71,6 +76,7 @@ public class MenuClient extends BorderPane {
         recherche.setMinHeight(40);
         recherche.setMinWidth(90);
         recherche.setSkin(new MyButtonSkin(recherche));
+        recherche.setOnAction(new ControleurRecherche(this, this.theme));
 
         VBox lesThemes = new VBox(5);
         ToggleGroup groupTheme = new ToggleGroup();
@@ -222,6 +228,28 @@ public class MenuClient extends BorderPane {
             }
         }
         return livres;
+    }
+
+    public void setTheme(String theme){
+        this.theme = theme;
+    }
+
+    public ClientBD getClientBD(){
+        return this.clientBD;
+    }
+
+    public Integer themeID(){
+        Map<Integer,String> themes = this.clientBD.afficheThemes();
+        for (int key : themes.keySet()){
+            if (themes.get(key).equals(this.theme)){
+                return key;
+            }
+        }
+        return null;
+    }
+
+    public void setLivreSelect(Livre livre){
+        this.livreSelectionne = livre;
     }
 
 }
