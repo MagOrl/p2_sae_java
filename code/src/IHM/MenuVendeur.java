@@ -30,8 +30,8 @@ public class MenuVendeur extends BorderPane {
     private Text textLibrairie;
     private Vendeur vendeur;
 
-    public MenuVendeur(Vendeur vendeur) {
-        this.vendeur = vendeur;
+    public MenuVendeur() {
+        // this.vendeur = null;
 
         this.setTop(top());
         this.setLeft(left());

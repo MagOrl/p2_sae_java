@@ -205,7 +205,7 @@ public class VendeurBD {
      * @param qte : la quantité du livre à ajouter 
      * @param mag : la librairie dans laquelle ajouter le livre  
      */
-  public void AjouterLivre(String isbn, String titre, String auteur, String editeur, String theme, String nbpages,
+  public void AjouterLivre(String isbn, String titre, String nbpages,
       String datepubli, String prix, String qte, Magasin mag) throws SQLException {
     Livre livre = new Livre(isbn, titre, Integer.parseInt(nbpages), datepubli, Double.parseDouble(prix),
         Integer.parseInt(qte));

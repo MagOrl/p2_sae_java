@@ -15,6 +15,6 @@ import javafx.scene.text.Text;
 
 public class FenetreVerifDispo extends VBox {
 
-
+    //a implementer
 
 }

@@ -23,6 +23,8 @@ public class AppliLib extends Application {
     private MenuAcceuil menuAcc;
     private MenuVendeur menuVend;
     private FenetreMajQte fenetreMajQte;
+    private FenetreTransfererLivre fenetreTransfererLivre;
+    private FenetreVerifDispo fenetreVerifDispo;
 
     private AdministrateurBD adminBD;
     private VendeurBD vendeurBD;
@@ -80,6 +82,8 @@ public class AppliLib extends Application {
 
         this.menuVend = new MenuVendeur();
         this.fenetreMajQte = new FenetreMajQte();
+        this.fenetreTransfererLivre = new FenetreTransfererLivre();
+        this.fenetreVerifDispo = new FenetreVerifDispo();
 
         this.creeCompte.setMinHeight(40);
         this.creeCompte.setMinWidth(90);
@@ -94,7 +98,7 @@ public class AppliLib extends Application {
 
     @Override
     public void start(Stage stg) {
-        this.scene = new Scene(this.fenetreMajQte);
+        this.scene = new Scene(this.menuVend);
         stg.setScene(this.scene);
         stg.setTitle("Menu principale");
         stg.show();
@@ -125,11 +129,11 @@ public class AppliLib extends Application {
     }
 
     public void afficheFenetreTransfererLivre() {
-//A implementer
+        this.scene.setRoot(this.fenetreTransfererLivre);
     }
 
     public void afficheFenetreVerifDispo() {
-//A implementer
+        this.scene.setRoot(this.fenetreVerifDispo);
     }
 
     public void quitte() {
