@@ -17,6 +17,7 @@ public class ControleurBoutonAjouter implements EventHandler<ActionEvent>{
         try{
             modele.AjouterLivre(this.vue.getISBN(), this.vue.getTitre(), this.vue.getNbPages(),  this.vue.getDatePubli(), this.vue.getPrix(), this.vue.getQuantite(), modele.trouveLibrairie(this.vue.getLibrairieActuelle()));
             vue.resetTFAjouterLivre();
+            vue.popUpLivreAjoute().show();
         }catch(SQLException e){
             vue.popUpAjouterLivreSQLException();
         }

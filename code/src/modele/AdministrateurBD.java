@@ -266,7 +266,7 @@ public class AdministrateurBD{
         if(!rs.next()){
           return false;
         } 
-        PreparedStatement ps = this.connexion.prepareStatement(("UPDATE POSSEDER SET qte = 0 where isbn = ? and idmag = ?"));
+        PreparedStatement ps = this.connexion.prepareStatement(("DELETE FROM POSSEDER where isbn = ? and idmag = ?"));
         ps.setString(1, isbn);
         ps.setInt(2, mag.getId());
         ps.executeUpdate();

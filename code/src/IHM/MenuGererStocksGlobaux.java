@@ -40,6 +40,8 @@ public class MenuGererStocksGlobaux extends BorderPane{
     private TextField nbPages;  
     private TextField qte;
     private TextField prix;
+    private TextField isbnQte;
+    private TextField nouvQte;
     private AdministrateurBD modele;
     private static ConnexionMySQL connexion;
 
@@ -55,13 +57,20 @@ public class MenuGererStocksGlobaux extends BorderPane{
         this.librairieActuelle = new Text();
         this.lesLibrairies = FXCollections.observableArrayList("Cap au Sud", "Loire et livres");
         this.choixLibrairie = new ComboBox<>(lesLibrairies);
-        this.btAjouterLivre = new Button("");
+        this.btAjouterLivre = new Button("Ajouter");
+        this.btAjouterLivre.setSkin(new MyButtonSkin(btAjouterLivre));
+        this.btAjouterLivre.setStyle(AppliLib.styleBouton);
+        this.btAjouterQte = new Button("Mettre à jour");
+        this.btAjouterQte.setSkin(new MyButtonSkin(btAjouterQte));
+        this.btAjouterQte.setStyle(AppliLib.styleBouton);
         this.isbn = new TextField();
         this.titre = new TextField();
         this.datePubli = new TextField();
         this.nbPages = new TextField();
         this.qte = new TextField();
         this.prix = new TextField();
+        this.isbnQte = new TextField();
+        this.nouvQte = new TextField();
         this.btDeconexion = bouton;
         this.prenom = new Text();
         this.nom = new Text();
@@ -137,8 +146,6 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
         VBox vbBouton = new VBox();
         this.btAjouterLivre.setOnAction(new ControleurBoutonAjouter(this, modele));
-        this.btAjouterLivre.setStyle(AppliLib.styleBouton);
-        this.btAjouterLivre.setSkin(new MyButtonSkin(btAjouterLivre));
         this.btAjouterLivre.disableProperty().bind(isbn.textProperty().isEmpty().or(datePubli.textProperty().isEmpty().
                                                     or(nbPages.textProperty().isEmpty().
                                                     or(qte.textProperty().isEmpty().   
@@ -157,13 +164,12 @@ public class MenuGererStocksGlobaux extends BorderPane{
         VBox vbMajQte = new VBox();
 
         GridPane gpQte = new GridPane();
-        TextField isbnQte = new TextField();
-        isbnQte.setStyle(AppliLib.styleTextField);
-        isbnQte.textProperty().addListener(new ControleurISBN(isbnQte));
+        this.isbnQte.setStyle(AppliLib.styleTextField);
+        this.isbnQte.textProperty().addListener(new ControleurISBN(isbnQte));
 
-        TextField nouvQte = new TextField();
-        nouvQte.setStyle(AppliLib.styleTextField);
-        nouvQte.textProperty().addListener(new ControleurQuantite(nouvQte));
+        this.nouvQte.setStyle(AppliLib.styleTextField);
+        this.nouvQte.textProperty().addListener(new ControleurNouvQte(nouvQte));
+        this.btAjouterQte.setOnAction(new ControleurBoutonMajQte(this, modele));
 
 
         
@@ -184,9 +190,8 @@ public class MenuGererStocksGlobaux extends BorderPane{
         gpQte.setPadding(new Insets(10));
 
         VBox vBoxBtQte = new VBox();
-        Button btAjouterQte = new Button("Mettre a jour");
         this.btAjouterQte.setStyle(AppliLib.styleBouton);
-        this.btAjouterQte.setSkin(new MyButtonSkin(btAjouterQte));
+        this.btAjouterQte.setSkin(new MyButtonSkin(this.btAjouterQte));
         this.btAjouterQte.disableProperty().bind(isbnQte.textProperty().isEmpty().or(nouvQte.textProperty().isEmpty()));
         vBoxBtQte.getChildren().addAll(btAjouterQte);
         vBoxBtQte.setAlignment(Pos.BOTTOM_CENTER);
@@ -404,6 +409,7 @@ public class MenuGererStocksGlobaux extends BorderPane{
     }
 
 
+
     public void resetTFAjouterLivre(){
         this.isbn.setText("");
         this.titre.setText("");
@@ -413,9 +419,39 @@ public class MenuGererStocksGlobaux extends BorderPane{
         this.prix.setText("");
     }
 
+    public void resetTFMajQte(){
+        this.isbnQte.setText("");
+        this.nouvQte.setText("");
+    }
+
     public Alert popUpAjouterLivreSQLException(){
         // A implementer    
         Alert alert = new Alert(Alert.AlertType.ERROR, "Une erreur est survenue lors de l'ajout du livre");
+        return alert;
+    }
+
+    public Alert popUpQteInfAZero(){
+        Alert alert = new Alert(Alert.AlertType.ERROR, "La nouvelle quantité est inférieure à zéro, veuillez enlever moins de quantitié");
+        return alert;   
+    }
+
+    public Alert popUpLivreInexistant(){
+        Alert alert = new Alert(Alert.AlertType.ERROR, "Le livre dont vous essayez de mettre à jour la quantité n'xiste pas dans la base de donnée");
+        return alert;
+    }
+
+    public Alert popUpNumberFormatException(){
+        Alert alert = new Alert(Alert.AlertType.ERROR, "Veuillez entrer uniquement des chiffres pour la quantité, la date de publication, le prix et le nombre de pages");
+        return alert;
+    }
+
+    public Alert popUpLivreAjoute(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Le livre a bien été ajouté");
+        return alert;
+    }
+
+    public Alert popUpQteMaj(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "la quantitié à bien été mise à jour");
         return alert;
     }
 }
