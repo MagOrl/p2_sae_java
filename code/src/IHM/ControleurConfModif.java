@@ -16,7 +16,6 @@ public class ControleurConfModif implements EventHandler<ActionEvent> {
         try {
             FileWriter fw = new FileWriter(".cachePourBaseDeDonne", false);
             for (String d : this.valAcc) {
-                System.out.println("ICI : :" +d);
                 fw.write(d + "\n");
             }
             fw.close();

@@ -68,7 +68,7 @@ public class AppliLib extends Application {
             this.nomMag.getItems().addAll(this.vendeurBD.choixLibrairie());
 
         } catch (SQLException e) {
-            System.out.println("pas bonne infos");
+            System.err.println("pas bonne base de données");
         }
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
