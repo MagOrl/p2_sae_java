@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
@@ -46,7 +47,7 @@ public class MenuClient extends BorderPane {
 
         this.setTop(this.ajouteTop());
         this.setLeft(this.ajouteLeft());
-        // this.setCenter(this.ajouteRight());
+        this.setCenter(this.ajouteCenter());
     }
 
     public BorderPane ajouteTop() {
@@ -124,7 +125,7 @@ public class MenuClient extends BorderPane {
         infosPerso.setMinWidth(90);
         infosPerso.setSkin(new MyButtonSkin(infosPerso));
         deco.setOnAction(new ControleurDeconnexion(this.appli));
-        // infosPerso.setOnAction(new ControleurInfosPersos());
+        infosPerso.setOnAction(new ControleurInfosPersos(this.appli));
         VBox blocB = new VBox(10);
         blocB.getChildren().addAll(deco, infosPerso);
         HBox right = new HBox(10);
@@ -141,8 +142,8 @@ public class MenuClient extends BorderPane {
         return top;
     }
 
-    public VBox ajouteLeft() {
-        VBox left = new VBox();
+    public BorderPane ajouteLeft() {
+        BorderPane left = new BorderPane();
 
         VBox blocObservable = new VBox();
         ImageView liv = new ImageView(new Image("../img/logo.png"));
@@ -150,31 +151,57 @@ public class MenuClient extends BorderPane {
         liv.setFitWidth(200);
         int i = (int) Math.round(Math.random()*this.livresRecommandes().size());
         Text titre = new Text(this.listeRecommandes.get(i).getTitre());
-        titre.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+        titre.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
         BorderPane blocA = new BorderPane();
         Text date = new Text(this.listeRecommandes.get(i).getDatePubli());
-        date.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+        date.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
         Text prix = new Text(""+this.listeRecommandes.get(i).getPrix());
-        prix.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+        prix.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
         blocA.setLeft(date);
         blocA.setRight(prix);
         blocA.setPadding(new Insets(20));
         blocObservable.getChildren().addAll(liv,titre,blocA);
         blocObservable.setAlignment(Pos.CENTER);
+
+        HBox bottom = new HBox(10);
         Button consulter = new Button("Consulter");
         //consulter.setOnAction(new ControleurConsulter(this.appli, this));
         consulter.setStyle(AppliLib.styleBouton);
         consulter.setMinHeight(40);
         consulter.setMinWidth(90);
         consulter.setSkin(new MyButtonSkin(consulter));
-        left.getChildren().addAll(blocObservable,consulter);
+        bottom.getChildren().addAll(consulter);
+        bottom.setAlignment(Pos.CENTER);
+
+        left.setCenter(blocObservable);
+        left.setBottom(bottom);
         left.setStyle(AppliLib.styleDefaultContainer);
-        left.setAlignment(Pos.CENTER);
+        BorderPane.setAlignment(left, Pos.CENTER);
         return left;
     }
 
-    public HBox ajouteCenter(){
-        HBox center = new HBox();
+    public BorderPane ajouteCenter(){
+        BorderPane center = new BorderPane();
+
+        VBox boite = new VBox(10);
+        Text message = new Text("Aucune recherche en cours");
+        Text conseil = new Text("Vous pouvez chercher des livres selon leur thême via la barre de recherche.");
+        message.setFont(Font.font("Arial", FontWeight.BOLD, 50));
+        conseil.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
+        boite.getChildren().addAll(message, conseil);
+        Button ajouter = new Button("Ajouter au panier");
+        //ajouter.setOnAction(new ControleurAjouterPanier(this.clientBD));
+        ajouter.setStyle(AppliLib.styleBouton);
+        ajouter.setMinHeight(40);
+        ajouter.setMinWidth(90);
+        ajouter.setSkin(new MyButtonSkin(ajouter));
+        ajouter.setDisable(true);
+
+        
+        center.setCenter(boite);
+        center.setBottom(ajouter);
+        center.setPadding(new Insets(20));
+        BorderPane.setAlignment(center, Pos.CENTER);
         return center;
     }
 

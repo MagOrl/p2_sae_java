@@ -25,6 +25,7 @@ public class AppliLib extends Application {
     private ClientBD clientBD;
     private Personne utilisateur;
     private MenuClient menuCli;
+    private MenuInfosPersos menuInfos;
     private ConnexionMySQL connexionSQL;
     private ComboBox<String> nomMag;
 
@@ -105,6 +106,13 @@ public class AppliLib extends Application {
         this.menuCli = new MenuClient(this);
         
         this.scene.setRoot(this.menuCli);
+    }
+
+    public void afficheMenuInfosPersos() {
+        if(this.menuInfos == null)
+        this.menuInfos = new MenuInfosPersos(this, this.getUtilisateur());
+        
+        this.scene.setRoot(this.menuInfos);
     }
 
 

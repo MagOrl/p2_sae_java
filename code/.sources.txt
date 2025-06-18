@@ -14,6 +14,7 @@
 ./src/IHM/MenuAcceuil.java
 ./src/IHM/MyButtonSkin.java
 ./src/IHM/ControleurDeconnexion.java
+./src/IHM/MenuInfosPersos.java
 ./src/modele/Administrateur.java
 ./src/modele/Auteur.java
 ./src/modele/Classification.java
