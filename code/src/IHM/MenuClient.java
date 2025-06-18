@@ -36,6 +36,8 @@ public class MenuClient extends BorderPane {
 
     private List<Livre> listeRecommandes;
 
+    private TextRecomDynamique livreDyna;
+
     public MenuClient(AppliLib appli) {
         super();
 
@@ -44,7 +46,7 @@ public class MenuClient extends BorderPane {
         this.client = (Client) this.appli.getUtilisateur();
         this.recommandations = lesRecommandations();
         this.listeRecommandes = livresRecommandes();
-
+        this.livreDyna = new TextRecomDynamique(this.listeRecommandes);
         this.setTop(this.ajouteTop());
         this.setLeft(this.ajouteLeft());
         this.setCenter(this.ajouteCenter());
@@ -110,7 +112,7 @@ public class MenuClient extends BorderPane {
         histori.setMinWidth(90);
         histori.setSkin(new MyButtonSkin(histori));
         // accesPanier.setOnAction(new ControleurPanier());
-        // histori.setOnAction(new ControleurHistorique());
+        histori.setOnAction(new ControleurHistorique(this.appli));
         VBox blocA = new VBox(10);
         blocA.getChildren().addAll(accesPanier, histori);
 
@@ -149,18 +151,8 @@ public class MenuClient extends BorderPane {
         ImageView liv = new ImageView(new Image("../img/logo.png"));
         liv.setFitHeight(200);
         liv.setFitWidth(200);
-        int i = (int) Math.round(Math.random()*this.livresRecommandes().size());
-        Text titre = new Text(this.listeRecommandes.get(i).getTitre());
-        titre.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
-        BorderPane blocA = new BorderPane();
-        Text date = new Text(this.listeRecommandes.get(i).getDatePubli());
-        date.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
-        Text prix = new Text(""+this.listeRecommandes.get(i).getPrix());
-        prix.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
-        blocA.setLeft(date);
-        blocA.setRight(prix);
-        blocA.setPadding(new Insets(20));
-        blocObservable.getChildren().addAll(liv,titre,blocA);
+
+        blocObservable.getChildren().addAll(liv,this.livreDyna);
         blocObservable.setAlignment(Pos.CENTER);
 
         HBox bottom = new HBox(10);

@@ -1,8 +1,63 @@
+import java.util.List;
+import java.util.Map;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import java.sql.SQLException;
+
 public class MenuHistorique extends BorderPane {
 
     private AppliLib appli;
 
+    private Client client;
+
+    private Map<String,List<String>> historique;
+
     public MenuHistorique(AppliLib appli){
+        super();
+
         this.appli = appli;
+        this.client = (Client) this.appli.getUtilisateur();
+        try{
+            this.historique = this.appli.getClientBD().historiqueCommande(this.client); 
+        }catch (SQLException e){
+            this.appli.popUpPasDeCommandes();
+        }
+        
+
+        Text titre = new Text("Historique de vos commandes");
+        titre.setFont(Font.font("Arial", FontWeight.BOLD, 35));
+
+        VBox center = new VBox(10);
+        for (String key : this.historique.keySet()){
+            Text titreCom = new Text(key);
+            titreCom.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+            VBox lesLivres = new VBox(5);
+            for (String value : this.historique.get(key)){
+                Text ligne = new Text(value);
+                ligne.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
+                lesLivres.getChildren().add(ligne);
+            }
+            TitledPane commande = new TitledPane(key, lesLivres);
+            center.getChildren().add(commande);
+        }
+
+        Button retour = new Button("Retour");
+        retour.setOnAction(new ControleurRetour(this.appli));
+        retour.setStyle(AppliLib.styleBouton);
+        retour.setMinHeight(40);
+        retour.setMinWidth(90);
+        retour.setSkin(new MyButtonSkin(retour));
+
+        this.setTop(titre);
+        this.setCenter(center);
+        this.setBottom(retour);
     }
 }
+
+//"Aucune commande effectuer pour le moment"

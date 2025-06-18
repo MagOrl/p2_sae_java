@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ClientBD {
@@ -168,9 +169,11 @@ public class ClientBD {
      *         moment" si l'utilisateur n'a toujours pas fait de commandes
      * @throws SQLException
      */
-    public String historiqueCommande(Client cli) throws SQLException {
+    public Map<String,List<String>> historiqueCommande(Client cli) throws SQLException {
         this.st = laConnexion.createStatement();
-        Map<String,String> historique;
+        Map<String,List<String>> historique = new HashMap<>();
+        List<String> listeCommande = new ArrayList<>();
+        String key = "";
         ResultSet rs = this.st.executeQuery(
                 "select numcom,numlig,datecom, enligne, livraison,titre,qte,prixvente FROM COMMANDE NATURAL JOIN DETAILCOMMANDE NATURAL JOIN LIVRE WHERE idcli = "
                         + cli.getNumCompte() + " ORDER BY datecom");
@@ -183,27 +186,29 @@ public class ClientBD {
         int cpt = 0;
         while (rs.next()) {
             String enligne = rs.getString("enLigne").equals("O") ? "en ligne" : "en magasin";
-            String livraison = rs.getString("livraison").equals("M") ? "Récuperé au magasin" : "Livré au domicile";
+            String livraison = rs.getString("livraison").equals("M") ? "récuperé en magasin" : "livré à domicile";
             if (rs.getInt("numcom") == numcomSave) {
-                res += "\n" + rs.getString("numlig") + "  " + rs.getString("titre") + "  " + rs.getInt("prixvente")
-                        + "€  quantité : " + rs.getInt("qte");
+                listeCommande.add(rs.getString("numlig") + ". Livre : " + rs.getString("titre") + " | Prix : " + rs.getInt("prixvente")
+                        + "€ | Quantité : " + rs.getInt("qte"));
                 cpt = cpt + (rs.getInt("prixvente") * rs.getInt("qte"));
             } else {
                 if (numcomSave != -1) {
-                    res += "\nprix total : " + cpt + " €";
+                    listeCommande.add("Prix total : " + cpt + " €");
+                    historique.put(key, listeCommande);
+                    listeCommande = new ArrayList<>();
                     cpt = 0;
                 }
                 numcomSave = rs.getInt("numcom");
-                res += "\n \nLa commande " + rs.getInt("numcom") + "\n"
-                        + "Le " + rs.getString("datecom") + " effectuée " + enligne + "\n" + livraison + " ";
-                res += rs.getString("numlig") + " \nLivre : " + rs.getString("titre") + "\nPrix : " + rs.getInt("prixvente")
-                        + "€  \nQuantité : " + rs.getInt("qte");
+                key = "Commande " + rs.getInt("numcom") + "\n"
+                        + "Effectuée " + rs.getString("datecom") + " " + enligne + " et " + livraison;
+                listeCommande.add(rs.getString("numlig") + ". Livre : " + rs.getString("titre") + " | Prix : " + rs.getInt("prixvente")
+                        + "€ | Quantité : " + rs.getInt("qte"));
                 cpt = cpt + (rs.getInt("prixvente") * rs.getInt("qte"));
             }
         }
         rs.close();
         res += "\nprix total : " + cpt + " €";
-        return res;
+        return historique;
     }
 
     /**

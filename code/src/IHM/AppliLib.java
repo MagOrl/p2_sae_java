@@ -26,6 +26,7 @@ public class AppliLib extends Application {
     private Personne utilisateur;
     private MenuClient menuCli;
     private MenuInfosPersos menuInfos;
+    private MenuHistorique menuHistorique;
     private ConnexionMySQL connexionSQL;
     private ComboBox<String> nomMag;
 
@@ -115,6 +116,13 @@ public class AppliLib extends Application {
         this.scene.setRoot(this.menuInfos);
     }
 
+    public void afficheMenuHistorique() {
+        if(this.menuHistorique == null)
+        this.menuHistorique = new MenuHistorique(this);
+        
+        this.scene.setRoot(this.menuHistorique);
+    }
+
 
     public void quitte() {
         Platform.exit();
@@ -159,6 +167,13 @@ public class AppliLib extends Application {
         Alert alert = new Alert(Alert.AlertType.WARNING, 
             "Pas de magasins existants.",ButtonType.YES);
         alert.setTitle("Aucun magasin");
+        return alert;
+    }
+
+    public Alert popUpPasDeCommandes() {
+        Alert alert = new Alert(Alert.AlertType.WARNING, 
+            "Pas de commandes enregistrées.",ButtonType.YES);
+        alert.setTitle("Aucune commande");
         return alert;
     }
 
