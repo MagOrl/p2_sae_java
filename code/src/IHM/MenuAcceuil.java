@@ -37,6 +37,7 @@ public class MenuAcceuil extends BorderPane {
         this.tfID.setStyle(AppliLib.styleTextField);
         this.pf.setStyle(AppliLib.styleTextField);
         this.cb.setStyle(AppliLib.styleTextField);
+        this.nomMag.setStyle(AppliLib.styleTextField);
         this.cb.setValue("");
         this.btnQuitte = btnQuitte;
         this.connexion = connexion;
