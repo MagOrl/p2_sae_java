@@ -2,7 +2,9 @@ import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -208,7 +210,9 @@ public class LesGraphic extends VBox {
         for (String mag : data.keySet()) {
             XYChart.Series series = new XYChart.Series();
             series.setName(mag);
-            for (String mois : data.get(mag).keySet()) {
+            List<String> l = new ArrayList<>(data.get(mag).keySet());
+            Collections.sort(l);
+            for (String mois : l) {
                 series.getData().add(new XYChart.Data(mois, data.get(mag).get(mois)));
             }
             lineChart.getData().add(series);
