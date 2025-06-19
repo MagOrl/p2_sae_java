@@ -21,7 +21,6 @@ public class AppliLib extends Application {
     private Button creeCompte;
     private Button connexion;
     private MenuAcceuil menuAcc;
-    private FenetreMajQte fenetreMajQte;
     private FenetreTransfererLivre fenetreTransfererLivre;
     private FenetreVerifDispo fenetreVerifDispo;
 
@@ -98,7 +97,6 @@ public class AppliLib extends Application {
         this.btnQuitte.setMinWidth(90);
 
         //this.fenetreMajQte = new FenetreMajQte();
-        this.fenetreTransfererLivre = new FenetreTransfererLivre(this);
         this.fenetreVerifDispo = new FenetreVerifDispo();
 
         this.creeCompte.setMinHeight(40);
@@ -164,12 +162,12 @@ public class AppliLib extends Application {
 
     }
 
-    public void afficheFenetreMajQte() {
-        this.scene.setRoot(new FenetreMajQte(this));
+    public void afficheFenetreMajQte(MenuVendeur mVend) {
+        this.scene.setRoot(new FenetreMajQte(this,this.vendeurBD,mVend));
     }
 
-    public void afficheFenetreTransfererLivre() {
-        this.scene.setRoot(this.fenetreTransfererLivre);
+    public void afficheFenetreTransfererLivre(MenuVendeur mVend) {
+        this.scene.setRoot(new FenetreTransfererLivre(this, mVend,this.vendeurBD));
     }
     
 

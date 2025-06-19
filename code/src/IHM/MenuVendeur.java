@@ -53,8 +53,8 @@ public class MenuVendeur extends BorderPane {
         this.btnCommander.setStyle(AppliLib.styleBouton);
         this.btnVerif.setStyle(AppliLib.styleBouton);
 
-        this.btnTransferer.setOnAction(new ControleurTransfererLivre(appli));
-        this.btnMettreAJour.setOnAction(new ControleurMajQte(appli));
+        this.btnTransferer.setOnAction(new ControleurTransfererLivre(appli,this));
+        this.btnMettreAJour.setOnAction(new ControleurMajQte(appli,this));
         this.btnDeconnexion.setOnAction(new ControleurDeconnexion(appli));
         this.btnAjouter.setOnAction(new ControleurAjouterLivre(this.modele, this, this.appli));
         this.btnCommander.setOnAction(new ControleurCommanderV(appli));

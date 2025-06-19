@@ -11,7 +11,6 @@ public class ControleurTransferer implements EventHandler<ActionEvent> {
     private FenetreTransfererLivre fenetreTransfererLivre;
 
     public ControleurTransferer(VendeurBD modele, MenuVendeur menu, AppliLib appli, FenetreTransfererLivre fenetreTransfererLivre) {
-
         this.modele = modele;
         this.menu = menu;
         this.appli = appli;

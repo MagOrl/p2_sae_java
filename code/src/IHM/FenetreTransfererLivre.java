@@ -22,11 +22,11 @@ public class FenetreTransfererLivre extends VBox {
     private VendeurBD vend;
     private MenuVendeur menu;
 
-    public FenetreTransfererLivre(AppliLib appli) {
-
+    public FenetreTransfererLivre(AppliLib appli,MenuVendeur menuV,VendeurBD vend) {
+        this.vend = vend;
         this.btnTransf = new Button("Transférer");
         this.btnRetour = new Button("Retour");
-
+        this.menu = menuV;
         this.appli = appli;
         
         this.btnTransf.setStyle(AppliLib.styleBouton);

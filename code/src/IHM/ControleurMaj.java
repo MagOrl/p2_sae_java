@@ -25,7 +25,7 @@ public class ControleurMaj implements EventHandler<ActionEvent> {
             String isbn = "" + this.fenetreMajQte.getIsbn() + "";
             int qte = this.fenetreMajQte.getQte();
             Magasin librairie = this.modele.trouveLibrairie(this.menu.getLibrairie(),-1);
-            if (isbn.isEmpty() || qte < 0 ) {
+            if (isbn.isEmpty() || (""+qte+"").isEmpty()) {
                 this.appli.popUpMettreToutesLesVal().showAndWait();
                 return;
             }
