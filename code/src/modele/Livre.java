@@ -16,6 +16,8 @@ public class Livre {
     this.qte = qte;
   };
 
+  public Livre(){}
+
   public String getIsbn() {
     return this.isbn;
   };
@@ -71,10 +73,8 @@ public class Livre {
   @Override
   public String toString() {
     return getTitre() +
-        " (isbn: " + getIsbn() +
-        " nombre de pages: " + getNbPages() +
-        " date de publication: " + getDatePubli() +
-        " prix: " + getPrix() + ")";
+        " ("+ getDatePubli() +
+        ") : " + getPrix()+ "€";
   }
 
   @Override

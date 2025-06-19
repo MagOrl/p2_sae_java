@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.List;
-import java.util.Scanner;
 
 public class AdministrateurBD {
 
@@ -33,6 +32,8 @@ public class AdministrateurBD {
         data.add(reader.nextLine());
       }
       laConnexion.connecter(data.get(0), data.get(1), data.get(2), data.get(3));
+    } catch (SQLException e) {
+      e.printStackTrace();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
@@ -188,23 +189,6 @@ public class AdministrateurBD {
     ps.setString(2, magasin.getNom());
     ps.setString(3, magasin.getVille());
     ps.executeUpdate();
-  }
-
-  /**
-   * Fonction qui va créer un nouvel identifiant de librairie maximum,
-   * par rapport au numéro maximum déjà présent
-   * 
-   * @return String : le nouvel identifiant de librairie maximum
-   */
-  public int idmagMax() throws SQLException {
-    Integer idMax = 0;
-    this.st = connexion.createStatement();
-    ResultSet rs = this.st.executeQuery("select max(idmag) as idMax from MAGASIN");
-    while (rs.next()) {
-      idMax = rs.getInt("idMax");
-    }
-    rs.close();
-    return idMax;
   }
 
   /**
@@ -421,6 +405,7 @@ public class AdministrateurBD {
     return res;
 
   }
+
   /**
    * Fonction qui va ajouter un nouveau livre à une librairie passée en paramètre
    * 
@@ -452,12 +437,7 @@ public class AdministrateurBD {
     psPosseder.setInt(1, mag.getId());
     psPosseder.setString(2, isbn);
     psPosseder.setInt(3, Integer.parseInt(qte));
-
-    // PreparedStatement ps
-    // System.out.println("Une erreur est survenue lors de l'ajout du livre veuillez
-    // réessayer");
   }
-
 
   /**
    * Fonction qui va afficher tout les livres que possède un librairie
@@ -485,8 +465,7 @@ public class AdministrateurBD {
 
   }
 
-
-   public HashMap<String, HashMap<String, Number>> requeteNbVendMagAnne() throws SQLException {
+  public HashMap<String, HashMap<String, Number>> requeteNbVendMagAnne() throws SQLException {
     this.st = connexion.createStatement();
     ResultSet rs = this.st.executeQuery(
         "select distinct nommag as Magasin, YEAR(datecom) as annee, sum(qte) as qte from MAGASIN natural join COMMANDE natural join DETAILCOMMANDE group by Magasin, annee order by annee");
@@ -610,13 +589,13 @@ public class AdministrateurBD {
         "with MaxCAParClient as (select idcli, YEAR(datecom) as annee, sum(qte*prixvente) as CA from CLIENT natural join COMMANDE natural join DETAILCOMMANDE natural join LIVRE group by YEAR(datecom), idcli) select annee, max(CA) as maximum, min(CA) as minimum, avg(CA) as moyenne from MaxCAParClient group by annee");
     HashMap<String, HashMap<String, Number>> p = new HashMap<>();
     while (rs.next()) {
-      p.putIfAbsent("maximum", new HashMap<String, Number>()); 
-      p.putIfAbsent("minimum", new HashMap<String, Number>()); 
-      p.putIfAbsent("moyenne", new HashMap<String, Number>()); 
-      p.get("maximum").put(rs.getString("annee"), rs.getInt(2)); 
+      p.putIfAbsent("maximum", new HashMap<String, Number>());
+      p.putIfAbsent("minimum", new HashMap<String, Number>());
+      p.putIfAbsent("moyenne", new HashMap<String, Number>());
+      p.get("maximum").put(rs.getString("annee"), rs.getInt(2));
       p.get("minimum").put(rs.getString("annee"), rs.getInt(3));
       p.get("moyenne").put(rs.getString("annee"), rs.getInt(4));
-      
+
     }
     return p;
   }

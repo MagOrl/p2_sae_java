@@ -92,7 +92,7 @@ public abstract class Personne {
     }
 
     public String getCodePostal() {
-        return this.getCodePostal();
+        return this.codePostal;
     }
 
     public void setCodePostal(String codepostal) {

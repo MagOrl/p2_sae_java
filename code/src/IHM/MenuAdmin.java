@@ -1,15 +1,10 @@
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
 
-import javax.swing.text.AbstractDocument;
-
-import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -20,10 +15,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
-import javafx.scene.layout.BorderPane;
 
 public class MenuAdmin extends BorderPane {
     private Button bDeconnexion;
@@ -54,18 +47,15 @@ public class MenuAdmin extends BorderPane {
 
         this.bAjouterLibrairie.setOnAction(new ControleurAfficherAjouterLibrairie(this));
         this.bCreerVendeur.setOnAction(new ControleurCreerCompteVendeur(this));
-        this.bDeconnexion.setOnAction(new ControleurDeconnexion(this.app)); 
-
+        this.bDeconnexion.setOnAction(new ControleurDeconnexion(this.app));
         try {
             this.connexion = new ConnexionMySQL();
             this.adminBD = new AdministrateurBD(connexion);
         } catch (ClassNotFoundException e) {
             System.out.println("");
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         this.bDeconnexion.setStyle(AppliLib.styleBouton + "-fx-background-color:rgb(194, 60, 60);");
         this.bCreerVendeur.setStyle(AppliLib.styleBouton);
         this.bAjouter.setStyle(AppliLib.styleBouton);
@@ -213,7 +203,7 @@ public class MenuAdmin extends BorderPane {
         hbMain.setStyle(AppliLib.styleDefaultContainer);
         hbMain.setAlignment(Pos.BASELINE_CENTER);
         hbMain.setPadding(new Insets(20));
-        
+
         Text txt1 = new Text("Identifiant");
         Text txt2 = new Text("Prenom");
         Text txt3 = new Text("Nom");
@@ -262,7 +252,6 @@ public class MenuAdmin extends BorderPane {
         tfTel.setStyle(AppliLib.styleTextField);
         tfId.setStyle(AppliLib.styleTextField);
 
-
         VBox vbNomMag = new VBox(10);
         VBox vbPwd = new VBox(10);
         VBox vbPwdConf = new VBox(10);
@@ -274,7 +263,6 @@ public class MenuAdmin extends BorderPane {
         VBox vbCodePostal = new VBox(10);
         VBox vbTel = new VBox(10);
         VBox vbId = new VBox(10);
-
 
         vbNomMag.getChildren().addAll(txt11, tfNomMag);
         vbPwd.getChildren().addAll(txt4, pf);
@@ -296,10 +284,14 @@ public class MenuAdmin extends BorderPane {
 
         vb1.getChildren().addAll(vbId, vbPrenom, vbNom, vbPwd, vbPwdConf, vbTel);
         vb2.getChildren().addAll(vbMail, vbAddress, vbVille, vbCodePostal, vbNomMag, this.bAjouterVendeur);
-        this.bAjouterVendeur.disableProperty().bind(tfNomMag.textProperty().isEmpty().or(pf.textProperty().isEmpty()).or(
-            pfConfirm.textProperty().isEmpty()).or(tfMail.textProperty().isEmpty()).or(tfNom.textProperty().isEmpty()).or(
-                tfPrenom.textProperty().isEmpty()).or(tfAddress.textProperty().isEmpty()).or(tfVille.textProperty().isEmpty()).or(
-                    tfCodePostal.textProperty().isEmpty()).or(tfTel.textProperty().isEmpty()));
+        this.bAjouterVendeur.disableProperty()
+                .bind(tfNomMag.textProperty().isEmpty().or(pf.textProperty().isEmpty()).or(
+                        pfConfirm.textProperty().isEmpty()).or(tfMail.textProperty().isEmpty())
+                        .or(tfNom.textProperty().isEmpty()).or(
+                                tfPrenom.textProperty().isEmpty())
+                        .or(tfAddress.textProperty().isEmpty()).or(tfVille.textProperty().isEmpty()).or(
+                                tfCodePostal.textProperty().isEmpty())
+                        .or(tfTel.textProperty().isEmpty()));
 
         this.pfConf = pfConfirm;
         this.pfMdp = pf;
@@ -307,8 +299,9 @@ public class MenuAdmin extends BorderPane {
 
         hbMain.getChildren().addAll(vb1, vb2);
 
-        this.bAjouterVendeur.setOnAction(new ControleurAjouterVendeur(this, this.adminBD, tfNomMag, pf, pfConfirm, tfMail, tfId,
-                                        tfNom, tfPrenom, tfAddress, tfVille, tfCodePostal, tfTel));
+        this.bAjouterVendeur
+                .setOnAction(new ControleurAjouterVendeur(this, this.adminBD, tfNomMag, pf, pfConfirm, tfMail, tfId,
+                        tfNom, tfPrenom, tfAddress, tfVille, tfCodePostal, tfTel));
 
         return hbMain;
     }
@@ -342,10 +335,8 @@ public class MenuAdmin extends BorderPane {
         return alert;
     }
 
-
-
     public void setPwdOnError(boolean b) {
-        if (b==true){
+        if (b == true) {
             this.pfConf.setStyle(AppliLib.styleTextField + " -fx-border-color: red;");
             this.pfMdp.setStyle(AppliLib.styleTextField + " -fx-border-color: red;");
         } else {

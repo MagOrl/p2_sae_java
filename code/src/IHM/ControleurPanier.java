@@ -1,18 +1,17 @@
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 
-public class ControleurRetour implements EventHandler<ActionEvent> {
+public class ControleurPanier implements EventHandler<ActionEvent> {
 
     private AppliLib appli;
     private MenuClient menuCli;
 
-    public ControleurRetour(AppliLib appli, MenuClient menuCli) {
+    public ControleurPanier(AppliLib appli, MenuClient menuCli) {
         this.appli = appli;
         this.menuCli = menuCli;
     }
 
-    @Override
     public void handle(ActionEvent event) {
-        this.appli.retourMenuClient(this.menuCli);
+        this.appli.afficheMenuPanier(menuCli);
     }
 }

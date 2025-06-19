@@ -21,6 +21,7 @@ public class AppliLib extends Application {
     private VendeurBD vendeurBD;
     private ClientBD clientBD;
     private Personne utilisateur;
+
     private ConnexionMySQL connexionSQL;
     private ComboBox<String> nomMag;
     private MenuCreaCompte menuCrea;
@@ -29,7 +30,7 @@ public class AppliLib extends Application {
     private Button changeInfoBD;
     private Button quitteInfo;
     private MenuAcceuil menuAcc;
-  
+
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
             "-fx-background-radius: 20;" +
@@ -38,7 +39,7 @@ public class AppliLib extends Application {
             "-fx-text-fill: white;";
     public static String styleBanniere = "-fx-border-radius: 15;" +
             "-fx-border-color:rgb(0, 0, 0);" +
-            "-fx-border-width: 3;"+"-fx-background-color: #0b7f94;" +"-fx-border-insets: -2.5px;"+
+            "-fx-border-width: 3;" + "-fx-background-color: #0b7f94;" + "-fx-border-insets: -2.5px;" +
             "-fx-border-width: 3;" + "-fx-background-color: #0b7f94;" + "-fx-border-insets: -2.5px;";
 
     public static String styleDefaultContainer = "-fx-background-color: #5d9b7d;" +
@@ -52,10 +53,11 @@ public class AppliLib extends Application {
             "    -fx-border-radius: 15;\n" +
             "    -fx-border-color: black;";
 
+    public static String styleBoutonImg = "-fx-background-color: transparent;";
+
     @Override
     public void init() {
         this.nomMag = new ComboBox<>();
-
         try {
             this.connexionSQL = new ConnexionMySQL();
         } catch (ClassNotFoundException e) {
@@ -69,7 +71,7 @@ public class AppliLib extends Application {
 
         } catch (SQLException e) {
             System.err.println("pas bonne base de données");
-        }
+        } 
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
@@ -109,6 +111,9 @@ public class AppliLib extends Application {
         this.btnQuitte.setOnAction(new ControlleurQuitter(this));
         this.connexion.setOnAction(new ControlleurConnexion(this));
         this.creeCompte.setOnAction(new ControleurCreationCompte(this));
+        this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
+        this.connexion.setSkin(new MyButtonSkin(this.connexion));
+        this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
         this.quitteCrea.setOnAction(new ControleurQuitteCreaCompte(this));
         this.confirmCrea.setOnAction(new ControleurCreeCompte(this));
         this.changeInfoBD.setOnAction(new ControleurChangeInfoBD(this));
@@ -139,6 +144,27 @@ public class AppliLib extends Application {
         this.scene.setRoot(this.menuAcc);
     }
 
+    public void afficheMenuClient() {
+        this.scene.setRoot(new MenuClient(this));
+    }
+
+    public void retourMenuClient(MenuClient menuCli) {
+        this.scene.setRoot(menuCli);
+    }
+
+    public void afficheMenuInfosPersos(MenuClient menuCli) {
+
+        this.scene.setRoot(new MenuInfosPersos(this, this.utilisateur, menuCli));
+    }
+
+    public void afficheMenuHistorique(MenuClient menuCli) {
+        this.scene.setRoot(new MenuHistorique(this, menuCli, (Client) this.utilisateur));
+    }
+
+    public void afficheMenuPanier(MenuClient menuCli) {
+        this.scene.setRoot(new MenuPanier(this, (Client) this.utilisateur, menuCli));
+    }
+
     public void afficheMenuAdmin(Administrateur adm) {
         this.scene.setRoot(new MenuAdmin(this.btnQuitte, adm, this));
     }
@@ -151,8 +177,8 @@ public class AppliLib extends Application {
         this.scene.setRoot(new MenuChangeInfoBD(this.quitteInfo));
     }
 
-    public void afficheMenuGererStocksGlobaux(Administrateur adm){
-        this.scene.setRoot(new MenuGererStocksGlobaux(this,adm));
+    public void afficheMenuGererStocksGlobaux(Administrateur adm) {
+        this.scene.setRoot(new MenuGererStocksGlobaux(this, adm));
     }
 
     public void quitte() {
@@ -161,8 +187,8 @@ public class AppliLib extends Application {
 
     public Alert popUpQuitte() {
         Alert alert = new Alert(Alert.AlertType.WARNING,
-                "Êtes vous sûr de quitter ?", ButtonType.YES, ButtonType.NO);
-        alert.setTitle("Attention");
+                "Votre panier est plein.", ButtonType.YES);
+        alert.setTitle("Panier plein");
         return alert;
     }
 
@@ -180,6 +206,48 @@ public class AppliLib extends Application {
         return alert;
     }
 
+    public Alert popUpPasDeRecommandations() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de recommandations pour vous.", ButtonType.YES);
+        alert.setTitle("Aucune recommandation");
+        return alert;
+    }
+
+    public Alert popUpPasDeThemes() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de thêmes existants.", ButtonType.YES);
+        alert.setTitle("Aucun thême");
+        return alert;
+    }
+
+    public Alert popUpPasDeMagasins() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de magasins existants.", ButtonType.YES);
+        alert.setTitle("Aucun magasin");
+        return alert;
+    }
+
+    public Alert popUpPasDeCommandes() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de commandes enregistrées.", ButtonType.YES);
+        alert.setTitle("Aucune commande");
+        return alert;
+    }
+
+    public Alert popUpPanierPlein() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Votre panier est plein.", ButtonType.YES);
+        alert.setTitle("Panier plein");
+        return alert;
+    }
+
+    public Alert popUpSurDeCommender() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Voulez vous finaliser votre transaction ?", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Panier plein");
+        return alert;
+    }
+
     public Alert popUpPasMemeMotDePasse() {
         Alert alert = new Alert(Alert.AlertType.WARNING,
                 "Le mot de passe de confirmation ne correspond pas", ButtonType.YES);
@@ -193,7 +261,6 @@ public class AppliLib extends Application {
         alert.setTitle("Erreur");
         return alert;
     }
-
 
     public Alert popUpCompteCree(String prenom) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
@@ -242,5 +309,4 @@ public class AppliLib extends Application {
         return this.menuCrea;
     }
 
-    
 }

@@ -19,7 +19,8 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
             case "Client":
                 try {
                     if (this.app.getClientBD().connectClient(tf, pf)) {
-                        Client cli = this.app.getClientBD().trouveClient(tf, pf);
+                        this.app.setUtilisateur(this.app.getClientBD().trouveClient(tf, pf));
+                        this.app.afficheMenuClient();
                     } else {
                         this.app.getMenuAcc().resetFields();
                         this.app.popUpMauvaiseSaisie().showAndWait();
@@ -32,7 +33,7 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
             case "Vendeur":
                 try {
                     if (this.app.getVendeurBD().connectVendeur(tf, pf)) {
-                        Vendeur vend = this.app.getVendeurBD().trouveVendeur(tf, pf, this.app.getValMag());
+                        this.app.setUtilisateur(this.app.getVendeurBD().trouveVendeur(tf, pf, this.app.getValMag()));
                     } else {
                         this.app.getMenuAcc().resetFields();
                         this.app.popUpMauvaiseSaisie().showAndWait();
@@ -41,13 +42,12 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                System.out.println("vend");
                 break;
             case "Administrateur":
                 try {
                     if (this.app.getAdminBD().connectAdmin(tf, pf)) {
+                        this.app.setUtilisateur(this.app.getAdminBD().trouveAdmin(tf, pf));
                         this.app.afficheMenuAdmin(this.app.getAdminBD().trouveAdmin(tf, pf));
-
                     } else {
                         this.app.getMenuAcc().resetFields();
                         this.app.popUpMauvaiseSaisie().showAndWait();
@@ -56,7 +56,6 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                System.out.println("vend");
                 break;
             default:
                 this.app.popUpPasMitDeUser().showAndWait();
