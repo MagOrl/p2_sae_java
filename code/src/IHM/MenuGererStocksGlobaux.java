@@ -30,7 +30,10 @@ import java.util.Map;
 
 
 public class MenuGererStocksGlobaux extends BorderPane{
-    private Button btDeconexion;
+
+    private AppliLib app;
+    private Administrateur admin;
+    private Button btRetour;
     private Text prenom;
     private Text nom;
     private Text librairieActuelle;
@@ -65,7 +68,7 @@ public class MenuGererStocksGlobaux extends BorderPane{
             "-fx-text-fill: white;";
 
     
-    public MenuGererStocksGlobaux(Button bouton){
+    public MenuGererStocksGlobaux(AppliLib app, Administrateur admin){
         try{
             connexion = new ConnexionMySQL();
             modele = new AdministrateurBD(connexion);
@@ -85,6 +88,8 @@ public class MenuGererStocksGlobaux extends BorderPane{
         imgwRecherche.setFitHeight(20);
         imgwRecherche.setFitWidth(20);
 
+        this.app = app;
+        this.admin = admin;
         this.barreDeRecherche = new TextField();
         this.bTRecherche = new Button("",imgwRecherche);
         this.vBoxCenter = new VBox();
@@ -115,7 +120,8 @@ public class MenuGererStocksGlobaux extends BorderPane{
         this.prix = new TextField();
         this.isbnQte = new TextField();
         this.nouvQte = new TextField();
-        this.btDeconexion = bouton;
+        this.btRetour = new Button("Retour");
+        this.btRetour.setOnAction(new ControleurRetourAdmin(this.app, admin));
         this.prenom = new Text();
         this.nom = new Text();
         this.supprLivre = new HashMap<>();
@@ -257,16 +263,18 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
         Text titre = new Text("Livre Express");
         titre.setFont(Font.font("Arial", 30));
-        setPrenom("Matteo");
-        setPrenom("Foucher");
+        this.setPrenom(this.admin.getPrenom());
+        this.setNom(this.admin.getPrenom());
 
-        vbLeft.getChildren().addAll(titre, this.nom, this.prenom);
+        HBox infoAdmin = new HBox();
+        infoAdmin.getChildren().addAll(this.nom, this.prenom);
+        vbLeft.getChildren().addAll(titre, infoAdmin);
         //--------------------------------------------------------
         TextField barreDeRecherche = new TextField();
         barreDeRecherche.setStyle(AppliLib.styleTextField);
         //--------------------------------------------------------
 
-        bandeau.setRight(btDeconexion);
+        bandeau.setRight(btRetour);
         bandeau.setLeft(vbLeft);
         
         bandeau.setStyle(AppliLib.styleBanniere);

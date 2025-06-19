@@ -28,6 +28,7 @@ public class AppliLib extends Application {
     private Button quitteCrea;
     private Button changeInfoBD;
     private Button quitteInfo;
+    private MenuAcceuil menuAcc;
   
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
@@ -128,7 +129,7 @@ public class AppliLib extends Application {
 
     @Override
     public void start(Stage stg) {
-        this.scene = new Scene(this.menuGSG);
+        this.scene = new Scene(this.menuAcc);
         stg.setScene(this.scene);
         stg.setTitle("Menu principal");
         stg.show();
@@ -148,6 +149,10 @@ public class AppliLib extends Application {
 
     public void afficheInfoBD() {
         this.scene.setRoot(new MenuChangeInfoBD(this.quitteInfo));
+    }
+
+    public void afficheMenuGererStocksGlobaux(Administrateur adm){
+        this.scene.setRoot(new MenuGererStocksGlobaux(this,adm));
     }
 
     public void quitte() {
@@ -201,13 +206,6 @@ public class AppliLib extends Application {
         return this.vendeurBD;
     }
 
-    public Alert popUpMettreToutesLesVal() {
-        Alert alert = new Alert(Alert.AlertType.WARNING,
-                "Un ou plusieurs champs n'ont pas été complété.", ButtonType.YES);
-        alert.setTitle("Erreur");
-        return alert;
-    }
-
     public Alert popUpDeconnexion() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Confirmation de déconnexion");
@@ -244,7 +242,5 @@ public class AppliLib extends Application {
         return this.menuCrea;
     }
 
-    public void afficheMenuGererStocksGlobaux(){
-        this.scene.setRoot(this.menuGSG);
-    }
+    
 }

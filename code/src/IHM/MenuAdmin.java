@@ -48,6 +48,7 @@ public class MenuAdmin extends BorderPane {
         this.bCreerVendeur = new Button("Créer compte vendeur");
         this.bAjouter = new Button("Ajouter");
         this.bGererStocks = new Button("Gérer les stocks");
+        this.bGererStocks.setOnAction(new ControleurGererStock(this.app, this.adm));
         this.bAjouterLibrairie = new Button("Ajouter une librairie");
         this.bAjouterVendeur = new Button("Ajouter");
 
