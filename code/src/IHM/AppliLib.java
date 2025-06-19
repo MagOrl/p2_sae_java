@@ -19,7 +19,6 @@ public class AppliLib extends Application {
     private Button btnQuitte;
     private Button creeCompte;
     private Button connexion;
-    private MenuAcceuil menuAcc;
     private AdministrateurBD adminBD;
     private VendeurBD vendeurBD;
     private ClientBD clientBD;
@@ -31,7 +30,7 @@ public class AppliLib extends Application {
     private Button quitteCrea;
     private Button changeInfoBD;
     private Button quitteInfo;
-
+  
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
             "-fx-background-radius: 20;" +
@@ -86,7 +85,6 @@ public class AppliLib extends Application {
         this.confirmCrea.setStyle(styleBouton);
         this.changeInfoBD.setStyle(styleBouton);
         this.quitteInfo.setStyle(styleBouton);
-
         this.connexion.setMinHeight(40);
         this.connexion.setMinWidth(90);
         this.btnQuitte.setMinHeight(40);
@@ -127,9 +125,9 @@ public class AppliLib extends Application {
 
     @Override
     public void start(Stage stg) {
-        this.scene = new Scene(this.menuAcc);
+        this.scene = new Scene(this.menuGSG);
         stg.setScene(this.scene);
-        stg.setTitle("Menu principale");
+        stg.setTitle("Menu principal");
         stg.show();
     }
 
@@ -221,6 +219,10 @@ public class AppliLib extends Application {
 
     public MenuCreaCompte getMenuCreaCompte() {
         return this.menuCrea;
+    }
+
+    public void afficheMenuGererStocksGlobaux(){
+        this.scene.setRoot(this.menuGSG);
     }
 
 }
