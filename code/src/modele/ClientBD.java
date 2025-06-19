@@ -329,7 +329,6 @@ public class ClientBD {
                 ps3.setDouble(4, livreMag.get(idmag).get(i).getPrix());
                 ps3.setString(5, livreMag.get(idmag).get(i).getIsbn());
                 ps3.executeUpdate();
-
             }
         }
         livreMag.clear();
@@ -439,7 +438,6 @@ public class ClientBD {
                                 + " group by isbn order by nbLiv DESC");
         List<List<Livre>> catalogue = new ArrayList<>();
         int taille = nbLigneRequetes(rs);
-        System.out.println(taille);
         for (int i = 0; i < taille; ++i) {
             catalogue.add(new ArrayList<>());
             for (int y = 0; y < 10; ++y) {
@@ -462,7 +460,6 @@ public class ClientBD {
 
     public List<List<Livre>> rechercheCritere(String critere, String isbn, String titre, String auteur, Magasin mag)
             throws SQLException {
-        System.out.println(critere);
         List<List<Livre>> res = new ArrayList<>();
         this.st = laConnexion.createStatement();
         String requete = "select * from LIVRE natural join POSSEDER";
@@ -536,7 +533,7 @@ public class ClientBD {
     public Magasin trouveLibrairie(int idmag) throws SQLException {
         Magasin mag = null;
         this.st = laConnexion.createStatement();
-        ResultSet rs = this.st.executeQuery("select idmag, villemag from MAGASIN where idmag =" + '"' + idmag + '"');
+        ResultSet rs = this.st.executeQuery("select * from MAGASIN where idmag =" + '"' + idmag + '"');
         while (rs.next()) {
             mag = new Magasin(idmag, rs.getString("nommag"), rs.getString("villemag"));
         }

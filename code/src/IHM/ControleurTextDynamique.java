@@ -3,17 +3,7 @@ import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 
 public class ControleurTextDynamique implements EventHandler<ActionEvent> {
-    /**
-     * temps enregistré lors du dernier événement
-     */
-    private long tempsCourant;
-    /**
-     * temps écoulé depuis le début de la mesure
-     */
-    private long duree;
-    /**
-     * Vue du chronomètre
-     */
+    
     private RecomDynamique txt;
 
     private List<Livre> lesRecomm;
@@ -22,13 +12,6 @@ public class ControleurTextDynamique implements EventHandler<ActionEvent> {
 
     private int indCour;
 
-    /**
-     * Constructeur du contrôleur du chronomètre
-     * noter que le modèle du chronomètre est tellement simple
-     * qu'il est inclus dans le contrôleur
-     * 
-     * @param chrono Vue du chronomètre
-     */
     public ControleurTextDynamique(RecomDynamique txt, List<Livre> lesRecomm) {
         this.lesRecomm = lesRecomm;
         this.premierInd = (int) Math.round(Math.random() * this.lesRecomm.size());

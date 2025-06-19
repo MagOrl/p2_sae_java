@@ -110,11 +110,11 @@ public class AppliLib extends Application {
 
     public void afficheMenuInfosPersos(MenuClient menuCli) {
 
-        this.scene.setRoot(new MenuInfosPersos(this, this.utilisateur,menuCli));
+        this.scene.setRoot(new MenuInfosPersos(this, this.utilisateur, menuCli));
     }
 
     public void afficheMenuHistorique(MenuClient menuCli) {
-        this.scene.setRoot(new MenuHistorique(this,menuCli));
+        this.scene.setRoot(new MenuHistorique(this, menuCli));
     }
 
     public void afficheMenuPanier(MenuClient menuCli) {
@@ -131,8 +131,8 @@ public class AppliLib extends Application {
 
     public Alert popUpQuitte() {
         Alert alert = new Alert(Alert.AlertType.WARNING,
-                "Êtes vous sûr de quitter ?", ButtonType.YES, ButtonType.NO);
-        alert.setTitle("Attention");
+                "Votre panier est plein.", ButtonType.YES);
+        alert.setTitle("Panier plein");
         return alert;
     }
 
@@ -181,6 +181,13 @@ public class AppliLib extends Application {
     public Alert popUpPanierPlein() {
         Alert alert = new Alert(Alert.AlertType.WARNING,
                 "Votre panier est plein.", ButtonType.YES);
+        alert.setTitle("Panier plein");
+        return alert;
+    }
+
+    public Alert popUpSurDeCommender() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Voulez vous finaliser votre transaction ?", ButtonType.YES,ButtonType.NO);
         alert.setTitle("Panier plein");
         return alert;
     }

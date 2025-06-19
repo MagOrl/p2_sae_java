@@ -42,7 +42,6 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                System.out.println("vend");
                 break;
             case "Administrateur":
                 try {
@@ -56,7 +55,6 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                System.out.println("vend");
                 break;
             default:
                 this.app.popUpPasMitDeUser().showAndWait();

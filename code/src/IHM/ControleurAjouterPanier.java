@@ -17,7 +17,7 @@ public class ControleurAjouterPanier implements EventHandler<ActionEvent> {
             this.menu.getClient().addPanier(menu.getClientBD().trouveLibrairie(this.menu.getLibActuelle()).getId(), liv, liv.getQte());
 
         } catch (TopDeLivreException | MauvaiseQuantiteException | SQLException e) {
-            e.printStackTrace();
+            this.menu.getAppli().popUpPanierPlein();
         }
     }
 }

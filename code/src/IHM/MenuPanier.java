@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
@@ -15,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Button;
 
 public class MenuPanier extends BorderPane {
@@ -24,7 +26,10 @@ public class MenuPanier extends BorderPane {
     private Client client;
 
     private MenuClient menuCli;
+
     private VBox panier;
+
+    private String methodCom;
 
     public MenuPanier(AppliLib appli, Client client, MenuClient menuCli) {
         this.menuCli = menuCli;
@@ -33,8 +38,8 @@ public class MenuPanier extends BorderPane {
         this.setStyle(AppliLib.styleBanniere);
         this.setPadding(new Insets(20));
         this.panier = new VBox(10);
+        this.methodCom = "";
         initCenter();
-        
         this.setTop(top());
         this.setCenter(this.panier);
         this.setBottom(bottom());
@@ -46,35 +51,47 @@ public class MenuPanier extends BorderPane {
         return titre;
     }
 
-    public HBox bottom() {
-        HBox boutons = new HBox(10);
+    public VBox bottom() {
+        VBox boutons = new VBox(10);
         Button commander = new Button("Commmander le panier");
-        // commander.setOnAction(new ControleurCommanderC(this.appli));
+        ToggleGroup tg = new ToggleGroup();
+        HBox rdBox = new HBox(10);
+        RadioButton rbC = new RadioButton("Commander");
+        RadioButton rbR = new RadioButton("Reserver");
+        rbC.setToggleGroup(tg);
+        rbR.setToggleGroup(tg);
+        rbC.pressedProperty().addListener(new ControleurMethodAchat(this, "C"));
+        rbR.pressedProperty().addListener(new ControleurMethodAchat(this, "M"));
+        rdBox.getChildren().addAll(rbC, rbR);
+        commander.setOnAction(new ControleurCommanderC(this.appli, this, this.client));
         commander.setStyle(AppliLib.styleBouton);
         commander.setMinHeight(40);
         commander.setMinWidth(90);
         commander.setSkin(new MyButtonSkin(commander));
+        commander.visibleProperty().bind(rbC.selectedProperty().or(rbR.selectedProperty()));
         Button retour = new Button("Retour");
         retour.setOnAction(new ControleurRetour(this.appli, this.menuCli));
         retour.setStyle(AppliLib.styleBouton);
         retour.setMinHeight(40);
         retour.setMinWidth(90);
         retour.setSkin(new MyButtonSkin(retour));
-        boutons.getChildren().addAll(commander, retour);
+        HBox hb = new HBox();
+        hb.getChildren().addAll(commander, retour);
+        boutons.getChildren().addAll(rdBox, hb);
         return boutons;
 
     }
 
     public void initCenter() {
+        this.panier.getChildren().clear();
         for (int idmag : this.client.getPanier().keySet()) {
             String magasin = "";
             try {
                 magasin = this.appli.getClientBD().trouveLibrairie(idmag).getNom();
-                System.out.println(magasin);
             } catch (SQLException e) {
                 this.appli.popUpPasDeMagasins();
             }
-            VBox vb = new VBox(20) ;
+            VBox vb = new VBox(20);
             for (Livre livre : this.client.getPanier(idmag)) {
                 Text liv = new Text(livre.toString());
                 liv.setFont(Font.font("Arial", FontWeight.NORMAL, 25));
@@ -82,12 +99,23 @@ public class MenuPanier extends BorderPane {
                 suppLiv.setStyle(AppliLib.styleBouton);
                 suppLiv.setSkin(new MyButtonSkin(suppLiv));
                 vb.getChildren().addAll(liv, suppLiv);
-                suppLiv.setOnAction(new ControleurSuppDuPan(this.client, idmag, livre, this.panier, vb));
+                suppLiv.setOnAction(new ControleurSuppDuPan(this.client, idmag, livre, this.panier, vb, this));
             }
-            TitledPane livreMag = new TitledPane(magasin,vb);
-            livreMag.setText(magasin);
+            TitledPane livreMag = new TitledPane(magasin, vb);
+
             panier.getChildren().add(livreMag);
         }
+    }
 
+    public void clearPan() {
+        this.panier.getChildren().clear();
+    }
+
+    public void setMethodComm(String method) {
+        this.methodCom = method;
+    }
+
+    public String getMethodComm() {
+        return this.methodCom;
     }
 }

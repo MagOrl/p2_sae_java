@@ -20,6 +20,7 @@
 ./src/IHM/ControleurSelectLivre.java
 ./src/IHM/GridPaneResultatRech.java
 ./src/IHM/ControleurRechercheC.java
+./src/IHM/ControleurMethodAchat.java
 ./src/IHM/ControleurInfosPersos.java
 ./src/IHM/MyButtonSkin.java
 ./src/IHM/ControleurCodePostal.java

@@ -30,7 +30,7 @@ public class MenuHistorique extends BorderPane {
         try {
             this.historique = this.appli.getClientBD().historiqueCommande(this.client);
         } catch (SQLException e) {
-            this.appli.popUpPasDeCommandes();
+            this.appli.popUpPasDeCommandes().showAndWait();
         }
 
         Text titre = new Text("Historique de vos commandes");
