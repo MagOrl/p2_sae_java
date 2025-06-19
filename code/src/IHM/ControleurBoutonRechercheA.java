@@ -18,9 +18,7 @@ public class ControleurBoutonRechercheA implements EventHandler<ActionEvent>{
 
     @Override
     public void handle(ActionEvent event){
-        System.out.println("check5");
-        System.out.println(this.tf.getText());
-        System.out.println(this.vue.getCritereActuel());
+        
         try{
             switch (this.vue.getCritereActuel()) {
                 case "Titre":

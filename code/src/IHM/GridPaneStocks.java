@@ -37,6 +37,7 @@ public class GridPaneStocks extends GridPane{
 
         if(this.stocks.size() == 0){
             Text text = new Text("Aucun Livre n'a été trouvé");
+            text.setFont(Font.font("Arial", 17));
             this.add(text,5,5);
         }else{
             for(Livre livre : this.stocks.get(this.index)){
