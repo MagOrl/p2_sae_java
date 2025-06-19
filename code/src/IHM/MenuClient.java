@@ -76,7 +76,7 @@ public class MenuClient extends BorderPane {
         recherche.setMinHeight(40);
         recherche.setMinWidth(90);
         recherche.setSkin(new MyButtonSkin(recherche));
-        recherche.setOnAction(new ControleurRecherche(this, this.theme));
+        recherche.setOnAction(new ControleurRechercheC(this, this.theme));
 
         VBox lesThemes = new VBox(5);
         ToggleGroup groupTheme = new ToggleGroup();
@@ -92,6 +92,7 @@ public class MenuClient extends BorderPane {
             this.appli.popUpPasDeThemes();
         }
         TitledPane themes = new TitledPane("Thêmes", lesThemes);
+        themes.setExpanded(false);
         BorderPane center = new BorderPane();
         center.setLeft(logo);
         HBox barreRecherche = new HBox(10);
@@ -239,17 +240,26 @@ public class MenuClient extends BorderPane {
     }
 
     public Integer themeID(){
-        Map<Integer,String> themes = this.clientBD.afficheThemes();
-        for (int key : themes.keySet()){
-            if (themes.get(key).equals(this.theme)){
+        try {
+            Map<Integer,String> themes = this.clientBD.afficheThemes(); 
+            for (int key : themes.keySet()){
+                if (themes.get(key).equals(this.theme)){
                 return key;
+                }
             }
+            
+        } catch (SQLException e) {
+            this.appli.popUpPasDeThemes();
         }
         return null;
     }
 
     public void setLivreSelect(Livre livre){
         this.livreSelectionne = livre;
+    }
+
+    public AppliLib getAppli(){
+        return this.appli;
     }
 
 }

@@ -45,6 +45,7 @@ public class MenuHistorique extends BorderPane {
                 lesLivres.getChildren().add(ligne);
             }
             TitledPane commande = new TitledPane(key, lesLivres);
+            commande.setExpanded(false);
             commande.setStyle(AppliLib.styleTextField);
             center.getChildren().add(commande);
         }

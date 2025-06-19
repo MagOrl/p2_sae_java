@@ -20,7 +20,8 @@
 ./src/IHM/RecomDynamique.java
 ./src/IHM/MenuPanier.java
 ./src/IHM/ControleurThemes.java
-./src/IHM/ControleurRecherche.java
+./src/IHM/ControleurSelectLivre.java
+./src/IHM/ControleurRechercheC.java
 ./src/modele/Administrateur.java
 ./src/modele/Auteur.java
 ./src/modele/Classification.java
