@@ -201,7 +201,7 @@ public class AdministrateurBD {
     this.st = connexion.createStatement();
     ResultSet rs = this.st.executeQuery("select max(idmag) as idMax from MAGASIN");
     while (rs.next()) {
-      idMax = rs.getInt("idMax") +
+      idMax = rs.getInt("idMax");
     }
     rs.close();
     return idMax;
@@ -421,55 +421,6 @@ public class AdministrateurBD {
     return res;
 
   }
-  // dans la vue faire un dico Bouton/Livre -> qu'on va pas afficher mais juste
-  // utiliser pour supprimer le bon livre
-  // vue -> grid pane avec Livre | bouton, va se mettre a jour quand la comboBox
-  // va changer de valeur (ya déjà un observable dessus)
-  // modele -> va créer la liste de liste de livres qui seront les pages
-  // controleur -> va appeler la methode qui genere la liste de liste de livre et
-  // la mettre dans le grid pane
-  // changer de page -> bouton qui vont changer l'index actuel dans la liste
-=======
-    }
-    rs.close();
-    return idMax;
-  }
-
-  /**
-   * Fonction qui va créer la liste des librairie présentes
-   * sur le réseau
-   * 
-   * @return List<String> : la liste des nom des librairie du réseau
-   */
-  public List<String> choixLibrairie() throws SQLException {
-    List<String> lesLibrairies = new ArrayList<>();
-    this.st = connexion.createStatement();
-    ResultSet rs = this.st.executeQuery("select nommag from MAGASIN");
-    while (rs.next()) {
-      lesLibrairies.add(rs.getString("nommag"));
-    }
-    rs.close();
-    return lesLibrairies;
-  }
-
-  /**
-   * Fonction qui à partir d'un nom de librairie va trouver la librairie
-   * correspondante
-   * 
-   * @param nommag : le nom de la librairie à trouver
-   * @return Magasin : la librairie correspondante (null si aucune n'a été trouvé
-   *         pour ce nom de librairie)
-   */
-  public Magasin trouveLibrairie(String nommag) throws SQLException {
-    Magasin mag = null;
-    this.st = connexion.createStatement();
-    ResultSet rs = this.st.executeQuery("select idmag, villemag from MAGASIN where nommag =" + '"' + nommag + '"');
-    while (rs.next()) {
-      mag = new Magasin(rs.getInt("idmag"), nommag, rs.getString("villemag"));
-    }
-    return mag;
-  }
-
   /**
    * Fonction qui va ajouter un nouveau livre à une librairie passée en paramètre
    * 
@@ -507,59 +458,6 @@ public class AdministrateurBD {
     // réessayer");
   }
 
-  /**
-   * Fonction qui va supprimer un livre d'une librairie passée en paramètre
-   * 
-   * @param isbn : l'identifiant du livre
-   * @param mag  : la librairie dans laquelle supprimer le livre
-   * @return boolean : true si le livre a été supprimé, false sinon
-   */
-  public boolean SupprimerLivre(String isbn, Magasin mag) throws SQLException {
-    this.st = connexion.createStatement();
-    ResultSet rs = this.st
-        .executeQuery("select * from POSSEDER where isbn = '" + isbn + "'" + " and idmag = '" + mag.getId() + "'");
-    if (!rs.next()) {
-      return false;
-    }
-    PreparedStatement ps = this.connexion
-        .prepareStatement(("UPDATE POSSEDER SET qte = 0 where isbn = ? and idmag = ?"));
-    ps.setString(1, isbn);
-    ps.setInt(2, mag.getId());
-    ps.executeUpdate();
-    return true;
-  }
-
-  /**
-   * Fonction qui va mettre à jour la quantité d'un livre que possède
-   * une librairie passeé en paramètre
-   * 
-   * @param isbn : l'identifiant du livre
-   * @param mag  : la librairie dans laquelle modifier la quantité le livre
-   * @param qte  : la quantité de livre à ajouter ou à enlever
-   * @return boolean : true si la quantité à été modifiée, false sinon
-   */
-  public boolean majQteLivre(String isbn, Magasin mag, int qte)
-      throws SQLException, NumberFormatException, QteInfAZeroException {
-    this.st = connexion.createStatement();
-    ResultSet rs = this.st
-        .executeQuery("select qte from POSSEDER where isbn = '" + isbn + "'" + " and idmag = '" + mag.getId() + "'");
-    if (!rs.next()) {
-      rs.close();
-      return false;
-    }
-    if (rs.getInt("qte") + qte < 0) {
-      throw new QteInfAZeroException();
-    }
-
-    PreparedStatement ps = this.connexion
-        .prepareStatement("UPDATE POSSEDER SET qte = qte + ? WHERE isbn = ? and idmag = ?");
-    ps.setInt(1, qte);
-    ps.setString(2, isbn);
-    ps.setInt(3, mag.getId());
-    ps.executeUpdate();
-    rs.close();
-    return true;
-  }
 
   /**
    * Fonction qui va afficher tout les livres que possède un librairie
@@ -572,9 +470,7 @@ public class AdministrateurBD {
         "select isbn, titre, nbpages, datepubli, prix, qte from LIVRE natural join POSSEDER natural join MAGASIN where idmag = "
             + mag.getId());
     if (!rs.next()) {
-      System.out.println("
-      
-    --------------------------------------------------------");
+      System.out.println("--------------------------------------------------------");
       System.out.println("La libraire actuelle (" + mag.getNom() + ") ne contient aucun livre");
       System.out.println("------------------------------------------------------------");
     }

@@ -31,8 +31,8 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
                 break;
             case "Vendeur":
                 try {
-                    if (this.app.getVendeurBD().connectVendeur(tf,pf)) {
-                        Vendeur vend = this.app.getVendeurBD().trouveVendeur(tf, pf,this.app.getValMag());
+                    if (this.app.getVendeurBD().connectVendeur(tf, pf)) {
+                        Vendeur vend = this.app.getVendeurBD().trouveVendeur(tf, pf, this.app.getValMag());
                     } else {
                         this.app.getMenuAcc().resetFields();
                         this.app.popUpMauvaiseSaisie().showAndWait();
@@ -45,8 +45,9 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
                 break;
             case "Administrateur":
                 try {
-                    if (this.app.getAdminBD().connectAdmin(tf,pf)) {
-                        Administrateur admin = this.app.getAdminBD().trouveAdmin(tf, pf);
+                    if (this.app.getAdminBD().connectAdmin(tf, pf)) {
+                        this.app.afficheMenuAdmin(this.app.getAdminBD().trouveAdmin(tf, pf));
+
                     } else {
                         this.app.getMenuAcc().resetFields();
                         this.app.popUpMauvaiseSaisie().showAndWait();

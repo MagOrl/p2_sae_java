@@ -1,17 +1,15 @@
 
 import java.sql.SQLException;
-import java.util.List;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.shape.Circle;
 
 public class AppliLib extends Application {
 
@@ -39,7 +37,9 @@ public class AppliLib extends Application {
             "-fx-text-fill: white;";
     public static String styleBanniere = "-fx-border-radius: 15;" +
             "-fx-border-color:rgb(0, 0, 0);" +
+            "-fx-border-width: 3;"+"-fx-background-color: #0b7f94;" +"-fx-border-insets: -2.5px;"+
             "-fx-border-width: 3;" + "-fx-background-color: #0b7f94;" + "-fx-border-insets: -2.5px;";
+
     public static String styleDefaultContainer = "-fx-background-color: #5d9b7d;" +
             "-fx-border-radius: 20; " +
             "-fx-background-radius: 20;" +
@@ -72,6 +72,8 @@ public class AppliLib extends Application {
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
+        this.btnQuitte.setStyle(styleBouton);
+
         this.confirmCrea = new Button("Confirmer");
         this.quitteCrea = new Button("Quitter");
         this.changeInfoBD = new Button("Paramètre");
@@ -85,6 +87,7 @@ public class AppliLib extends Application {
         this.confirmCrea.setStyle(styleBouton);
         this.changeInfoBD.setStyle(styleBouton);
         this.quitteInfo.setStyle(styleBouton);
+
         this.connexion.setMinHeight(40);
         this.connexion.setMinWidth(90);
         this.btnQuitte.setMinHeight(40);
@@ -135,6 +138,10 @@ public class AppliLib extends Application {
         this.scene.setRoot(this.menuAcc);
     }
 
+    public void afficheMenuAdmin(Administrateur adm) {
+        this.scene.setRoot(new MenuAdmin(this.btnQuitte, adm, this));
+    }
+
     public void afficheMenuCreaCompte() {
         this.scene.setRoot(this.menuCrea);
     }
@@ -182,6 +189,7 @@ public class AppliLib extends Application {
         return alert;
     }
 
+
     public Alert popUpCompteCree(String prenom) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 "Compte à bien été créé, bienvenue " + prenom, ButtonType.YES);
@@ -191,6 +199,21 @@ public class AppliLib extends Application {
 
     public VendeurBD getVendeurBD() {
         return this.vendeurBD;
+    }
+
+    public Alert popUpMettreToutesLesVal() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Un ou plusieurs champs n'ont pas été complété.", ButtonType.YES);
+        alert.setTitle("Erreur");
+        return alert;
+    }
+
+    public Alert popUpDeconnexion() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de déconnexion");
+        alert.setHeaderText("Voulez-vous vraiment vous déconnecter ?");
+        alert.setContentText("Cliquez sur OK pour vous déconnecter, ou Annuler pour rester.");
+        return alert;
     }
 
     public AdministrateurBD getAdminBD() {
@@ -224,5 +247,4 @@ public class AppliLib extends Application {
     public void afficheMenuGererStocksGlobaux(){
         this.scene.setRoot(this.menuGSG);
     }
-
 }

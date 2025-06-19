@@ -217,7 +217,6 @@ public class LesGraphic extends VBox {
             }
             lineChart.getData().add(series);
         }
-        System.out.println(data);
         return lineChart;
     }
 }
