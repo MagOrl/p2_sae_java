@@ -310,23 +310,25 @@ public class AdministrateurBD{
           String requete = "select * from LIVRE natural join POSSEDER";
           switch (critere) {
             case "isbn":
-              requete += " where isbn = " + isbn;
+              requete += " where isbn = '" + isbn + "'";
               break;
 
-            case "titre":
-              requete += " natural join ECRIRE natural join AUTEUR where idmag = '" + mag.getId() + "' and nomauteur like '%" + auteur + "%' or levenshtein('"+auteur+"', nomauteur) between 0 and 2";
+            case "auteur":
+              requete += " natural join ECRIRE natural join AUTEUR where idmag = '" + mag.getId() + "' and (nomauteur like '%" + auteur + "%' or levenshtein('"+auteur+"', nomauteur) between 0 and 3) order by nomauteur";
               break;
             
-            case "auteur":
-              requete += " where idmag = '" + mag.getId() + "' and titre like '%" + titre + "%' or levenshtein('"+titre+"', titre) between 0 and 2";
+            case "titre":
+              requete += " where idmag = '" + mag.getId() + "' and (titre like '%" + titre + "%' or levenshtein('"+titre+"', titre) between 0 and 3) order by titre";
               break;
           
             default:
-              break;
+              return res;
           }
+          System.out.println(requete);
           ResultSet rs = this.st.executeQuery(requete);
           List<Livre> page = new ArrayList<>();
           while(rs.next()){
+            System.out.println(rs.getString("isbn") + " " + rs.getString("titre") + " " +  rs.getInt("nbpages") + " " +  rs.getString("datepubli") + " " +  rs.getDouble("prix") + " " +  rs.getInt("qte"));
             Livre livre = new Livre(rs.getString("isbn"), rs.getString("titre"), rs.getInt("nbpages"), rs.getString("datepubli"), rs.getDouble("prix"), rs.getInt("qte"));
             page.add(livre);
             cpt ++;
@@ -347,7 +349,7 @@ public class AdministrateurBD{
       List<List<Livre>> res = new ArrayList<>();
       try{
         this.st = connexion.createStatement();
-        ResultSet rs = this.st.executeQuery("select * from POSSEDER natural join LIVRE where idmag = " + mag.getId());
+        ResultSet rs = this.st.executeQuery("select isbn, titre, nbpages, datepubli, prix, qte from POSSEDER natural join LIVRE where idmag = " + mag.getId() + " order by titre");
         List<Livre> page = new ArrayList<>();
         while(rs.next()){
           Livre livre = new Livre(rs.getString("isbn"), rs.getString("titre"), rs.getInt("nbpages"), rs.getString("datepubli"), rs.getDouble("prix"), rs.getInt("qte"));

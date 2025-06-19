@@ -27,7 +27,7 @@ public class ControleurChoixLibrairie implements ChangeListener<String>{
             this.vue.setGpStocks(new GridPaneStocks(this.modele.afficheStock(this.modele.trouveLibrairie(this.vue.getLibrairieActuelle())), 0, vue, modele));
             this.vue.majVBoxCenter(this.vue.getGpStocks());
         }catch(SQLException e){
-            
+                   
         }
         
     }

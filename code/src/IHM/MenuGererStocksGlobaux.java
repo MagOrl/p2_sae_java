@@ -35,7 +35,12 @@ public class MenuGererStocksGlobaux extends BorderPane{
     private Text nom;
     private Text librairieActuelle;
     private ComboBox<String> choixLibrairie;
-    private ObservableList<String> lesLibrairies; 
+    private ObservableList<String> lesLibrairies;
+    private ComboBox critereReherche;
+    private String critereActuel;
+    private ObservableList<String> lesCriteres;
+    private Button bTRecherche;  
+    private TextField barreDeRecherche;
     private Button btAjouterLivre;
     private Button btAjouterQte;
     private TextField isbn;
@@ -67,13 +72,26 @@ public class MenuGererStocksGlobaux extends BorderPane{
         }catch(ClassNotFoundException e){
             System.out.println("Nous n'avons pas pu connecter l'application à la base de données");
         }
-        
+
+        ImageView imgwRecherche = new ImageView();
+        imgwRecherche.setImage(new Image("../img/loupeRecherche.png"));
+        imgwRecherche.setFitHeight(20);
+        imgwRecherche.setFitWidth(20);
+
+        this.barreDeRecherche = new TextField();
+        this.bTRecherche = new Button("",imgwRecherche);
         this.vBoxCenter = new VBox();
         this.gpStocks = new GridPaneStocks();
         this.choixLibrairie = new ComboBox<>();
         this.choixLibrairie.setItems(lesLibrairies);
         this.choixLibrairie.setValue("Changer de librairie");
         this.choixLibrairie.valueProperty().addListener(new ControleurChoixLibrairie(librairieActuelle, this, this.modele));
+        this.critereReherche = new ComboBox<>();
+        this.lesCriteres =  FXCollections.observableArrayList("Titre", "Auteur", "ISBN");
+        this.critereReherche.setItems(lesCriteres);
+        this.critereReherche.setValue("Choisir un critère");
+        this.critereReherche.valueProperty().addListener(new ControleurCritereRecherche(this.critereActuel, this, this.modele));
+        this.critereActuel = "";
         this.btAjouterLivre = new Button("Ajouter");
         this.btAjouterLivre.setSkin(new MyButtonSkin(btAjouterLivre));
         this.btAjouterLivre.setStyle(AppliLib.styleBouton);
@@ -260,6 +278,7 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
         
 
+
         top.getChildren().addAll(placeHolder, librairieActuelle, this.choixLibrairie);
         top.setMargin(this.choixLibrairie, new Insets(4,0,0,110));
 
@@ -267,67 +286,20 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
         HBox hbCenter = new HBox(10);
 
-        ImageView imgwRecherche = new ImageView();
-        imgwRecherche.setImage(new Image("../img/loupeRecherche.png"));
-        imgwRecherche.setFitHeight(20);
-        imgwRecherche.setFitWidth(20);
-        Button recherche = new Button("",imgwRecherche);
-        recherche.setStyle(AppliLib.styleBouton);
-        recherche.setSkin(new MyButtonSkin(recherche));
-
-        TextField barreDeRecherche = new TextField();
-        barreDeRecherche.setStyle(AppliLib.styleTextField);
-        hbCenter.getChildren().addAll(recherche, barreDeRecherche);
-
         
-        //
-        //Text livre0 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
-        //Text livre1 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
-        //Text livre2 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
-        //Text livre3 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
-        //Text livre4 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
-//
-//
+        this.bTRecherche.setStyle(AppliLib.styleBouton);
+        this.bTRecherche.setSkin(new MyButtonSkin(bTRecherche));
+
+        this.barreDeRecherche.setStyle(AppliLib.styleTextField);
+        bTRecherche.setOnAction(new ControleurBoutonRechercheA(this, modele, this.barreDeRecherche));
+        hbCenter.getChildren().addAll(bTRecherche, barreDeRecherche, this.critereReherche);
+
+
         ImageView imgwSuppr = new ImageView();
         imgwSuppr.setImage(new Image("../img/croix.png"));
         imgwSuppr.setFitHeight(20);
         imgwSuppr.setFitWidth(20);
-        //Button btSuppr0 = new Button("",imgwSuppr);
-        //btSuppr0.setStyle(AppliLib.styleBouton);
-        //btSuppr0.setSkin(new MyButtonSkin(btSuppr0));
-//
-        //Button btSuppr1 = new Button("",imgwSuppr);
-        //btSuppr1.setStyle(AppliLib.styleBouton);
-        //btSuppr1.setSkin(new MyButtonSkin(btSuppr1));
-//
-        //Button btSuppr2 = new Button("",imgwSuppr);
-        //btSuppr2.setStyle(AppliLib.styleBouton);
-        //btSuppr2.setSkin(new MyButtonSkin(btSuppr2));
-//
-//
-        //Button btSuppr3 = new Button("",imgwSuppr);
-        //btSuppr3.setStyle(AppliLib.styleBouton);
-        //btSuppr3.setSkin(new MyButtonSkin(btSuppr3));
-//
-        //Button btSuppr4 = new Button("",imgwSuppr);
-        //btSuppr4.setStyle(AppliLib.styleBouton);
-        //btSuppr4.setSkin(new MyButtonSkin(btSuppr4));
-//
-//
-        //gpStocks.add(livre0, 0, 0);
-        //gpStocks.add(livre1, 0, 1);
-        //gpStocks.add(livre2, 0, 2);
-        //gpStocks.add(livre3, 0, 3);
-        //gpStocks.add(livre4, 0, 4);
-//
-        //gpStocks.add(btSuppr0, 1, 0);
-        //gpStocks.add(btSuppr1, 1, 1);
-        //gpStocks.add(btSuppr2, 1, 2);
-        //gpStocks.add(btSuppr3, 1, 3);
-        //gpStocks.add(btSuppr4, 1, 4);
-        //
-        //gpStocks.setVgap(2.0);
-        //gpStocks.setHgap(5.0);
+
         
         this.vBoxCenter.setStyle(AppliLib.styleDefaultContainer);
         this.vBoxCenter.setPadding(new Insets(7));
@@ -455,6 +427,14 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
     public void setGpStocks(GridPaneStocks gp){
         this.gpStocks = gp;
+    }
+
+    public void setCritereActuel(String nouvCritere){
+        this.critereActuel = nouvCritere;
+    }
+
+    public String getCritereActuel(){
+        return this.critereActuel;
     }
 
 

@@ -35,14 +35,19 @@ public class GridPaneStocks extends GridPane{
 
         creeMapStocks();
 
-        for(Livre livre : this.stocks.get(this.index)){
-            for(Button btSruppr : this.mapStocks.keySet()){
-                if(this.mapStocks.get(btSruppr).equals(livre)){
-                    Text text = new Text(livre.toString());
-                    text.setFont(Font.font("Arial", 17));
-                    this.add(text, 0, cptGp);
-                    this.add(btSruppr, 1, cptGp);
-                    cptGp ++;
+        if(this.stocks.size() == 0){
+            Text text = new Text("Aucun Livre n'a été trouvé");
+            this.add(text,5,5);
+        }else{
+            for(Livre livre : this.stocks.get(this.index)){
+                for(Button btSruppr : this.mapStocks.keySet()){
+                    if(this.mapStocks.get(btSruppr).equals(livre)){
+                        Text text = new Text(livre.toString());
+                        text.setFont(Font.font("Arial", 17));
+                        this.add(text, 0, cptGp);
+                        this.add(btSruppr, 1, cptGp);
+                        cptGp ++;
+                    }
                 }
             }
         }
