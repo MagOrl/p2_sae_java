@@ -185,6 +185,13 @@ public class AppliLib extends Application {
         return alert;
     }
 
+    public Alert popUpPanierPlein() {
+        Alert alert = new Alert(Alert.AlertType.WARNING, 
+            "Votre panier est plein.",ButtonType.YES);
+        alert.setTitle("Panier plein");
+        return alert;
+    }
+
     public VendeurBD getVendeurBD() {
         return this.vendeurBD;
     }

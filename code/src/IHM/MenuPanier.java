@@ -18,6 +18,8 @@ public class MenuPanier extends BorderPane {
 
     private Client client;
 
+    private Livre select;
+
     public MenuPanier(AppliLib appli, Personne client){
         super();
 

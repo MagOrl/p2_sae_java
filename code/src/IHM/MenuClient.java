@@ -76,7 +76,7 @@ public class MenuClient extends BorderPane {
         recherche.setMinHeight(40);
         recherche.setMinWidth(90);
         recherche.setSkin(new MyButtonSkin(recherche));
-        recherche.setOnAction(new ControleurRechercheC(this, this.theme));
+        recherche.setOnAction(new ControleurRechercheC(this));
 
         VBox lesThemes = new VBox(5);
         ToggleGroup groupTheme = new ToggleGroup();
@@ -163,7 +163,7 @@ public class MenuClient extends BorderPane {
 
         HBox bottom = new HBox(10);
         Button consulter = new Button("Consulter");
-        //consulter.setOnAction(new ControleurConsulter(this.appli, this));
+        consulter.setOnAction(new ControleurConsulter(this));
         consulter.setStyle(AppliLib.styleBouton);
         consulter.setMinHeight(40);
         consulter.setMinWidth(90);
@@ -235,8 +235,16 @@ public class MenuClient extends BorderPane {
         this.theme = theme;
     }
 
+    public String getTheme(){
+        return this.theme;
+    }
+
     public ClientBD getClientBD(){
         return this.clientBD;
+    }
+
+    public Client getClient(){
+        return this.client;
     }
 
     public Integer themeID(){
@@ -258,8 +266,16 @@ public class MenuClient extends BorderPane {
         this.livreSelectionne = livre;
     }
 
+    public Livre getLivreSelect(){
+        return this.livreSelectionne;
+    }
+
     public AppliLib getAppli(){
         return this.appli;
+    }
+
+    public Livre getLivreDyna(){
+        return this.livreDyna.getLivre();
     }
 
 }

@@ -2,13 +2,13 @@ import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import java.sql.SQLException;
@@ -19,9 +19,9 @@ public class ControleurRechercheC implements EventHandler<ActionEvent> {
 
     private String theme;
 
-    public ControleurRechercheC(MenuClient menu, String theme){
+    public ControleurRechercheC(MenuClient menu){
         this.menu = menu;
-        this.theme = theme;
+        this.theme = this.menu.getTheme();
     }
 
     @Override
@@ -36,7 +36,9 @@ public class ControleurRechercheC implements EventHandler<ActionEvent> {
             Map<Integer,Magasin> magasins = this.menu.getClientBD().afficheMagasin();
             for (Integer idmag : magasins.keySet()){
                 String magasin = "Magasin "+magasins.get(idmag).getNom();
+                HBox grandeBoite = new HBox(10);
                 VBox boite = new VBox(10);
+                int cpt = 0;
                 try {
                     List<List<Livre>> livresTheme = this.menu.getClientBD().rechercheTheme(idTheme,magasins.get(idmag)); 
                     
@@ -48,12 +50,18 @@ public class ControleurRechercheC implements EventHandler<ActionEvent> {
                     for (Livre livre : tousLesLivres){
                         Button select = new Button(livre.toString());
                         select.setOnAction(new ControleurSelectLivre(this.menu,livre));
+                        if (cpt == 10){
+                            grandeBoite.getChildren().add(boite);
+                            cpt=0;
+                            boite = new VBox(10);
+                        }
                         boite.getChildren().add(select);
+                        cpt++;
                     }
                 } catch (SQLException e) {
                     this.menu.getAppli().popUpPasDeThemes();
                 }
-                TitledPane livresMag = new TitledPane(magasin,boite);
+                TitledPane livresMag = new TitledPane(magasin,grandeBoite);
                 livresMag.setExpanded(false);
                 livresParMag.getChildren().add(livresMag);
             }
