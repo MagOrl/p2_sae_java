@@ -8,6 +8,7 @@
 ./src/IHM/ControleurUtilisateur.java
 ./src/IHM/LesGraphic.java
 ./src/IHM/MyButtonSkin.java
+./src/IHM/ControleurGraph.java
 ./src/IHM/ControleurCodePostal.java
 ./src/IHM/ControleurInfoBDTxtField.java
 ./src/IHM/ControlleurConnexion.java

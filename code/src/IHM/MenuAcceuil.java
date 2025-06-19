@@ -50,14 +50,6 @@ public class MenuAcceuil extends BorderPane {
         this.creeCompte = creeCompte;
         this.setTop(top());
         this.setCenter(left());
-
-        try {
-            this.setRight(new LesGraphic("Évolution du chiffre d'affaire total par client",
-                    new AdministrateurBD(new ConnexionMySQL())));
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public BorderPane top() {
