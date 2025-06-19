@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,6 +30,7 @@ public class GridPaneResultatRech extends GridPane{
         this.modele = modele;
         this.mapStocks = new HashMap<>();
         int cptGp = 0;
+        this.setPadding(new Insets(30));
 
         creeMapStocks();
 
@@ -72,15 +74,12 @@ public class GridPaneResultatRech extends GridPane{
         for(List<Livre> page : stocks){
             for(Livre livre : page){
                 Button livreBT = new Button("+");
+                livreBT.setOnAction(new ControleurAjouterPanier(vue,livre));
                 livreBT.setStyle(AppliLib.styleBouton);
                 livreBT.setSkin(new MyButtonSkin(livreBT));
                 this.mapStocks.put(livreBT, livre);
             }
         }
-    }
-
-    public Livre getLivreSuppr(Button bt){
-        return this.mapStocks.get(bt);
     }
 
     public int getIndex(){

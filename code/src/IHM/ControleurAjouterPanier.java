@@ -5,22 +5,20 @@ import java.sql.SQLException;
 public class ControleurAjouterPanier implements EventHandler<ActionEvent> {
 
     private MenuClient menu;
+    private Livre liv;
 
-    public ControleurAjouterPanier(MenuClient menu){
+    public ControleurAjouterPanier(MenuClient menu,Livre liv){
         this.menu = menu;
+        this.liv = liv;
     }
 
-
-    public void handle(ActionEvent event){
-        Livre livre = this.menu.getLivreSelect();
+    public void handle(ActionEvent event) {
         try {
-            this.menu.getClient().addPanier(this.menu.getClientBD().trouveMagasin(livre), livre, 1);
-        } catch (SQLException e) {
-            this.menu.getAppli().popUpPasDeMagasins();
-        } catch (TopDeLivreException e){
-            this.menu.getAppli().popUpPanierPlein();
-        } catch (MauvaiseQuantiteException e){
-            e.debug();
+            System.out.println("OKOKOKo");
+            this.menu.getClient().addPanier(menu.getClientBD().trouveLibrairie(this.menu.getLibActuelle()).getId(), liv, liv.getQte());
+
+        } catch (TopDeLivreException | MauvaiseQuantiteException | SQLException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -48,6 +49,15 @@ public class MenuClient extends BorderPane {
 
     private GridPaneResultatRech gp;
 
+    
+
+    public static String styleBoutonPage = "-fx-background-color:rgb(255, 255, 255);" +
+            "-fx-border-radius: 50; " +
+            "-fx-background-radius: 20;" +
+            "-fx-border-color:rgb(32, 33, 32);" +
+            "-fx-border-width: 2;" +
+            "-fx-text-fill: white;";
+
     public MenuClient(AppliLib appli) {
         this.vBoxCenter = new VBox(10);
         leCriter.getItems().addAll("Titre", "Auteur", "ISBN");
@@ -55,7 +65,6 @@ public class MenuClient extends BorderPane {
         this.recheField.setStyle(AppliLib.styleTextField);
         this.gp = new GridPaneResultatRech();
         this.gp.setStyle(AppliLib.styleDefaultContainer);
-
         this.appli = appli;
         this.clientBD = this.appli.getClientBD();
         this.client = (Client) this.appli.getUtilisateur();
@@ -79,6 +88,32 @@ public class MenuClient extends BorderPane {
         this.setTop(this.ajouteTop());
         this.setLeft(this.ajouteLeft());
         this.setCenter(this.vBoxCenter);
+        this.setBottom(lesBouton());
+    }
+
+    private Node lesBouton() {
+        // TODO Auto-generated method stub
+        ImageView imgP = new ImageView("../img/boutonPrec.png");
+        imgP.setFitWidth(20);
+        imgP.setFitHeight(20);
+        Button pageprec = new Button();
+        pageprec.setStyle(styleBoutonPage);
+        pageprec.setSkin(new MyButtonSkin(pageprec));
+        pageprec.setOnAction(new ControleurPagePrecedenteClie(this));
+        pageprec.setGraphic(imgP);
+
+        ImageView imgS = new ImageView("../img/boutonSuivant.png");
+        imgS.setFitWidth(20);
+        imgS.setFitHeight(20);
+        Button pageSuivante = new Button();
+        pageSuivante.setStyle(styleBoutonPage);
+        pageSuivante.setSkin(new MyButtonSkin(pageSuivante));
+        pageSuivante.setOnAction(new ControleurPageSuivanteClie(this));
+        pageSuivante.setGraphic(imgS);
+        HBox boutonTournerLaPage = new HBox(10);
+        boutonTournerLaPage.getChildren().addAll(pageprec, pageSuivante);
+        boutonTournerLaPage.setAlignment(Pos.TOP_CENTER);
+        return boutonTournerLaPage;
     }
 
     public BorderPane ajouteTop() {
@@ -168,7 +203,6 @@ public class MenuClient extends BorderPane {
 
     public BorderPane ajouteLeft() {
         BorderPane left = new BorderPane();
-
         VBox blocObservable = new VBox();
         ImageView liv = new ImageView(new Image("../img/logo.png"));
         liv.setFitHeight(200);
@@ -200,9 +234,11 @@ public class MenuClient extends BorderPane {
         Text conseil = new Text("Vous pouvez chercher des livres selon leur thême via la barre de recherche.");
         message.setFont(Font.font("Arial", FontWeight.BOLD, 50));
         conseil.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
-        HBox hb = new HBox();
-        hb.getChildren().addAll(message, conseil);
-        this.vBoxCenter.getChildren().addAll(hb, this.gp);
+
+        VBox vb = new VBox();
+        vb.getChildren().addAll(message, conseil);
+
+        this.vBoxCenter.getChildren().addAll(vb, this.gp);
 
     }
 
@@ -264,6 +300,7 @@ public class MenuClient extends BorderPane {
 
     public void setGpLivRech(GridPaneResultatRech gp) {
         this.gp = gp;
+
     }
 
     public GridPaneResultatRech getGpLivRech() {

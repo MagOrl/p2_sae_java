@@ -462,11 +462,11 @@ public class ClientBD {
 
     public List<List<Livre>> rechercheCritere(String critere, String isbn, String titre, String auteur, Magasin mag)
             throws SQLException {
-                System.out.println(critere);
-                System.out.println(isbn);
-                System.out.println(titre);
-                System.out.println(auteur);
-                System.out.println(mag);
+        System.out.println(critere);
+        System.out.println(isbn);
+        System.out.println(titre);
+        System.out.println(auteur);
+        System.out.println(mag);
         List<List<Livre>> res = new ArrayList<>();
         this.st = laConnexion.createStatement();
         String requete = "select * from LIVRE natural join POSSEDER";
@@ -497,7 +497,7 @@ public class ClientBD {
             res.add(new ArrayList<>());
             for (int y = 0; y < 10; ++y) {
                 if (rs.next()) {
-                    System.out.println("CECI" +rs.getString("isbn")+rs.getString("titre"));
+                    System.out.println("CECI" + rs.getString("isbn") + rs.getString("titre"));
                     res.get(i).add(new Livre(rs.getString("isbn"), rs.getString("titre"), rs.getInt("nbpages"),
                             rs.getString("datepubli"), rs.getDouble("prix"), rs.getInt("qte")));
                 }
@@ -528,6 +528,24 @@ public class ClientBD {
         ResultSet rs = this.st.executeQuery("select idmag, villemag from MAGASIN where nommag =" + '"' + nommag + '"');
         while (rs.next()) {
             mag = new Magasin(rs.getInt("idmag"), nommag, rs.getString("villemag"));
+        }
+        return mag;
+    }
+
+    /**
+     * Fonction qui à partir d'un nom de librairie va trouver la librairie
+     * correspondante
+     * 
+     * @param idmag : idmag de la librairie à trouver
+     * @return Magasin : la librairie correspondante (null si aucune n'a été trouvé
+     *         pour ce nom de librairie)
+     */
+    public Magasin trouveLibrairie(int idmag) throws SQLException {
+        Magasin mag = null;
+        this.st = laConnexion.createStatement();
+        ResultSet rs = this.st.executeQuery("select idmag, villemag from MAGASIN where idmag =" + '"' + idmag + '"');
+        while (rs.next()) {
+            mag = new Magasin(idmag, rs.getString("nommag"), rs.getString("villemag"));
         }
         return mag;
     }

@@ -7,11 +7,14 @@
 ./src/IHM/ControleurDeconnexion.java
 ./src/IHM/ControleurPanier.java
 ./src/IHM/MenuPanier.java
+./src/IHM/ControleurSuppDuPan.java
 ./src/IHM/ControleurTextDynamique.java
 ./src/IHM/MenuHistorique.java
 ./src/IHM/ControleurRechercheLivreCli.java
 ./src/IHM/MenuClient.java
+./src/IHM/ControleurPagePrecedenteClie.java
 ./src/IHM/ControleurUtilisateur.java
+./src/IHM/ControleurPageSuivanteClie.java
 ./src/IHM/MenuInfosPersos.java
 ./src/IHM/ControleurHistorique.java
 ./src/IHM/ControleurSelectLivre.java

@@ -1,7 +1,12 @@
 import java.lang.management.ManagementPermission;
 import java.sql.SQLException;
 
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -18,9 +23,7 @@ public class MenuPanier extends BorderPane {
 
     private Client client;
 
-    private Livre select;
-
-    public MenuPanier(AppliLib appli, Personne client){
+    public MenuPanier(AppliLib appli, Personne client) {
         super();
 
         this.appli = appli;
@@ -29,22 +32,29 @@ public class MenuPanier extends BorderPane {
         this.setStyle(AppliLib.styleBanniere);
         this.setPadding(new Insets(20));
 
-        Text titre = new Text("Panier du compte n°"+this.client.getNumCompte());
+        Text titre = new Text("Panier du compte n°" + this.client.getNumCompte());
         titre.setFont(Font.font("Arial", FontWeight.BOLD, 35));
 
         VBox panier = new VBox(10);
-        for (int idmag : this.client.getPanier().keySet()){
+        for (int idmag : this.client.getPanier().keySet()) {
             String magasin = "";
             try {
-                magasin =this.appli.getClientBD().afficheMagasin().get(idmag).getNom(); 
-            }catch(SQLException e){
+                magasin = this.appli.getClientBD().trouveLibrairie(idmag).getNom();
+            } catch (SQLException e) {
                 this.appli.popUpPasDeMagasins();
             }
             VBox livres = new VBox(10);
-            for (Livre livre : this.client.getPanier(idmag)){
+            for (Livre livre : this.client.getPanier(idmag)) {
                 Text liv = new Text(livre.toString());
                 liv.setFont(Font.font("Arial", FontWeight.NORMAL, 25));
-                livres.getChildren().add(liv);
+                Button suppLiv = new Button("-");
+                suppLiv.setStyle(AppliLib.styleBouton);
+                suppLiv.setSkin(new MyButtonSkin(suppLiv));
+                HBox hb = new HBox(20);
+                livres.getChildren().add(hb);
+                suppLiv.setOnAction(new ControleurSuppDuPan(this.client, idmag, livre));
+                hb.getChildren().addAll(liv, suppLiv);
+
             }
             TitledPane livreMag = new TitledPane(magasin, livres);
             panier.getChildren().add(livreMag);
@@ -52,7 +62,7 @@ public class MenuPanier extends BorderPane {
 
         HBox boutons = new HBox(10);
         Button commander = new Button("Commmander le panier");
-        //commander.setOnAction(new ControleurCommanderC(this.appli));
+        // commander.setOnAction(new ControleurCommanderC(this.appli));
         commander.setStyle(AppliLib.styleBouton);
         commander.setMinHeight(40);
         commander.setMinWidth(90);
@@ -69,4 +79,5 @@ public class MenuPanier extends BorderPane {
         this.setCenter(panier);
         this.setBottom(boutons);
     }
+
 }
