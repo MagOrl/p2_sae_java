@@ -19,7 +19,8 @@ public class FenetreTransfererLivre extends VBox {
     private TextField isbn;
     private TextField qte;
     private AppliLib appli;
-    private Vendeur vend;
+    private VendeurBD vend;
+    private MenuVendeur menu;
 
     public FenetreTransfererLivre(AppliLib appli) {
 
@@ -34,7 +35,7 @@ public class FenetreTransfererLivre extends VBox {
         this.btnTransf.setSkin(new MyButtonSkin(this.btnTransf));
         this.btnRetour.setSkin(new MyButtonSkin(this.btnRetour));
 
-        //this.btnTransf.setOnAction(new ControleurTransferer());
+        this.btnTransf.setOnAction(new ControleurTransferer(this.vend, this.menu, this.appli, this));
         this.btnRetour.setOnAction(new ControleurRetourVendeur(this.appli));
 
         this.getChildren().add(trans());
@@ -72,12 +73,17 @@ public class FenetreTransfererLivre extends VBox {
         return vb;
     }
 
+
     public String getIsbn() {
-        return isbn.getText();
+        return this.isbn.getText();
     }
 
-    public String getQte() {
-        return qte.getText();
+    public int getQte() {
+        return Integer.parseInt(this.qte.getText());
     }
 
+    public void resetTFTransferer() {
+        this.isbn.setText("");
+        this.qte.setText("");
+    }
 }

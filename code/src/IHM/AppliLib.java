@@ -21,7 +21,7 @@ public class AppliLib extends Application {
     private Button creeCompte;
     private Button connexion;
     private MenuAcceuil menuAcc;
-    //private FenetreMajQte fenetreMajQte;
+    private FenetreMajQte fenetreMajQte;
     private FenetreTransfererLivre fenetreTransfererLivre;
     private FenetreVerifDispo fenetreVerifDispo;
 
@@ -246,6 +246,27 @@ public class AppliLib extends Application {
         return alert;
     }
 
+    public Alert popUpModifQte() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "La quantité du livre a été changé avec succès :)");
+        alert.setTitle("Tout est bon !!");
+        return alert;
+    }
+
+    public Alert popUpTransferer() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Le transfert a été effectué avec succès :)");
+        alert.setTitle("Tout est bon !!");
+        return alert;
+    }
+
+    public Alert popUpQteInfAZero() {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Erreur de quantité");
+        alert.setHeaderText(null);
+        alert.setContentText("La quantité doit être supérieure ou égale à zéro.");
+        return alert;
+    }
 
     public VendeurBD getVendeurBD() {
         return this.vendeurBD;

@@ -292,6 +292,9 @@ public class MenuVendeur extends BorderPane {
         this.prix.setText("");
     }
 
+    
+
+
     public Alert popUpNumberFormatException() {
         Alert alert = new Alert(Alert.AlertType.ERROR,
                 "Veuillez entrer uniquement des chiffres pour la quantité, la date de publication, le prix et le nombre de pages");

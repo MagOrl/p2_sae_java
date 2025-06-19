@@ -31,7 +31,7 @@ public class FenetreMajQte extends VBox {
         this.btnMaj.setSkin(new MyButtonSkin(this.btnMaj));
         this.btnRetour.setSkin(new MyButtonSkin(this.btnRetour));
 
-        this.btnMaj.setOnAction(new ControleurMaj(this.modele,this.menu, this.appli));
+        this.btnMaj.setOnAction(new ControleurMaj(this.modele,this, this.appli,this.menu));
         this.btnRetour.setOnAction(new ControleurRetourVendeur(this.appli));
 
         this.getChildren().add(maj());
@@ -69,12 +69,18 @@ public class FenetreMajQte extends VBox {
         return vb;
     }
 
-    public String getIsbn() {
-        return isbn.getText();
+    public int getIsbn() {
+        return Integer.parseInt(isbn.getText());
     }
 
-    public String getQte() {
-        return qte.getText();
+    public int getQte() {
+        return Integer.parseInt(this.qte.getText());
     }
+
+    public void resetTFMaj() {
+        this.isbn.setText("");
+        this.qte.setText("");
+    }
+    
 
 }

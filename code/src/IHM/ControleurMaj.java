@@ -6,37 +6,36 @@ import javafx.scene.control.Alert;
 public class ControleurMaj implements EventHandler<ActionEvent> {
 
     private VendeurBD modele;
-    private MenuVendeur menu;
+    private FenetreMajQte fenetreMajQte;
     private AppliLib appli;
+    private MenuVendeur menu;
 
-    public ControleurMaj(VendeurBD modele, MenuVendeur menu, AppliLib appli) {
+    public ControleurMaj(VendeurBD modele, FenetreMajQte fenetreMajQte, AppliLib appli, MenuVendeur menu) {
 
         this.modele = modele;
-        this.menu = menu;
+        this.fenetreMajQte = fenetreMajQte;
         this.appli = appli;
+        this.menu = menu;
     }
 
     @Override
     public void handle(ActionEvent event) {
         try {
-            String isbn = ""+this.menu.getIsbn2()+"";
-            int qte = this.menu.getQte2();
-            Magasin librairie = this.modele.trouveLibrairie(this.menu.getLibrairie(), -1);
-            if (isbn.isEmpty() || qte <= 0) { 
+            
+            String isbn = "" + this.fenetreMajQte.getIsbn() + "";
+            int qte = this.fenetreMajQte.getQte();
+            Magasin librairie = this.modele.trouveLibrairie(this.menu.getLibrairie(),-1);
+            if (isbn.isEmpty() || qte < 0 ) {
                 this.appli.popUpMettreToutesLesVal().showAndWait();
                 return;
             }
             this.modele.majQteLivre(isbn, librairie, qte);
-            this.menu.resetTFAjouterLivre();
-            this.appli.popUpAjouteLivre().show();
+            this.fenetreMajQte.resetTFMaj();
+            this.appli.popUpModifQte().show();
 
         } catch (QteInfAZeroException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur de quantité");
-            alert.setHeaderText(null);
-            alert.setContentText("La quantité ne peut pas être inférieure ou égale à zéro.");
-            alert.showAndWait();
+            this.appli.popUpQteInfAZero().showAndWait();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (NumberFormatException e) {

@@ -6,6 +6,7 @@
 ./src/IHM/ControleurQuitteCreaCompte.java
 ./src/IHM/ControleurUtilisateur.java
 ./src/IHM/MenuCreaCompte.java
+./src/IHM/ControleurMaj.java
 ./src/IHM/MyButtonSkin.java
 ./src/IHM/ControlleurConnexion.java
 ./src/IHM/ControlleurQuitter.java
@@ -14,6 +15,7 @@
 ./src/IHM/ControleurRetour.java
 ./src/IHM/MenuAcceuil.java
 ./src/IHM/ControleurRetourVendeur.java
+./src/IHM/ControleurTransferer.java
 ./src/IHM/ControleurAjouterLivre.java
 ./src/IHM/ControleurCommanderC.java
 ./src/IHM/ControleurCommanderV.java
