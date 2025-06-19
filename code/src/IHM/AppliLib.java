@@ -17,7 +17,6 @@ public class AppliLib extends Application {
     private Button btnQuitte;
     private Button creeCompte;
     private Button connexion;
-    private MenuAcceuil menuAcc;
     private AdministrateurBD adminBD;
     private VendeurBD vendeurBD;
     private ClientBD clientBD;
@@ -29,7 +28,7 @@ public class AppliLib extends Application {
     private Button quitteCrea;
     private Button changeInfoBD;
     private Button quitteInfo;
-
+  
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
             "-fx-background-radius: 20;" +
@@ -73,7 +72,6 @@ public class AppliLib extends Application {
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
-
         this.btnQuitte.setStyle(styleBouton);
 
         this.confirmCrea = new Button("Confirmer");
@@ -130,9 +128,9 @@ public class AppliLib extends Application {
 
     @Override
     public void start(Stage stg) {
-        this.scene = new Scene(this.menuAcc);
+        this.scene = new Scene(this.menuGSG);
         stg.setScene(this.scene);
-        stg.setTitle("Menu principale");
+        stg.setTitle("Menu principal");
         stg.show();
     }
 
@@ -143,6 +141,7 @@ public class AppliLib extends Application {
     public void afficheMenuAdmin(Administrateur adm) {
         this.scene.setRoot(new MenuAdmin(this.btnQuitte, adm, this));
     }
+
     public void afficheMenuCreaCompte() {
         this.scene.setRoot(this.menuCrea);
     }
@@ -179,6 +178,13 @@ public class AppliLib extends Application {
     public Alert popUpPasMemeMotDePasse() {
         Alert alert = new Alert(Alert.AlertType.WARNING,
                 "Le mot de passe de confirmation ne correspond pas", ButtonType.YES);
+        alert.setTitle("Erreur");
+        return alert;
+    }
+
+    public Alert popUpMettreToutesLesVal() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Un ou plusieurs champs n'ont pas été complété.", ButtonType.YES);
         alert.setTitle("Erreur");
         return alert;
     }
@@ -238,4 +244,7 @@ public class AppliLib extends Application {
         return this.menuCrea;
     }
 
+    public void afficheMenuGererStocksGlobaux(){
+        this.scene.setRoot(this.menuGSG);
+    }
 }
