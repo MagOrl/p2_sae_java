@@ -3,6 +3,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -22,19 +23,22 @@ public class MenuVendeur extends BorderPane {
     private AppliLib appli;
     private VendeurBD modele;
     private TextField isbn;
+    private TextField isbn2;
     private TextField titre;
     private TextField publication;
     private TextField page;
     private TextField qte;
+    private TextField qte2;
     private TextField prix;
     private Text textLibrairie;
     private Vendeur vendeur;
 
-    public MenuVendeur(Vendeur vend,AppliLib app) {
-        
+    public MenuVendeur(Vendeur vend, AppliLib app, VendeurBD vendeurBD) {
 
-        this.vendeur = vend ;
+        this.vendeur = vend;
         this.appli = app;
+        this.modele = vendeurBD;
+
         this.btnTransferer = new Button("Transférer \n    Livre");
         this.btnMettreAJour = new Button("Mettre à jour \n   Quantité");
         this.btnDeconnexion = new Button("Déconnexion");
@@ -49,20 +53,19 @@ public class MenuVendeur extends BorderPane {
         this.btnCommander.setStyle(AppliLib.styleBouton);
         this.btnVerif.setStyle(AppliLib.styleBouton);
 
+        this.btnTransferer.setOnAction(new ControleurTransfererLivre(appli));
+        this.btnMettreAJour.setOnAction(new ControleurMajQte(appli));
+        this.btnDeconnexion.setOnAction(new ControleurDeconnexion(appli));
+        this.btnAjouter.setOnAction(new ControleurAjouterLivre(this.modele, this, this.appli));
+        this.btnCommander.setOnAction(new ControleurCommanderV(appli));
+        this.btnVerif.setOnAction(new ControleurVerifDispo(appli));
+
         this.btnTransferer.setSkin(new MyButtonSkin(btnTransferer));
         this.btnMettreAJour.setSkin(new MyButtonSkin(btnMettreAJour));
         this.btnDeconnexion.setSkin(new MyButtonSkin(btnDeconnexion));
         this.btnAjouter.setSkin(new MyButtonSkin(btnAjouter));
         this.btnCommander.setSkin(new MyButtonSkin(btnCommander));
         this.btnVerif.setSkin(new MyButtonSkin(btnVerif));
-
-        this.btnTransferer.setOnAction(new ControleurTransfererLivre(appli));
-        this.btnMettreAJour.setOnAction(new ControleurMajQte(appli));
-        this.btnDeconnexion.setOnAction(new ControleurDeconnexion(appli));
-        this.btnAjouter.setOnAction(new ControleurAjouterLivre(modele, this));
-        this.btnCommander.setOnAction(new ControleurCommanderV(appli));
-        this.btnVerif.setOnAction(new ControleurVerifDispo(appli));
-
 
         this.setTop(top());
         this.setLeft(left());
@@ -118,22 +121,22 @@ public class MenuVendeur extends BorderPane {
         VBox vb = new VBox(15);
 
         HBox hb1 = new HBox(10);
-        Text txtId = new Text("Identifiant :");
+        Text txtId = new Text("Identifiant Client :");
         txtId.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         TextField identifiant = new TextField();
         identifiant.setFont(Font.font("Arial", 15));
         identifiant.setStyle(AppliLib.styleTextField);
 
-        Text txtISBN = new Text("Publication :");
+        Text txtISBN = new Text("ISBN :");
         txtISBN.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        isbn = new TextField();
-        isbn.setFont(Font.font("Arial", 15));
-        isbn.setStyle(AppliLib.styleTextField);
+        this.isbn2 = new TextField();
+        this.isbn2.setFont(Font.font("Arial", 15));
+        this.isbn2.setStyle(AppliLib.styleTextField);
 
-        hb1.getChildren().addAll(txtId, identifiant, txtISBN, isbn);
+        hb1.getChildren().addAll(txtId, identifiant, txtISBN, this.isbn2);
 
         HBox hb2 = new HBox(10);
-        Text txtMdp = new Text("Mot de passe :");
+        Text txtMdp = new Text("Mot de passe Client :");
         txtMdp.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         PasswordField mdp = new PasswordField();
         mdp.setFont(Font.font("Arial", 15));
@@ -141,11 +144,11 @@ public class MenuVendeur extends BorderPane {
 
         Text txtQte = new Text("Quantité :");
         txtQte.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        TextField qte = new TextField();
-        qte.setFont(Font.font("Arial", 15));
-        qte.setStyle(AppliLib.styleTextField);
+        this.qte2 = new TextField();
+        this.qte2.setFont(Font.font("Arial", 15));
+        this.qte2.setStyle(AppliLib.styleTextField);
 
-        hb2.getChildren().addAll(txtMdp, mdp, txtQte, qte);
+        hb2.getChildren().addAll(txtMdp, mdp, txtQte, this.qte2);
 
         HBox hb3 = new HBox(10);
         Text txtPrixTot = new Text("Prix totale :");
@@ -156,6 +159,14 @@ public class MenuVendeur extends BorderPane {
         hb3.getChildren().addAll(txtPrixTot, prixTot);
 
         HBox hb4 = new HBox(10);
+
+        this.btnCommander.disableProperty()
+                .bind(this.isbn2.textProperty().isEmpty().or(identifiant.textProperty().isEmpty())
+                        .or(mdp.textProperty().isEmpty()).or(this.qte2.textProperty().isEmpty()));
+        this.btnVerif.disableProperty()
+                .bind(this.isbn2.textProperty().isEmpty().or(this.qte2.textProperty().isEmpty()));
+
+
         hb4.getChildren().addAll(this.btnCommander, this.btnVerif);
 
         vb.getChildren().addAll(hb1, hb2, hb3, hb4);
@@ -178,84 +189,118 @@ public class MenuVendeur extends BorderPane {
         HBox hbIsbn = new HBox(10);
         Text txtIsbn = new Text("ISBN :");
         txtIsbn.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        isbn = new TextField();
-        isbn.setFont(Font.font("Arial", 15));
-        isbn.setStyle(AppliLib.styleTextField);
-        hbIsbn.getChildren().addAll(txtIsbn, isbn);
+        this.isbn = new TextField();
+        this.isbn.setFont(Font.font("Arial", 15));
+        this.isbn.setStyle(AppliLib.styleTextField);
+        hbIsbn.getChildren().addAll(txtIsbn, this.isbn);
 
         HBox hbTitre = new HBox(10);
         Text txtTitre = new Text("Titre :");
         txtTitre.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        titre = new TextField();
-        titre.setFont(Font.font("Arial", 15));
-        titre.setStyle(AppliLib.styleTextField);
-        hbTitre.getChildren().addAll(txtTitre, titre);
+        this.titre = new TextField();
+        this.titre.setFont(Font.font("Arial", 15));
+        this.titre.setStyle(AppliLib.styleTextField);
+        hbTitre.getChildren().addAll(txtTitre, this.titre);
 
         HBox hbPub = new HBox(10);
         Text txtPublication = new Text("Publication :");
         txtPublication.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        publication = new TextField();
-        publication.setFont(Font.font("Arial", 15));
-        publication.setStyle(AppliLib.styleTextField);
-        hbPub.getChildren().addAll(txtPublication, publication);
+        this.publication = new TextField();
+        this.publication.setFont(Font.font("Arial", 15));
+        this.publication.setStyle(AppliLib.styleTextField);
+        hbPub.getChildren().addAll(txtPublication, this.publication);
 
         HBox hbPage = new HBox(10);
         Text txtPage = new Text("Pages :");
         txtPage.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        page = new TextField();
-        page.setFont(Font.font("Arial", 15));
-        page.setStyle(AppliLib.styleTextField);
-        hbPage.getChildren().addAll(txtPage, page);
+        this.page = new TextField();
+        this.page.setFont(Font.font("Arial", 15));
+        this.page.setStyle(AppliLib.styleTextField);
+        hbPage.getChildren().addAll(txtPage, this.page);
 
         HBox hbQte = new HBox(10);
         Text txtQuantite = new Text("Quantité :");
         txtQuantite.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        qte = new TextField();
-        qte.setFont(Font.font("Arial", 15));
-        qte.setStyle(AppliLib.styleTextField);
-        hbQte.getChildren().addAll(txtQuantite, qte);
+        this.qte = new TextField();
+        this.qte.setFont(Font.font("Arial", 15));
+        this.qte.setStyle(AppliLib.styleTextField);
+        hbQte.getChildren().addAll(txtQuantite, this.qte);
 
         HBox hbPrix = new HBox(10);
         Text txtPrix = new Text("Prix :");
         txtPrix.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        prix = new TextField();
-        prix.setFont(Font.font("Arial", 15));
-        prix.setStyle(AppliLib.styleTextField);
-        hbPrix.getChildren().addAll(txtPrix, prix);
+        this.prix = new TextField();
+        this.prix.setFont(Font.font("Arial", 15));
+        this.prix.setStyle(AppliLib.styleTextField);
+        hbPrix.getChildren().addAll(txtPrix, this.prix);
 
-        vb.getChildren().addAll(hbIsbn, hbTitre, hbPub, hbPage, hbQte, this.btnAjouter);
+        this.btnAjouter.disableProperty()
+                .bind(this.isbn.textProperty().isEmpty().or(this.titre.textProperty().isEmpty())
+                        .or(this.publication.textProperty().isEmpty()).or(this.page.textProperty().isEmpty())
+                        .or(this.qte.textProperty().isEmpty()).or(this.prix.textProperty().isEmpty()));
+
+        vb.getChildren().addAll(hbIsbn, hbTitre, hbPage, hbPub, hbPrix, hbQte, this.btnAjouter);
+        
         vb.setStyle(AppliLib.styleDefaultContainer);
         vb.setPadding(new Insets(25));
 
         return vb;
     }
 
-    public String getIsbn() {
-        return isbn.getText();
+    public int getIsbn() {
+        return Integer.parseInt(this.isbn.getText());
     }
 
     public String getTitre() {
-        return titre.getText();
+        return this.titre.getText();
     }
 
-    public String getNbPages() {
-        return isbn.getText();
+    public int getNbPages() {
+        return Integer.parseInt(this.page.getText());
     }
 
-    public String getDatePubli() {
-        return publication.getText();
+    public int getDatePubli() {
+        return Integer.parseInt(this.publication.getText());
     }
 
-    public String getPrix() {
-        return prix.getText();
+    public double getPrix() {
+        return Double.parseDouble(this.prix.getText());
     }
 
-    public String getQte() {
-        return qte.getText();
+    public int getQte() {
+        return Integer.parseInt(this.qte.getText());
     }
 
     public String getLibrairie() {
-        return textLibrairie.getText();
+        return this.textLibrairie.getText();
+    }
+
+    public int getIsbn2() {
+        return Integer.parseInt(this.isbn2.getText());
+    }
+
+    public int getQte2() {
+        return Integer.parseInt(this.qte2.getText());
+    }
+
+    public void resetTFAjouterLivre() {
+        this.isbn.setText("");
+        this.titre.setText("");
+        this.publication.setText("");
+        this.page.setText("");
+        this.qte.setText("");
+        this.prix.setText("");
+    }
+
+    public Alert popUpNumberFormatException() {
+        Alert alert = new Alert(Alert.AlertType.ERROR,
+                "Veuillez entrer uniquement des chiffres pour la quantité, la date de publication, le prix et le nombre de pages");
+        return alert;
+    }
+
+    public Alert popUpLivreAjoute() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Le livre a bien été ajouté");
+        return alert;
     }
 
 }

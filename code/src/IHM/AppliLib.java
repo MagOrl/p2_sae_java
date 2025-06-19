@@ -149,7 +149,7 @@ public class AppliLib extends Application {
     }
 
     public void afficheMenuVendeur(Vendeur vend) {
-        this.scene.setRoot(new MenuVendeur(vend, this));
+        this.scene.setRoot(new MenuVendeur(vend, this, this.vendeurBD));
     }
 
     public void afficheMenuClient() {
@@ -210,7 +210,7 @@ public class AppliLib extends Application {
         return alert;
     }
 
-    public static Alert popUpDeconnexion() {
+    public Alert popUpDeconnexion() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Confirmation de déconnexion");
         alert.setHeaderText("Voulez-vous vraiment vous déconnecter ?");
@@ -238,6 +238,14 @@ public class AppliLib extends Application {
         alert.setTitle("Tout est bon " + prenom);
         return alert;
     }
+
+    public Alert popUpAjouteLivre() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Le livre a été ajouté avec succès :)");
+        alert.setTitle("Tout est bon !!");
+        return alert;
+    }
+
 
     public VendeurBD getVendeurBD() {
         return this.vendeurBD;

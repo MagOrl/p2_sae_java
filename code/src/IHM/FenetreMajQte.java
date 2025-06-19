@@ -15,10 +15,12 @@ public class FenetreMajQte extends VBox {
     private TextField qte;
     private VendeurBD modele;
     private AppliLib appli;
+    private MenuVendeur menu;
 
     public FenetreMajQte(AppliLib appli) {
 
         this.appli = appli;
+    
 
         this.btnMaj = new Button("Mettre à jour");
         this.btnRetour = new Button("Retour");
@@ -29,7 +31,7 @@ public class FenetreMajQte extends VBox {
         this.btnMaj.setSkin(new MyButtonSkin(this.btnMaj));
         this.btnRetour.setSkin(new MyButtonSkin(this.btnRetour));
 
-        //this.btnMaj.setOnAction(new ControleurMaj(this.appli));
+        this.btnMaj.setOnAction(new ControleurMaj(this.modele,this.menu, this.appli));
         this.btnRetour.setOnAction(new ControleurRetourVendeur(this.appli));
 
         this.getChildren().add(maj());

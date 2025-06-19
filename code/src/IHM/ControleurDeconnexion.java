@@ -18,7 +18,7 @@ public class ControleurDeconnexion implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
         
-        Alert alert = AppliLib.popUpDeconnexion();
+        Alert alert = this.appli.popUpDeconnexion();
         Optional<ButtonType> resultat = alert.showAndWait();
 
         if (resultat.isPresent() && resultat.get() == ButtonType.OK) {

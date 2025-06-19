@@ -1,6 +1,5 @@
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent ;
-import javafx.scene.control.Button;
 
 
 public class ControleurRetourVendeur implements EventHandler<ActionEvent>{
@@ -18,7 +17,7 @@ public class ControleurRetourVendeur implements EventHandler<ActionEvent>{
             Vendeur vendeur = (Vendeur) this.appli.getUtilisateur();
             this.appli.afficheMenuVendeur(vendeur);
         }else{
-            
+            System.out.println("L'utilisateur n'est PAS un vendeur, ou est null.");
         }
     }
 
