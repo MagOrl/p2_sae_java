@@ -43,7 +43,7 @@ public class GridPaneStocks extends GridPane{
             for(Livre livre : this.stocks.get(this.index)){
                 for(Button btSruppr : this.mapStocks.keySet()){
                     if(this.mapStocks.get(btSruppr).equals(livre)){
-                        Text text = new Text(livre.toString());
+                        Text text = new Text(livre.toStringStock());
                         text.setFont(Font.font("Arial", 17));
                         this.add(text, 0, cptGp);
                         this.add(btSruppr, 1, cptGp);
