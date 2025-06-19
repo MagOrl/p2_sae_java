@@ -100,7 +100,7 @@ public class MenuCreaCompte extends BorderPane {
         Text txt7 = new Text("Adresse");
         Text txt8 = new Text("Ville");
         Text txt9 = new Text("Code Postal");
-        Text txt10 = new Text("Téléphone");
+        Text txt10 = new Text("Téléphoe");
 
         txt1.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         txt2.setFont(Font.font("Arial", FontWeight.BOLD, 15));
