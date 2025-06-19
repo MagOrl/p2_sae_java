@@ -57,6 +57,13 @@ public class MenuGererStocksGlobaux extends BorderPane{
     private AdministrateurBD modele;
     private static ConnexionMySQL connexion;
 
+    public static String styleBoutonPage = "-fx-background-color:rgb(255, 255, 255);" +
+            "-fx-border-radius: 50; " +
+            "-fx-background-radius: 20;" +
+            "-fx-border-color:rgb(32, 33, 32);" +
+            "-fx-border-width: 2;" +
+            "-fx-text-fill: white;";
+
     
     public MenuGererStocksGlobaux(Button bouton){
         try{
@@ -86,11 +93,13 @@ public class MenuGererStocksGlobaux extends BorderPane{
         this.choixLibrairie.setItems(lesLibrairies);
         this.choixLibrairie.setValue("Changer de librairie");
         this.choixLibrairie.valueProperty().addListener(new ControleurChoixLibrairie(librairieActuelle, this, this.modele));
+        this.choixLibrairie.setStyle(AppliLib.styleTextField);
         this.critereReherche = new ComboBox<>();
         this.lesCriteres =  FXCollections.observableArrayList("Titre", "Auteur", "ISBN");
         this.critereReherche.setItems(lesCriteres);
         this.critereReherche.setValue("Choisir un critère");
         this.critereReherche.valueProperty().addListener(new ControleurCritereRecherche(this.critereActuel, this, this.modele));
+        this.critereReherche.setStyle(AppliLib.styleTextField);
         this.critereActuel = "";
         this.btAjouterLivre = new Button("Ajouter");
         this.btAjouterLivre.setSkin(new MyButtonSkin(btAjouterLivre));
@@ -293,6 +302,7 @@ public class MenuGererStocksGlobaux extends BorderPane{
         this.barreDeRecherche.setStyle(AppliLib.styleTextField);
         bTRecherche.setOnAction(new ControleurBoutonRechercheA(this, modele, this.barreDeRecherche));
         hbCenter.getChildren().addAll(bTRecherche, barreDeRecherche, this.critereReherche);
+        
 
 
         ImageView imgwSuppr = new ImageView();
@@ -305,20 +315,33 @@ public class MenuGererStocksGlobaux extends BorderPane{
         this.vBoxCenter.setPadding(new Insets(7));
         this.vBoxCenter.getChildren().addAll(this.gpStocks);
 
-        Button pageSuivante = new Button("Page suivante");
-        pageSuivante.setStyle(AppliLib.styleBouton);
+
+        ImageView imgwSuivante = new ImageView();
+        imgwSuivante.setImage(new Image("../img/boutonSuivant.png"));
+        imgwSuivante.setFitHeight(20);
+        imgwSuivante.setFitWidth(20);
+
+        Button pageSuivante = new Button();
+        pageSuivante.setStyle(styleBoutonPage);
         pageSuivante.setSkin(new MyButtonSkin(pageSuivante));
         pageSuivante.setOnAction(new ControleurPageSuivante(this));
+        pageSuivante.setGraphic(imgwSuivante);
 
-        Button pagePrecedente = new Button("Page précedente");
-        pagePrecedente.setStyle(AppliLib.styleBouton);
+        ImageView imgwPrecedente = new ImageView();
+        imgwPrecedente.setImage(new Image("../img/boutonPrec.png"));
+        imgwPrecedente.setFitHeight(20);
+        imgwPrecedente.setFitWidth(20);
+
+        Button pagePrecedente = new Button();
+        pagePrecedente.setStyle(styleBoutonPage);
         pagePrecedente.setSkin(new MyButtonSkin(pagePrecedente));
         pagePrecedente.setOnAction(new ControleurPagePrecedente(this));
-
+        pagePrecedente.setGraphic(imgwPrecedente);
 
         HBox passerPages = new HBox();
         passerPages.getChildren().addAll(pagePrecedente, pageSuivante);
-
+        passerPages.setSpacing(20.0);
+        passerPages.setAlignment(Pos.BOTTOM_CENTER);
 
 
         VBox vBoxCenterPrincipal = new VBox();
@@ -436,6 +459,10 @@ public class MenuGererStocksGlobaux extends BorderPane{
     public String getCritereActuel(){
         return this.critereActuel;
     }
+
+    
+
+
 
 
 

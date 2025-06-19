@@ -64,6 +64,10 @@ public class Livre {
     this.qte = qte;
   }
 
+  public String toStringStock(){
+    return this.getIsbn() + "| Titre : " + this.getTitre() + " | Paru en : " + this.getDatePubli() + " | Nombre de pages : " + this.getNbPages() + " | Prix : " + this.getPrix() + " euros | Quantité : " + this.getQte(); 
+  }
+
   @Override
   public String toString() {
     return getTitre() +

@@ -12,7 +12,7 @@ public class ControleurPagePrecedente implements EventHandler<ActionEvent>{
     public void handle(ActionEvent event){
         try{
             GridPaneStocks gpStocks = this.vue.getGpStocks();
-            if (gpStocks != null && gpStocks.getIndex()-1 >= 0){
+            if (gpStocks != null && gpStocks.getIndex()-1 > 0){
                 gpStocks.setIndex(gpStocks.getIndex()-1);
                 gpStocks.majGPStocks();
                 this.vue.majVBoxCenter(gpStocks);
