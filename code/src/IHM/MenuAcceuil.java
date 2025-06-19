@@ -5,6 +5,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+
+import java.sql.SQLException;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -47,6 +50,13 @@ public class MenuAcceuil extends BorderPane {
         this.creeCompte = creeCompte;
         this.setTop(top());
         this.setCenter(left());
+
+        try {
+            this.setRight(new LesGraphic("Évolution du chiffre d'affaire total par client",
+                    new AdministrateurBD(new ConnexionMySQL())));
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
