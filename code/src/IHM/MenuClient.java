@@ -168,8 +168,8 @@ public class MenuClient extends BorderPane {
         histori.setMinHeight(40);
         histori.setMinWidth(90);
         histori.setSkin(new MyButtonSkin(histori));
-        accesPanier.setOnAction(new ControleurPanier(this.appli));
-        histori.setOnAction(new ControleurHistorique(this.appli));
+        accesPanier.setOnAction(new ControleurPanier(this.appli,this));
+        histori.setOnAction(new ControleurHistorique(this.appli,this));
         VBox blocA = new VBox(10);
         blocA.getChildren().addAll(accesPanier, histori);
 
@@ -184,7 +184,7 @@ public class MenuClient extends BorderPane {
         infosPerso.setMinWidth(90);
         infosPerso.setSkin(new MyButtonSkin(infosPerso));
         deco.setOnAction(new ControleurDeconnexion(this.appli));
-        infosPerso.setOnAction(new ControleurInfosPersos(this.appli));
+        infosPerso.setOnAction(new ControleurInfosPersos(this.appli,this));
         VBox blocB = new VBox(10);
         blocB.getChildren().addAll(deco, infosPerso);
         HBox right = new HBox(10);

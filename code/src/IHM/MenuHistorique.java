@@ -17,29 +17,29 @@ public class MenuHistorique extends BorderPane {
 
     private Client client;
 
-    private Map<String,List<String>> historique;
+    private Map<String, List<String>> historique;
 
-    public MenuHistorique(AppliLib appli){
-        super();
+    private MenuClient menuCli;
 
+    public MenuHistorique(AppliLib appli, MenuClient menucli) {
+        this.menuCli = menucli;
         this.appli = appli;
         this.client = (Client) this.appli.getUtilisateur();
         this.setStyle(AppliLib.styleBanniere);
         this.setPadding(new Insets(20));
-        try{
-            this.historique = this.appli.getClientBD().historiqueCommande(this.client); 
-        }catch (SQLException e){
+        try {
+            this.historique = this.appli.getClientBD().historiqueCommande(this.client);
+        } catch (SQLException e) {
             this.appli.popUpPasDeCommandes();
         }
-        
 
         Text titre = new Text("Historique de vos commandes");
         titre.setFont(Font.font("Arial", FontWeight.BOLD, 35));
 
         VBox center = new VBox(10);
-        for (String key : this.historique.keySet()){
+        for (String key : this.historique.keySet()) {
             VBox lesLivres = new VBox(5);
-            for (String value : this.historique.get(key)){
+            for (String value : this.historique.get(key)) {
                 Text ligne = new Text(value);
                 ligne.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
                 lesLivres.getChildren().add(ligne);
@@ -52,7 +52,7 @@ public class MenuHistorique extends BorderPane {
         center.setPadding(new Insets(20));
 
         Button retour = new Button("Retour");
-        retour.setOnAction(new ControleurRetour(this.appli));
+        retour.setOnAction(new ControleurRetour(this.appli, this.menuCli));
         retour.setStyle(AppliLib.styleBouton);
         retour.setMinHeight(40);
         retour.setMinWidth(90);
@@ -64,4 +64,4 @@ public class MenuHistorique extends BorderPane {
     }
 }
 
-//"Aucune commande effectuer pour le moment"
+// "Aucune commande effectuer pour le moment"

@@ -1,24 +1,20 @@
 import javafx.event.EventHandler;
-import javafx.event.ActionEvent ;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 
+public class ControleurRetour implements EventHandler<ActionEvent> {
 
-public class ControleurRetour implements EventHandler<ActionEvent>{
-    
     private AppliLib appli;
-    
+    private MenuClient menuCli;
 
-    public ControleurRetour(AppliLib appli) {
+    public ControleurRetour(AppliLib appli, MenuClient menuCli) {
         this.appli = appli;
+        this.menuCli = menuCli;
     }
 
     @Override
-    public void handle(ActionEvent event) { 
-        if (this.appli.getUtilisateur() instanceof Client){
-            this.appli.afficheMenuClient();
-        }else{
-            // this.appli.afficheMenuVendeur();
-        }
+    public void handle(ActionEvent event) {
+        this.appli.retourMenuClient(this.menuCli);
     }
 
 }

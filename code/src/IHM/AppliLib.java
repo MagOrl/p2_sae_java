@@ -104,20 +104,24 @@ public class AppliLib extends Application {
         this.scene.setRoot(new MenuClient(this));
     }
 
-    public void afficheMenuInfosPersos() {
-
-        this.scene.setRoot(new MenuInfosPersos(this, this.utilisateur));
+    public void retourMenuClient(MenuClient menuCli) {
+        this.scene.setRoot(menuCli);
     }
 
-    public void afficheMenuHistorique() {
-        this.scene.setRoot(new MenuHistorique(this));
+    public void afficheMenuInfosPersos(MenuClient menuCli) {
+
+        this.scene.setRoot(new MenuInfosPersos(this, this.utilisateur,menuCli));
     }
 
-    public void afficheMenuPanier() {
-        this.scene.setRoot(new MenuPanier(this, this.utilisateur));
+    public void afficheMenuHistorique(MenuClient menuCli) {
+        this.scene.setRoot(new MenuHistorique(this,menuCli));
     }
 
-    public void afficheMenuCreaCompte(){
+    public void afficheMenuPanier(MenuClient menuCli) {
+        this.scene.setRoot(new MenuPanier(this, (Client) this.utilisateur, menuCli));
+    }
+
+    public void afficheMenuCreaCompte() {
         this.scene.setRoot(new MenuCreaCompte(btnQuitte, this.btnQuitte));
     }
 

@@ -14,7 +14,6 @@ public class ControleurAjouterPanier implements EventHandler<ActionEvent> {
 
     public void handle(ActionEvent event) {
         try {
-            System.out.println("OKOKOKo");
             this.menu.getClient().addPanier(menu.getClientBD().trouveLibrairie(this.menu.getLibActuelle()).getId(), liv, liv.getQte());
 
         } catch (TopDeLivreException | MauvaiseQuantiteException | SQLException e) {

@@ -463,10 +463,6 @@ public class ClientBD {
     public List<List<Livre>> rechercheCritere(String critere, String isbn, String titre, String auteur, Magasin mag)
             throws SQLException {
         System.out.println(critere);
-        System.out.println(isbn);
-        System.out.println(titre);
-        System.out.println(auteur);
-        System.out.println(mag);
         List<List<Livre>> res = new ArrayList<>();
         this.st = laConnexion.createStatement();
         String requete = "select * from LIVRE natural join POSSEDER";
@@ -491,13 +487,11 @@ public class ClientBD {
                 return res;
         }
         ResultSet rs = this.st.executeQuery(requete);
-        System.out.println(requete);
         int tailleR = nbLigneRequetes(rs);
         for (int i = 0; i < tailleR; ++i) {
             res.add(new ArrayList<>());
             for (int y = 0; y < 10; ++y) {
                 if (rs.next()) {
-                    System.out.println("CECI" + rs.getString("isbn") + rs.getString("titre"));
                     res.get(i).add(new Livre(rs.getString("isbn"), rs.getString("titre"), rs.getInt("nbpages"),
                             rs.getString("datepubli"), rs.getDouble("prix"), rs.getInt("qte")));
                 }
@@ -510,7 +504,6 @@ public class ClientBD {
                 res.remove(res.get(tailleR));
             --tailleR;
         }
-        System.out.println(res);
         return res;
     }
 
