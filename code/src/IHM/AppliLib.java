@@ -1,17 +1,15 @@
 
 import java.sql.SQLException;
-import java.util.List;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.shape.Circle;
 
 public class AppliLib extends Application {
 
@@ -19,7 +17,6 @@ public class AppliLib extends Application {
     private Button btnQuitte;
     private Button creeCompte;
     private Button connexion;
-    private MenuAcceuil menuAcc;
     private AdministrateurBD adminBD;
     private VendeurBD vendeurBD;
     private ClientBD clientBD;
@@ -27,6 +24,12 @@ public class AppliLib extends Application {
 
     private ConnexionMySQL connexionSQL;
     private ComboBox<String> nomMag;
+    private MenuCreaCompte menuCrea;
+    private Button confirmCrea;
+    private Button quitteCrea;
+    private Button changeInfoBD;
+    private Button quitteInfo;
+    private MenuAcceuil menuAcc;
 
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
@@ -36,7 +39,9 @@ public class AppliLib extends Application {
             "-fx-text-fill: white;";
     public static String styleBanniere = "-fx-border-radius: 15;" +
             "-fx-border-color:rgb(0, 0, 0);" +
+            "-fx-border-width: 3;" + "-fx-background-color: #0b7f94;" + "-fx-border-insets: -2.5px;" +
             "-fx-border-width: 3;" + "-fx-background-color: #0b7f94;" + "-fx-border-insets: -2.5px;";
+
     public static String styleDefaultContainer = "-fx-background-color: #5d9b7d;" +
             "-fx-border-radius: 20; " +
             "-fx-background-radius: 20;" +
@@ -52,39 +57,78 @@ public class AppliLib extends Application {
 
     @Override
     public void init() {
+        this.nomMag = new ComboBox<>();
         try {
             this.connexionSQL = new ConnexionMySQL();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        this.clientBD = new ClientBD(this.connexionSQL);
-        this.adminBD = new AdministrateurBD(this.connexionSQL);
-        this.vendeurBD = new VendeurBD(this.connexionSQL);
-        this.nomMag = new ComboBox<>();
         try {
+            this.clientBD = new ClientBD(this.connexionSQL);
+            this.adminBD = new AdministrateurBD(this.connexionSQL);
+            this.vendeurBD = new VendeurBD(this.connexionSQL);
             this.nomMag.getItems().addAll(this.vendeurBD.choixLibrairie());
+
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            System.err.println("pas bonne base de données");
+        } 
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
         this.btnQuitte.setStyle(styleBouton);
+
+        this.confirmCrea = new Button("Confirmer");
+        this.quitteCrea = new Button("Quitter");
+        this.changeInfoBD = new Button("Paramètre");
+        this.quitteInfo = new Button("Quitter");
+
+        this.btnQuitte.setStyle(styleBouton + "-fx-background-color:rgb(194, 60, 60);");
         this.connexion.setStyle(styleBouton);
         this.creeCompte.setStyle(styleBouton);
+        this.confirmCrea.setStyle(styleBouton);
+        this.quitteCrea.setStyle(styleBouton);
+        this.confirmCrea.setStyle(styleBouton);
+        this.changeInfoBD.setStyle(styleBouton);
+        this.quitteInfo.setStyle(styleBouton);
+
         this.connexion.setMinHeight(40);
         this.connexion.setMinWidth(90);
         this.btnQuitte.setMinHeight(40);
         this.btnQuitte.setMinWidth(90);
         this.creeCompte.setMinHeight(40);
         this.creeCompte.setMinWidth(90);
+        this.quitteCrea.setMinHeight(40);
+        this.quitteCrea.setMinWidth(90);
+        this.confirmCrea.setMinHeight(40);
+        this.confirmCrea.setMinWidth(90);
+        this.quitteCrea.setMinHeight(40);
+        this.quitteCrea.setMinWidth(90);
+        this.changeInfoBD.setMinHeight(40);
+        this.changeInfoBD.setMinWidth(90);
+        this.quitteInfo.setMinHeight(40);
+        this.quitteInfo.setMinWidth(90);
+
         this.btnQuitte.setOnAction(new ControlleurQuitter(this));
         this.connexion.setOnAction(new ControlleurConnexion(this));
         this.creeCompte.setOnAction(new ControleurCreationCompte(this));
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
         this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
-        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag);
+        this.quitteCrea.setOnAction(new ControleurQuitteCreaCompte(this));
+        this.confirmCrea.setOnAction(new ControleurCreeCompte(this));
+        this.changeInfoBD.setOnAction(new ControleurChangeInfoBD(this));
+        this.quitteInfo.setOnAction(new ControleurQuitteCreaCompte(this));
+
+        this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
+        this.connexion.setSkin(new MyButtonSkin(this.connexion));
+        this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
+        this.quitteCrea.setSkin(new MyButtonSkin(this.quitteCrea));
+        this.confirmCrea.setSkin(new MyButtonSkin(this.confirmCrea));
+        this.changeInfoBD.setSkin(new MyButtonSkin(this.changeInfoBD));
+        this.quitteInfo.setSkin(new MyButtonSkin(this.quitteInfo));
+
+        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag, this.changeInfoBD);
+        this.menuCrea = new MenuCreaCompte(this.quitteCrea, this.confirmCrea);
 
     }
 
@@ -92,7 +136,7 @@ public class AppliLib extends Application {
     public void start(Stage stg) {
         this.scene = new Scene(this.menuAcc);
         stg.setScene(this.scene);
-        stg.setTitle("Menu principale");
+        stg.setTitle("Menu principal");
         stg.show();
     }
 
@@ -114,15 +158,27 @@ public class AppliLib extends Application {
     }
 
     public void afficheMenuHistorique(MenuClient menuCli) {
-        this.scene.setRoot(new MenuHistorique(this, menuCli,(Client)this.utilisateur));
+        this.scene.setRoot(new MenuHistorique(this, menuCli, (Client) this.utilisateur));
     }
 
     public void afficheMenuPanier(MenuClient menuCli) {
         this.scene.setRoot(new MenuPanier(this, (Client) this.utilisateur, menuCli));
     }
 
+    public void afficheMenuAdmin(Administrateur adm) {
+        this.scene.setRoot(new MenuAdmin(this.btnQuitte, adm, this));
+    }
+
     public void afficheMenuCreaCompte() {
-        this.scene.setRoot(new MenuCreaCompte(btnQuitte, this.btnQuitte));
+        this.scene.setRoot(this.menuCrea);
+    }
+
+    public void afficheInfoBD() {
+        this.scene.setRoot(new MenuChangeInfoBD(this.quitteInfo));
+    }
+
+    public void afficheMenuGererStocksGlobaux(Administrateur adm) {
+        this.scene.setRoot(new MenuGererStocksGlobaux(this, adm));
     }
 
     public void quitte() {
@@ -187,13 +243,42 @@ public class AppliLib extends Application {
 
     public Alert popUpSurDeCommender() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Voulez vous finaliser votre transaction ?", ButtonType.YES,ButtonType.NO);
+                "Voulez vous finaliser votre transaction ?", ButtonType.YES, ButtonType.NO);
         alert.setTitle("Panier plein");
+        return alert;
+    }
+
+    public Alert popUpPasMemeMotDePasse() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Le mot de passe de confirmation ne correspond pas", ButtonType.YES);
+        alert.setTitle("Erreur");
+        return alert;
+    }
+
+    public Alert popUpMettreToutesLesVal() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Un ou plusieurs champs n'ont pas été complété.", ButtonType.YES);
+        alert.setTitle("Erreur");
+        return alert;
+    }
+
+    public Alert popUpCompteCree(String prenom) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Compte à bien été créé, bienvenue " + prenom, ButtonType.YES);
+        alert.setTitle("Tout est bon " + prenom);
         return alert;
     }
 
     public VendeurBD getVendeurBD() {
         return this.vendeurBD;
+    }
+
+    public Alert popUpDeconnexion() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de déconnexion");
+        alert.setHeaderText("Voulez-vous vraiment vous déconnecter ?");
+        alert.setContentText("Cliquez sur OK pour vous déconnecter, ou Annuler pour rester.");
+        return alert;
     }
 
     public AdministrateurBD getAdminBD() {
@@ -219,4 +304,9 @@ public class AppliLib extends Application {
     public String getValMag() {
         return this.nomMag.getValue();
     }
+
+    public MenuCreaCompte getMenuCreaCompte() {
+        return this.menuCrea;
+    }
+
 }

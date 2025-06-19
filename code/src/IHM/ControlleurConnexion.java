@@ -47,6 +47,7 @@ public class ControlleurConnexion implements EventHandler<ActionEvent> {
                 try {
                     if (this.app.getAdminBD().connectAdmin(tf, pf)) {
                         this.app.setUtilisateur(this.app.getAdminBD().trouveAdmin(tf, pf));
+                        this.app.afficheMenuAdmin(this.app.getAdminBD().trouveAdmin(tf, pf));
                     } else {
                         this.app.getMenuAcc().resetFields();
                         this.app.popUpMauvaiseSaisie().showAndWait();

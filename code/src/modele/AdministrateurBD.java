@@ -4,17 +4,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.List;
 
 public class AdministrateurBD {
 
   private ConnexionMySQL connexion;
   private Statement st;
 
-  public AdministrateurBD(ConnexionMySQL laConnexion) {
+  public AdministrateurBD(ConnexionMySQL laConnexion) throws SQLException {
     this.connexion = laConnexion;
     try {
       List<String> data = new ArrayList<>();
@@ -184,23 +189,6 @@ public class AdministrateurBD {
     ps.setString(2, magasin.getNom());
     ps.setString(3, magasin.getVille());
     ps.executeUpdate();
-  }
-
-  /**
-   * Fonction qui va créer un nouvel identifiant de librairie maximum,
-   * par rapport au numéro maximum déjà présent
-   * 
-   * @return String : le nouvel identifiant de librairie maximum
-   */
-  public int idmagMax() throws SQLException {
-    Integer idMax = 0;
-    this.st = connexion.createStatement();
-    ResultSet rs = this.st.executeQuery("select max(idmag) as idMax from MAGASIN");
-    while (rs.next()) {
-      idMax = rs.getInt("idMax") + 1;
-    }
-    rs.close();
-    return idMax;
   }
 
   /**
@@ -416,5 +404,199 @@ public class AdministrateurBD {
     }
     return res;
 
+  }
+
+  /**
+   * Fonction qui va ajouter un nouveau livre à une librairie passée en paramètre
+   * 
+   * @param isbn      : l'identifiant du livre
+   * @param titre     : le titre du livre
+   * @param auteur    : l'auteur du livre
+   * @param editeur   : l'éditeur du livre
+   * @param theme     : le thème du livre
+   * @param nbpages   : le nombre de pages du livre
+   * @param datepubli : la date de publication du livre
+   * @param prix      : le prix du livre
+   * @param qte       : la quantité du livre à ajouter
+   * @param mag       : la librairie dans laquelle ajouter le livre
+   */
+  public void AjouterLivre(String isbn, String titre, String auteur, String editeur, String theme, String nbpages,
+      String datepubli, String prix, String qte, Magasin mag) throws SQLException {
+    Livre livre = new Livre(isbn, titre, Integer.parseInt(nbpages), datepubli, Double.parseDouble(prix),
+        Integer.parseInt(qte));
+
+    PreparedStatement psLivre = this.connexion.prepareStatement("insert ignore into LIVRE values(?,?,?,?,?)");
+    psLivre.setString(1, livre.getIsbn());
+    psLivre.setString(2, livre.getTitre());
+    psLivre.setInt(3, livre.getNbPages());
+    psLivre.setString(4, (livre.getDatePubli()));
+    psLivre.setDouble(5, livre.getPrix());
+    psLivre.executeUpdate();
+
+    PreparedStatement psPosseder = this.connexion.prepareStatement("insert into POSSEDER values(?,?,?)");
+    psPosseder.setInt(1, mag.getId());
+    psPosseder.setString(2, isbn);
+    psPosseder.setInt(3, Integer.parseInt(qte));
+  }
+
+  /**
+   * Fonction qui va afficher tout les livres que possède un librairie
+   * 
+   * @param mag : la librairie dont il faut afficher le stock
+   */
+  public void afficherStockLibrairie(Magasin mag) throws SQLException {
+    this.st = connexion.createStatement();
+    ResultSet rs = this.st.executeQuery(
+        "select isbn, titre, nbpages, datepubli, prix, qte from LIVRE natural join POSSEDER natural join MAGASIN where idmag = "
+            + mag.getId());
+    if (!rs.next()) {
+      System.out.println("--------------------------------------------------------");
+      System.out.println("La libraire actuelle (" + mag.getNom() + ") ne contient aucun livre");
+      System.out.println("------------------------------------------------------------");
+    }
+    while (rs.next()) {
+      Livre livreActuel = new Livre(rs.getString("isbn"), rs.getString("titre"), rs.getInt("nbpages"),
+          rs.getString("datepubli"), rs.getDouble("prix"), rs.getInt("qte"));
+      System.out.println("------------------------------------------------------------");
+      System.out.println(livreActuel);
+      System.out.println("------------------------------------------------------------");
+    }
+    // System.out.println("Une erreur est survenue lors de l'affichage du stock");
+
+  }
+
+  public HashMap<String, HashMap<String, Number>> requeteNbVendMagAnne() throws SQLException {
+    this.st = connexion.createStatement();
+    ResultSet rs = this.st.executeQuery(
+        "select distinct nommag as Magasin, YEAR(datecom) as annee, sum(qte) as qte from MAGASIN natural join COMMANDE natural join DETAILCOMMANDE group by Magasin, annee order by annee");
+    HashMap<String, HashMap<String, Number>> p = new HashMap<>();
+    while (rs.next()) {
+      p.putIfAbsent(rs.getString("annee"), new HashMap<String, Number>());
+      p.get(rs.getString("annee")).put(rs.getString("Magasin"), rs.getInt("qte"));
+    }
+    rs.close();
+    return p;
+  }
+
+  /**
+   * Fonction qui va afficher le pourcentage du chiffre d'affaire de chaque thème
+   * pour une année
+   * 
+   * @param annee : l'annee à analyser
+   */
+  public ArrayList<Map.Entry<String, Integer>> requeteCAThemeAnnee() throws SQLException {
+    this.st = connexion.createStatement();
+    ResultSet rs = this.st.executeQuery(
+        "Select nomclass as Theme, sum(prixvente*qte) as Montant From COMMANDE Natural Join DETAILCOMMANDE Natural Join LIVRE Natural Join THEMES Natural Join CLASSIFICATION Where Year(datecom) = 2025 Group by Floor(iddewey / 100) * 100");
+    ArrayList<Map.Entry<String, Integer>> listo = new ArrayList<>();
+    while (rs.next()) {
+      listo.add(new AbstractMap.SimpleEntry<>(rs.getString("Theme"), rs.getInt("montant")));
+    }
+    return listo;
+  }
+
+  /**
+   * Fonction qui va afficher l'évolution du chiffre d'affaire des magasins par
+   * mois, pour une année
+   * 
+   * @param annee : l'annee à analyser
+   */
+  public HashMap<String, HashMap<String, Number>> requeteEvoCAMag() throws SQLException {
+    this.st = connexion.createStatement();
+    HashMap<String, HashMap<String, Number>> listo = new HashMap<>();
+    ResultSet rs = this.st.executeQuery(
+        "Select MONTH(datecom) as mois, nommag as Magasin, sum(qte*prixvente) as CA From MAGASIN Natural Join COMMANDE Natural Join DETAILCOMMANDE Where YEAR(datecom) = 2024 Group by mois, Magasin");
+    while (rs.next()) {
+      listo.putIfAbsent(rs.getString("Magasin"), new HashMap<String, Number>());
+      listo.get(rs.getString("Magasin")).put(rs.getString("mois"), rs.getInt("CA"));
+    }
+    return listo;
+
+  }
+
+  /**
+   * Fonction qui va afficher la comparaison entre le nombre de ventes en lignes
+   * et le nombre de ventes en magasin par année
+   */
+  public HashMap<String, HashMap<String, Number>> requeteCompVenteLMAnnee() throws SQLException {
+    this.st = connexion.createStatement();
+    HashMap<String, HashMap<String, Number>> listo = new HashMap<>();
+    ResultSet rs = this.st.executeQuery(
+        "select YEAR(datecom) as annee, enligne as typevente, sum(qte*prix) as montant from COMMANDE natural join DETAILCOMMANDE natural join LIVRE where YEAR(datecom)<>2025 group by annee, typevente order by annee DESC");
+
+    while (rs.next()) {
+      listo.putIfAbsent(rs.getString("typevente"), new HashMap<String, Number>());
+      listo.get(rs.getString("typevente")).put(rs.getString("annee"), rs.getInt("montant"));
+
+    }
+    return listo;
+  }
+
+  /**
+   * Fonction qui va afficher les dix éditeurs le plus importants en nombre
+   * d'auteurs
+   */
+  public ArrayList<Map.Entry<String, Integer>> requeteDixeditPlusImportants() throws SQLException {
+    this.st = connexion.createStatement();
+    ResultSet rs = this.st.executeQuery(
+        "select nomedit as Editeur, count(idauteur) as nbauteurs from EDITEUR natural join EDITER natural join LIVRE natural join ECRIRE natural join AUTEUR group by nomedit order by nbauteurs desc limit 10");
+    ArrayList<Map.Entry<String, Integer>> listo = new ArrayList<>();
+    while (rs.next()) {
+      listo.add(new AbstractMap.SimpleEntry<>(rs.getString("Editeur"), rs.getInt("nbauteurs")));
+    }
+    return listo;
+  }
+
+  /**
+   * Fonction qui va afficher l'origine des clients ayant acheté des livres d'un
+   * auteur passé en paramètre
+   * 
+   * @param auteur : l'auteur à analyser
+   */
+  public ArrayList<Map.Entry<String, Integer>> requeteOrigineClientAuteur() throws SQLException {
+    this.st = connexion.createStatement();
+    ArrayList<Map.Entry<String, Integer>> listo = new ArrayList<>();
+    ResultSet rs = this.st.executeQuery(
+        "select villecli as ville, sum(qte) as qte from CLIENT natural join COMMANDE natural join DETAILCOMMANDE natural join LIVRE natural join ECRIRE natural join AUTEUR where nomauteur = 'René Goscinny'  group by villecli");
+
+    while (rs.next()) {
+      listo.add(new AbstractMap.SimpleEntry<>(rs.getString("ville"), rs.getInt("qte")));
+    }
+    return listo;
+  }
+
+  /**
+   * Fonction qui va afficher la valeur du stock de chaque magasin du réseau
+   */
+  public ArrayList<Map.Entry<String, Integer>> requeteValeurStockMag() throws SQLException {
+    this.st = connexion.createStatement();
+    ArrayList<Map.Entry<String, Integer>> listo = new ArrayList<>();
+    ResultSet rs = this.st.executeQuery(
+        "select nommag as Magasin, sum(qte*prix) as total from MAGASIN natural join POSSEDER natural join LIVRE group by nommag");
+    while (rs.next()) {
+      listo.add(new AbstractMap.SimpleEntry<>(rs.getString("Magasin"), rs.getInt("total")));
+    }
+    return listo;
+  }
+
+  /**
+   * Fonction qui va afficher l'évolution du chiffre d'affaire par client chaque
+   * ann
+   */
+  public HashMap<String, HashMap<String, Number>> requeteEvoCAClient() throws SQLException {
+    this.st = connexion.createStatement();
+    ResultSet rs = this.st.executeQuery(
+        "with MaxCAParClient as (select idcli, YEAR(datecom) as annee, sum(qte*prixvente) as CA from CLIENT natural join COMMANDE natural join DETAILCOMMANDE natural join LIVRE group by YEAR(datecom), idcli) select annee, max(CA) as maximum, min(CA) as minimum, avg(CA) as moyenne from MaxCAParClient group by annee");
+    HashMap<String, HashMap<String, Number>> p = new HashMap<>();
+    while (rs.next()) {
+      p.putIfAbsent("maximum", new HashMap<String, Number>());
+      p.putIfAbsent("minimum", new HashMap<String, Number>());
+      p.putIfAbsent("moyenne", new HashMap<String, Number>());
+      p.get("maximum").put(rs.getString("annee"), rs.getInt(2));
+      p.get("minimum").put(rs.getString("annee"), rs.getInt(3));
+      p.get("moyenne").put(rs.getString("annee"), rs.getInt(4));
+
+    }
+    return p;
   }
 }

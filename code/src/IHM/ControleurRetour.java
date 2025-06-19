@@ -1,6 +1,5 @@
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
 
 public class ControleurRetour implements EventHandler<ActionEvent> {
 
@@ -16,5 +15,4 @@ public class ControleurRetour implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         this.appli.retourMenuClient(this.menuCli);
     }
-
 }
