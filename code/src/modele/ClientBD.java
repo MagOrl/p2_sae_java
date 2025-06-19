@@ -182,9 +182,10 @@ public class ClientBD {
         }
         rs.beforeFirst();
         int numcomSave = -1;
-        String res = "";
         int cpt = 0;
+        int nblig = nbLigneRequetes(rs);
         while (rs.next()) {
+            --nblig;
             String enligne = rs.getString("enLigne").equals("O") ? "en ligne" : "en magasin";
             String livraison = rs.getString("livraison").equals("M") ? "récuperé en magasin" : "livré à domicile";
             if (rs.getInt("numcom") == numcomSave) {
@@ -207,11 +208,15 @@ public class ClientBD {
                         + "€ | Quantité : " + rs.getInt("qte"));
                 cpt = cpt + (rs.getInt("prixvente") * rs.getInt("qte"));
             }
+            if (nblig<=0) {
+                historique.put(key, listeCommande); // fix car ne prennait pas la dernière val 
+            }
         }
+        
         rs.close();
-        res += "\nprix total : " + cpt + " €";
         return historique;
     }
+
 
     /**
      * permet d'afficher les themes des livres

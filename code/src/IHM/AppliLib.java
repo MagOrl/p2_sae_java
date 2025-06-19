@@ -114,7 +114,7 @@ public class AppliLib extends Application {
     }
 
     public void afficheMenuHistorique(MenuClient menuCli) {
-        this.scene.setRoot(new MenuHistorique(this, menuCli));
+        this.scene.setRoot(new MenuHistorique(this, menuCli,(Client)this.utilisateur));
     }
 
     public void afficheMenuPanier(MenuClient menuCli) {

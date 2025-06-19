@@ -21,14 +21,15 @@ public class MenuHistorique extends BorderPane {
 
     private MenuClient menuCli;
 
-    public MenuHistorique(AppliLib appli, MenuClient menucli) {
+    public MenuHistorique(AppliLib appli, MenuClient menucli, Client client) {
         this.menuCli = menucli;
         this.appli = appli;
-        this.client = (Client) this.appli.getUtilisateur();
+        this.client = client;
         this.setStyle(AppliLib.styleBanniere);
         this.setPadding(new Insets(20));
         try {
             this.historique = this.appli.getClientBD().historiqueCommande(this.client);
+
         } catch (SQLException e) {
             this.appli.popUpPasDeCommandes().showAndWait();
         }
