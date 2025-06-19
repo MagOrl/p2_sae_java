@@ -24,10 +24,7 @@ public class AppliLib extends Application {
     private VendeurBD vendeurBD;
     private ClientBD clientBD;
     private Personne utilisateur;
-    private MenuClient menuCli;
-    private MenuInfosPersos menuInfos;
-    private MenuHistorique menuHistorique;
-    private MenuPanier menuPanier;
+
     private ConnexionMySQL connexionSQL;
     private ComboBox<String> nomMag;
 
@@ -50,7 +47,7 @@ public class AppliLib extends Application {
             "    -fx-background-radius: 15;\n" +
             "    -fx-border-radius: 15;\n" +
             "    -fx-border-color: black;";
-    
+
     public static String styleBoutonImg = "-fx-background-color: transparent;";
 
     @Override
@@ -83,10 +80,11 @@ public class AppliLib extends Application {
         this.creeCompte.setMinWidth(90);
         this.btnQuitte.setOnAction(new ControlleurQuitter(this));
         this.connexion.setOnAction(new ControlleurConnexion(this));
+        this.creeCompte.setOnAction(new ControleurCreationCompte(this));
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
         this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
-        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion,this.nomMag);
+        this.menuAcc = new MenuAcceuil(this.btnQuitte, this.creeCompte, this.connexion, this.nomMag);
 
     }
 
@@ -102,35 +100,26 @@ public class AppliLib extends Application {
         this.scene.setRoot(this.menuAcc);
     }
 
-
     public void afficheMenuClient() {
-        if(this.menuCli == null)
-        this.menuCli = new MenuClient(this);
-        
-        this.scene.setRoot(this.menuCli);
+        this.scene.setRoot(new MenuClient(this));
     }
 
     public void afficheMenuInfosPersos() {
-        if(this.menuInfos == null)
-        this.menuInfos = new MenuInfosPersos(this, this.getUtilisateur());
-        
-        this.scene.setRoot(this.menuInfos);
+
+        this.scene.setRoot(new MenuInfosPersos(this, this.utilisateur));
     }
 
     public void afficheMenuHistorique() {
-        if(this.menuHistorique == null)
-        this.menuHistorique = new MenuHistorique(this);
-        
-        this.scene.setRoot(this.menuHistorique);
+        this.scene.setRoot(new MenuHistorique(this));
     }
 
     public void afficheMenuPanier() {
-        if(this.menuPanier == null)
-        this.menuPanier = new MenuPanier(this, this.getUtilisateur());
-        
-        this.scene.setRoot(this.menuPanier);
+        this.scene.setRoot(new MenuPanier(this, this.utilisateur));
     }
 
+    public void afficheMenuCreaCompte(){
+        this.scene.setRoot(new MenuCreaCompte(btnQuitte, this.btnQuitte));
+    }
 
     public void quitte() {
         Platform.exit();
@@ -158,36 +147,36 @@ public class AppliLib extends Application {
     }
 
     public Alert popUpPasDeRecommandations() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, 
-            "Pas de recommandations pour vous.",ButtonType.YES);
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de recommandations pour vous.", ButtonType.YES);
         alert.setTitle("Aucune recommandation");
         return alert;
     }
 
     public Alert popUpPasDeThemes() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, 
-            "Pas de thêmes existants.",ButtonType.YES);
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de thêmes existants.", ButtonType.YES);
         alert.setTitle("Aucun thême");
         return alert;
     }
 
     public Alert popUpPasDeMagasins() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, 
-            "Pas de magasins existants.",ButtonType.YES);
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de magasins existants.", ButtonType.YES);
         alert.setTitle("Aucun magasin");
         return alert;
     }
 
     public Alert popUpPasDeCommandes() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, 
-            "Pas de commandes enregistrées.",ButtonType.YES);
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de commandes enregistrées.", ButtonType.YES);
         alert.setTitle("Aucune commande");
         return alert;
     }
 
     public Alert popUpPanierPlein() {
-        Alert alert = new Alert(Alert.AlertType.WARNING, 
-            "Votre panier est plein.",ButtonType.YES);
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Votre panier est plein.", ButtonType.YES);
         alert.setTitle("Panier plein");
         return alert;
     }
@@ -215,7 +204,8 @@ public class AppliLib extends Application {
     public void setUtilisateur(Personne pers) {
         this.utilisateur = pers;
     }
-    public String getValMag(){
+
+    public String getValMag() {
         return this.nomMag.getValue();
     }
 }

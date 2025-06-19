@@ -36,9 +36,13 @@ public class MenuClient extends BorderPane {
 
     private RecomDynamique livreDyna;
 
+    private TextField recheField;
+
     private Livre livreSelectionne;
 
     public MenuClient(AppliLib appli) {
+        this.recheField = new TextField();
+        this.recheField.setStyle(AppliLib.styleTextField);
 
         this.appli = appli;
         this.clientBD = this.appli.getClientBD();
@@ -73,15 +77,9 @@ public class MenuClient extends BorderPane {
         recherche.setMinHeight(40);
         recherche.setMinWidth(90);
         recherche.setSkin(new MyButtonSkin(recherche));
-        // recherche.setOnAction(new ControleurRechercheC(this));
 
         HBox rech = new HBox(5);
-
         ComboBox<String> lesMag = new ComboBox<>();
-        TextField barreRech = new TextField("");
-        barreRech.setStyle(AppliLib.styleTextField);
-        rech.getChildren().addAll(barreRech, lesMag);
-
         try {
             for (Magasin mag : clientBD.afficheMagasin().values()) {
                 lesMag.getItems().add(mag.getNom());
@@ -89,6 +87,8 @@ public class MenuClient extends BorderPane {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        rech.getChildren().addAll(this.recheField, lesMag);
 
         BorderPane center = new BorderPane();
         center.setLeft(logo);

@@ -1,3 +1,4 @@
+./src/IHM/ControleurCreationCompte.java
 ./src/IHM/ControleurCommanderC.java
 ./src/IHM/ControleurAjouterPanier.java
 ./src/IHM/MenuCreaCompte.java
@@ -16,10 +17,12 @@
 ./src/IHM/ControleurRechercheC.java
 ./src/IHM/ControleurInfosPersos.java
 ./src/IHM/MyButtonSkin.java
+./src/IHM/ControleurCodePostal.java
 ./src/IHM/ControlleurConnexion.java
 ./src/IHM/ControleurConsulter.java
 ./src/IHM/RecomDynamique.java
 ./src/IHM/AppliLib.java
+./src/IHM/ControleurTextFieldTel.java
 ./src/IHM/ControlleurQuitter.java
 ./src/modele/QuitterExecption.java
 ./src/modele/Editeur.java
