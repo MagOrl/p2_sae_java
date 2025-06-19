@@ -40,9 +40,21 @@ public class MenuClient extends BorderPane {
 
     private Livre livreSelectionne;
 
+    private VBox vBoxCenter;
+
+    private final ComboBox<String> leCriter = new ComboBox<>();
+
+    private ComboBox<String> lesMag;
+
+    private GridPaneResultatRech gp;
+
     public MenuClient(AppliLib appli) {
+        this.vBoxCenter = new VBox(10);
+        leCriter.getItems().addAll("Titre", "Auteur", "ISBN");
         this.recheField = new TextField();
         this.recheField.setStyle(AppliLib.styleTextField);
+        this.gp = new GridPaneResultatRech();
+        this.gp.setStyle(AppliLib.styleDefaultContainer);
 
         this.appli = appli;
         this.clientBD = this.appli.getClientBD();
@@ -50,10 +62,23 @@ public class MenuClient extends BorderPane {
         this.recommandations = lesRecommandations();
         this.listeRecommandes = livresRecommandes();
         this.livreDyna = new RecomDynamique(this.listeRecommandes);
+        lesMag = new ComboBox<>();
+        try {
+            for (Magasin mag : clientBD.afficheMagasin().values()) {
+                lesMag.getItems().add(mag.getNom());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ajouteCenter();
+        this.lesMag.setPromptText("Mettre le magasin");
+        this.leCriter.setPromptText("critère de recherche");
+        this.lesMag.setStyle(AppliLib.styleTextField);
+        this.leCriter.setStyle(AppliLib.styleTextField);
 
         this.setTop(this.ajouteTop());
         this.setLeft(this.ajouteLeft());
-        this.setCenter(this.ajouteCenter());
+        this.setCenter(this.vBoxCenter);
     }
 
     public BorderPane ajouteTop() {
@@ -77,18 +102,10 @@ public class MenuClient extends BorderPane {
         recherche.setMinHeight(40);
         recherche.setMinWidth(90);
         recherche.setSkin(new MyButtonSkin(recherche));
-
+        recherche.setOnAction(new ControleurRechercheLivreCli(this, clientBD));
         HBox rech = new HBox(5);
-        ComboBox<String> lesMag = new ComboBox<>();
-        try {
-            for (Magasin mag : clientBD.afficheMagasin().values()) {
-                lesMag.getItems().add(mag.getNom());
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        rech.getChildren().addAll(this.recheField, lesMag);
+        rech.getChildren().addAll(recherche, this.recheField, lesMag, leCriter);
 
         BorderPane center = new BorderPane();
         center.setLeft(logo);
@@ -178,28 +195,15 @@ public class MenuClient extends BorderPane {
         return left;
     }
 
-    public BorderPane ajouteCenter() {
-        BorderPane center = new BorderPane();
-
-        VBox boite = new VBox(10);
+    public void ajouteCenter() {
         Text message = new Text("Aucune recherche en cours");
         Text conseil = new Text("Vous pouvez chercher des livres selon leur thême via la barre de recherche.");
         message.setFont(Font.font("Arial", FontWeight.BOLD, 50));
         conseil.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
-        boite.getChildren().addAll(message, conseil);
-        Button ajouter = new Button("Ajouter au panier");
-        // ajouter.setOnAction(new ControleurAjouterPanier(this.clientBD));
-        ajouter.setStyle(AppliLib.styleBouton);
-        ajouter.setMinHeight(40);
-        ajouter.setMinWidth(90);
-        ajouter.setSkin(new MyButtonSkin(ajouter));
-        ajouter.setDisable(true);
+        HBox hb = new HBox();
+        hb.getChildren().addAll(message, conseil);
+        this.vBoxCenter.getChildren().addAll(hb, this.gp);
 
-        center.setCenter(boite);
-        center.setBottom(ajouter);
-        center.setPadding(new Insets(20));
-        BorderPane.setAlignment(center, Pos.CENTER);
-        return center;
     }
 
     public Map<Integer, List<List<Livre>>> lesRecommandations() {
@@ -254,4 +258,28 @@ public class MenuClient extends BorderPane {
         return this.livreDyna.getLivre();
     }
 
+    public String getValCrit() {
+        return this.leCriter.getValue();
+    }
+
+    public void setGpLivRech(GridPaneResultatRech gp) {
+        this.gp = gp;
+    }
+
+    public GridPaneResultatRech getGpLivRech() {
+        return this.gp;
+    }
+
+    public String getLibActuelle() {
+        return this.lesMag.getValue();
+    }
+
+    public void majVBoxCenter(GridPaneResultatRech nouvGpStock) {
+        this.vBoxCenter.getChildren().clear();
+        this.vBoxCenter.getChildren().add(nouvGpStock);
+    }
+
+    public String getValRech() {
+        return recheField.getText();
+    }
 }

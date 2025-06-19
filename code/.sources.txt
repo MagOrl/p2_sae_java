@@ -9,11 +9,13 @@
 ./src/IHM/MenuPanier.java
 ./src/IHM/ControleurTextDynamique.java
 ./src/IHM/MenuHistorique.java
+./src/IHM/ControleurRechercheLivreCli.java
 ./src/IHM/MenuClient.java
 ./src/IHM/ControleurUtilisateur.java
 ./src/IHM/MenuInfosPersos.java
 ./src/IHM/ControleurHistorique.java
 ./src/IHM/ControleurSelectLivre.java
+./src/IHM/GridPaneResultatRech.java
 ./src/IHM/ControleurRechercheC.java
 ./src/IHM/ControleurInfosPersos.java
 ./src/IHM/MyButtonSkin.java
