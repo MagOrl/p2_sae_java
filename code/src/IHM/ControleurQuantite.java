@@ -28,6 +28,9 @@ public class ControleurQuantite implements ChangeListener<String>{
         } else {
             tf.setStyle(AppliLib.styleTextField);
         }
+        if (arg2.length() == 6) {
+            tf.setText(arg1);
+        }
         
     }
 }

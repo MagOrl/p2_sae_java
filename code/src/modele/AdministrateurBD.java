@@ -162,6 +162,7 @@ public class AdministrateurBD{
      * Fonction qui va ajouter un nouvelle librairie au réseau
      * @param nommag : le nom de la librairie
      * @param villemag : la ville de la librairie 
+     * @param idmag : l'id de la librairie
      */
     public void ajouteNouvelleLibrairie(String nommag, String villemag, String idmag) throws SQLException{
         Magasin magasin = new Magasin(Integer.parseInt(idmag), nommag, villemag);
@@ -300,6 +301,75 @@ public class AdministrateurBD{
         rs.close();
         return true;
     }
+
+    public List<List<Livre>> rechercheCritere(String critere, String isbn, String titre, String auteur, Magasin mag){
+        int cpt = 0;
+        List<List<Livre>> res = new ArrayList<>();
+        try{
+          this.st = connexion.createStatement();
+          String requete = "select * from LIVRE natural join POSSEDER";
+          switch (critere) {
+            case "isbn":
+              requete += " where isbn = " + isbn;
+              break;
+
+            case "titre":
+              requete += " natural join ECRIRE natural join AUTEUR where idmag = '" + mag.getId() + "' and nomauteur like '%" + auteur + "%' or levenshtein('"+auteur+"', nomauteur) between 0 and 2";
+              break;
+            
+            case "auteur":
+              requete += " where idmag = '" + mag.getId() + "' and titre like '%" + titre + "%' or levenshtein('"+titre+"', titre) between 0 and 2";
+              break;
+          
+            default:
+              break;
+          }
+          ResultSet rs = this.st.executeQuery(requete);
+          List<Livre> page = new ArrayList<>();
+          while(rs.next()){
+            Livre livre = new Livre(rs.getString("isbn"), rs.getString("titre"), rs.getInt("nbpages"), rs.getString("datepubli"), rs.getDouble("prix"), rs.getInt("qte"));
+            page.add(livre);
+            cpt ++;
+            if(cpt == 10){
+              res.add(page);
+              page = new ArrayList<>();
+              cpt = 0;
+            }
+          }
+        }catch(SQLException e){
+          System.out.println("Une erreur est survenue lors de la recherche");
+        }
+        return res;
+    }
+
+    public List<List<Livre>> afficheStock(Magasin mag){
+      int cpt = 0;
+      List<List<Livre>> res = new ArrayList<>();
+      try{
+        this.st = connexion.createStatement();
+        ResultSet rs = this.st.executeQuery("select * from POSSEDER natural join LIVRE where idmag = " + mag.getId());
+        List<Livre> page = new ArrayList<>();
+        while(rs.next()){
+          Livre livre = new Livre(rs.getString("isbn"), rs.getString("titre"), rs.getInt("nbpages"), rs.getString("datepubli"), rs.getDouble("prix"), rs.getInt("qte"));
+          page.add(livre);
+          cpt++;
+          if(cpt == 10){
+            res.add(page);
+            page = new ArrayList<>();
+            cpt = 0;
+          }
+        }
+      }catch(SQLException e){
+          System.out.println("Une erreur est survenue lors de la recherche");
+      }
+      return res;
+
+    }
+    // dans la vue faire un dico Bouton/Livre -> qu'on va pas afficher mais juste utiliser pour supprimer le bon livre 
+    // vue -> grid pane avec Livre | bouton,  va se mettre a jour quand la comboBox va changer de valeur (ya déjà un observable dessus)
+    // modele -> va créer la liste de liste de livres qui seront les pages
+    // controleur -> va appeler la methode qui genere la liste de liste de livre et la mettre dans le grid pane
+    // changer de page -> bouton qui vont changer l'index actuel dans la liste
 
     /**
      * Fonction qui va afficher tout les livres que possède un librairie

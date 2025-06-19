@@ -28,6 +28,9 @@ public class ControleurISBN implements ChangeListener<String>{
         } else {
             tf.setStyle(AppliLib.styleTextField);
         }
+        if (arg2.length() == 14) {
+            tf.setText(arg1);
+        }
         
     }
 }

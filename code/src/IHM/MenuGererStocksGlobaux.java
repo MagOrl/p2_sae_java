@@ -25,6 +25,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class MenuGererStocksGlobaux extends BorderPane{
     private Button btDeconexion;
@@ -43,6 +46,9 @@ public class MenuGererStocksGlobaux extends BorderPane{
     private TextField prix;
     private TextField isbnQte;
     private TextField nouvQte;
+    private GridPaneStocks gpStocks;
+    private VBox vBoxCenter;
+    private Map<Button, Livre> supprLivre;
     private AdministrateurBD modele;
     private static ConnexionMySQL connexion;
 
@@ -62,10 +68,12 @@ public class MenuGererStocksGlobaux extends BorderPane{
             System.out.println("Nous n'avons pas pu connecter l'application à la base de données");
         }
         
+        this.vBoxCenter = new VBox();
+        this.gpStocks = new GridPaneStocks();
         this.choixLibrairie = new ComboBox<>();
         this.choixLibrairie.setItems(lesLibrairies);
         this.choixLibrairie.setValue("Changer de librairie");
-        this.choixLibrairie.valueProperty().addListener(new ControleurChoixLibrairie(librairieActuelle));
+        this.choixLibrairie.valueProperty().addListener(new ControleurChoixLibrairie(librairieActuelle, this, this.modele));
         this.btAjouterLivre = new Button("Ajouter");
         this.btAjouterLivre.setSkin(new MyButtonSkin(btAjouterLivre));
         this.btAjouterLivre.setStyle(AppliLib.styleBouton);
@@ -83,6 +91,7 @@ public class MenuGererStocksGlobaux extends BorderPane{
         this.btDeconexion = bouton;
         this.prenom = new Text();
         this.nom = new Text();
+        this.supprLivre = new HashMap<>();
         this.setTop(top());
         this.setLeft(left());
         this.setCenter(center());
@@ -162,7 +171,6 @@ public class MenuGererStocksGlobaux extends BorderPane{
                                                     or(titre.textProperty().isEmpty()))))));
 
         
-        //desactiverBtAjouter();
         vbBouton.getChildren().addAll(this.btAjouterLivre);
         vbBouton.setAlignment(Pos.BOTTOM_CENTER);
         vbBouton.setPadding(new Insets(10));
@@ -242,7 +250,6 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
     public VBox center(){
         
-        VBox vBoxCenter = new VBox();
         VBox vBoxAfficheStock = new VBox();
 
         HBox top = new HBox();
@@ -272,70 +279,70 @@ public class MenuGererStocksGlobaux extends BorderPane{
         barreDeRecherche.setStyle(AppliLib.styleTextField);
         hbCenter.getChildren().addAll(recherche, barreDeRecherche);
 
-        GridPane gpStocks = new GridPane();
         
-        Text livre0 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
-        Text livre1 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
-        Text livre2 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
-        Text livre3 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
-        Text livre4 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
-
-
+        //
+        //Text livre0 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
+        //Text livre1 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
+        //Text livre2 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
+        //Text livre3 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
+        //Text livre4 = new Text("Isbn : , titre : , date publi : 2006, Nombre de Pages : 45, Prix :4, Quantité : 2");
+//
+//
         ImageView imgwSuppr = new ImageView();
         imgwSuppr.setImage(new Image("../img/croix.png"));
         imgwSuppr.setFitHeight(20);
         imgwSuppr.setFitWidth(20);
-        Button btSuppr0 = new Button("",imgwSuppr);
-        btSuppr0.setStyle(AppliLib.styleBouton);
-        btSuppr0.setSkin(new MyButtonSkin(btSuppr0));
-
-        Button btSuppr1 = new Button("",imgwSuppr);
-        btSuppr1.setStyle(AppliLib.styleBouton);
-        btSuppr1.setSkin(new MyButtonSkin(btSuppr1));
-
-        Button btSuppr2 = new Button("",imgwSuppr);
-        btSuppr2.setStyle(AppliLib.styleBouton);
-        btSuppr2.setSkin(new MyButtonSkin(btSuppr2));
-
-
-        Button btSuppr3 = new Button("",imgwSuppr);
-        btSuppr3.setStyle(AppliLib.styleBouton);
-        btSuppr3.setSkin(new MyButtonSkin(btSuppr3));
-
-        Button btSuppr4 = new Button("",imgwSuppr);
-        btSuppr4.setStyle(AppliLib.styleBouton);
-        btSuppr4.setSkin(new MyButtonSkin(btSuppr4));
-
-
-        gpStocks.add(livre0, 0, 0);
-        gpStocks.add(livre1, 0, 1);
-        gpStocks.add(livre2, 0, 2);
-        gpStocks.add(livre3, 0, 3);
-        gpStocks.add(livre4, 0, 4);
-
-        gpStocks.add(btSuppr0, 1, 0);
-        gpStocks.add(btSuppr1, 1, 1);
-        gpStocks.add(btSuppr2, 1, 2);
-        gpStocks.add(btSuppr3, 1, 3);
-        gpStocks.add(btSuppr4, 1, 4);
+        //Button btSuppr0 = new Button("",imgwSuppr);
+        //btSuppr0.setStyle(AppliLib.styleBouton);
+        //btSuppr0.setSkin(new MyButtonSkin(btSuppr0));
+//
+        //Button btSuppr1 = new Button("",imgwSuppr);
+        //btSuppr1.setStyle(AppliLib.styleBouton);
+        //btSuppr1.setSkin(new MyButtonSkin(btSuppr1));
+//
+        //Button btSuppr2 = new Button("",imgwSuppr);
+        //btSuppr2.setStyle(AppliLib.styleBouton);
+        //btSuppr2.setSkin(new MyButtonSkin(btSuppr2));
+//
+//
+        //Button btSuppr3 = new Button("",imgwSuppr);
+        //btSuppr3.setStyle(AppliLib.styleBouton);
+        //btSuppr3.setSkin(new MyButtonSkin(btSuppr3));
+//
+        //Button btSuppr4 = new Button("",imgwSuppr);
+        //btSuppr4.setStyle(AppliLib.styleBouton);
+        //btSuppr4.setSkin(new MyButtonSkin(btSuppr4));
+//
+//
+        //gpStocks.add(livre0, 0, 0);
+        //gpStocks.add(livre1, 0, 1);
+        //gpStocks.add(livre2, 0, 2);
+        //gpStocks.add(livre3, 0, 3);
+        //gpStocks.add(livre4, 0, 4);
+//
+        //gpStocks.add(btSuppr0, 1, 0);
+        //gpStocks.add(btSuppr1, 1, 1);
+        //gpStocks.add(btSuppr2, 1, 2);
+        //gpStocks.add(btSuppr3, 1, 3);
+        //gpStocks.add(btSuppr4, 1, 4);
+        //
+        //gpStocks.setVgap(2.0);
+        //gpStocks.setHgap(5.0);
         
-        gpStocks.setVgap(2.0);
-        gpStocks.setHgap(5.0);
-        vBoxCenter.setStyle(AppliLib.styleDefaultContainer);
-        vBoxCenter.setPadding(new Insets(7));
-        vBoxCenter.getChildren().addAll(gpStocks);
+        this.vBoxCenter.setStyle(AppliLib.styleDefaultContainer);
+        this.vBoxCenter.setPadding(new Insets(7));
+        this.vBoxCenter.getChildren().addAll(this.gpStocks);
 
-        ImageView imgwSuiv = new ImageView();
-        imgwSuiv.setImage(new Image("../img/croix.png"));
-        imgwSuiv.setFitHeight(20);
-        imgwSuiv.setFitWidth(20);
-        Button pageSuivante = new Button("", imgwSuiv);
+        Button pageSuivante = new Button("Page suivante");
+        pageSuivante.setStyle(AppliLib.styleBouton);
+        pageSuivante.setSkin(new MyButtonSkin(pageSuivante));
+        pageSuivante.setOnAction(new ControleurPageSuivante(this));
 
-        ImageView imgwPrec = new ImageView();
-        imgwPrec.setImage(new Image("../img/croix.png"));
-        imgwPrec.setFitHeight(20);
-        imgwPrec.setFitWidth(20);
-        Button pagePrecedente = new Button("", imgwPrec);
+        Button pagePrecedente = new Button("Page précedente");
+        pagePrecedente.setStyle(AppliLib.styleBouton);
+        pagePrecedente.setSkin(new MyButtonSkin(pagePrecedente));
+        pagePrecedente.setOnAction(new ControleurPagePrecedente(this));
+
 
         HBox passerPages = new HBox();
         passerPages.getChildren().addAll(pagePrecedente, pageSuivante);
@@ -349,7 +356,6 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
 
         return vBoxCenterPrincipal;
-
 
     }
 
@@ -430,6 +436,27 @@ public class MenuGererStocksGlobaux extends BorderPane{
         this.librairieActuelle.setText(librairie);
     }
 
+    public void setStocks(Map<Button, Livre> supprLivre){
+        this.supprLivre = supprLivre;
+    }
+
+    public void majVueGPStocks(GridPaneStocks nouvGPStocks){
+        this.gpStocks = nouvGPStocks;
+    }
+
+    public void majVBoxCenter(GridPaneStocks nouvGpStock){
+        this.vBoxCenter.getChildren().clear();
+        this.vBoxCenter.getChildren().add(nouvGpStock);
+    }
+
+    public GridPaneStocks getGpStocks(){
+        return this.gpStocks;
+    }
+
+    public void setGpStocks(GridPaneStocks gp){
+        this.gpStocks = gp;
+    }
+
 
 
     public void resetTFAjouterLivre(){
@@ -474,6 +501,11 @@ public class MenuGererStocksGlobaux extends BorderPane{
 
     public Alert popUpQteMaj(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "la quantitié à bien été mise à jour");
+        return alert;
+    }
+
+    public Alert popPasDeLibrairie(){
+        Alert alert = new Alert(Alert.AlertType.ERROR, "Veuillez choisir une librairie");
         return alert;
     }
 }
