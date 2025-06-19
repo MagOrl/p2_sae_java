@@ -7,8 +7,10 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Font;
@@ -19,8 +21,6 @@ import javafx.scene.text.Text;
 import java.util.Map;
 import java.util.HashMap;
 import java.sql.SQLException;
-import java.util.Random;
-import java.lang.Math;
 
 public class MenuClient extends BorderPane {
 
@@ -36,20 +36,17 @@ public class MenuClient extends BorderPane {
 
     private RecomDynamique livreDyna;
 
-    private String theme;
-
     private Livre livreSelectionne;
 
     public MenuClient(AppliLib appli) {
-        super();
 
         this.appli = appli;
         this.clientBD = this.appli.getClientBD();
         this.client = (Client) this.appli.getUtilisateur();
         this.recommandations = lesRecommandations();
         this.listeRecommandes = livresRecommandes();
-        this.theme = "";
         this.livreDyna = new RecomDynamique(this.listeRecommandes);
+
         this.setTop(this.ajouteTop());
         this.setLeft(this.ajouteLeft());
         this.setCenter(this.ajouteCenter());
@@ -76,28 +73,31 @@ public class MenuClient extends BorderPane {
         recherche.setMinHeight(40);
         recherche.setMinWidth(90);
         recherche.setSkin(new MyButtonSkin(recherche));
-        recherche.setOnAction(new ControleurRechercheC(this));
+        // recherche.setOnAction(new ControleurRechercheC(this));
 
-        VBox lesThemes = new VBox(5);
-        ToggleGroup groupTheme = new ToggleGroup();
+        HBox rech = new HBox(5);
+
+        ComboBox<String> lesMag = new ComboBox<>();
+        TextField barreRech = new TextField("");
+        barreRech.setStyle(AppliLib.styleTextField);
+        rech.getChildren().addAll(barreRech, lesMag);
+
         try {
-            Map<Integer, String> themesBD = this.clientBD.afficheThemes();
-            for (String theme : themesBD.values()) {
-                RadioButton t = new RadioButton(theme);
-                t.setToggleGroup(groupTheme);
-                t.setOnAction(new ControleurThemes(this));
-                lesThemes.getChildren().add(t);
+            for (Magasin mag : clientBD.afficheMagasin().values()) {
+                lesMag.getItems().add(mag.getNom());
             }
-        } catch (Exception e) {
-            this.appli.popUpPasDeThemes();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        TitledPane themes = new TitledPane("Thêmes", lesThemes);
-        themes.setExpanded(false);
+
         BorderPane center = new BorderPane();
         center.setLeft(logo);
         HBox barreRecherche = new HBox(10);
-        barreRecherche.getChildren().addAll(recherche,themes);
+
+        barreRecherche.getChildren().addAll(rech, lesMag);
+
         center.setCenter(barreRecherche);
+
         BorderPane.setAlignment(center, Pos.CENTER_RIGHT);
 
         ImageView pan = new ImageView(new Image("../img/panier.png"));
@@ -157,7 +157,7 @@ public class MenuClient extends BorderPane {
         liv.setFitHeight(200);
         liv.setFitWidth(200);
 
-        blocObservable.getChildren().addAll(liv,this.livreDyna);
+        blocObservable.getChildren().addAll(liv, this.livreDyna);
         blocObservable.setAlignment(Pos.CENTER);
         blocObservable.setPadding(new Insets(20));
 
@@ -178,7 +178,7 @@ public class MenuClient extends BorderPane {
         return left;
     }
 
-    public BorderPane ajouteCenter(){
+    public BorderPane ajouteCenter() {
         BorderPane center = new BorderPane();
 
         VBox boite = new VBox(10);
@@ -188,14 +188,13 @@ public class MenuClient extends BorderPane {
         conseil.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
         boite.getChildren().addAll(message, conseil);
         Button ajouter = new Button("Ajouter au panier");
-        //ajouter.setOnAction(new ControleurAjouterPanier(this.clientBD));
+        // ajouter.setOnAction(new ControleurAjouterPanier(this.clientBD));
         ajouter.setStyle(AppliLib.styleBouton);
         ajouter.setMinHeight(40);
         ajouter.setMinWidth(90);
         ajouter.setSkin(new MyButtonSkin(ajouter));
         ajouter.setDisable(true);
 
-        
         center.setCenter(boite);
         center.setBottom(ajouter);
         center.setPadding(new Insets(20));
@@ -221,60 +220,37 @@ public class MenuClient extends BorderPane {
         return recommendations;
     }
 
-    public List<Livre> livresRecommandes(){
+    public List<Livre> livresRecommandes() {
         List<Livre> livres = new ArrayList<>();
-        for (List<List<Livre>> listes : this.recommandations.values()){
-            for (List<Livre> petiteListe : listes){
+        for (List<List<Livre>> listes : this.recommandations.values()) {
+            for (List<Livre> petiteListe : listes) {
                 livres.addAll(petiteListe);
             }
         }
         return livres;
     }
 
-    public void setTheme(String theme){
-        this.theme = theme;
-    }
-
-    public String getTheme(){
-        return this.theme;
-    }
-
-    public ClientBD getClientBD(){
+    public ClientBD getClientBD() {
         return this.clientBD;
     }
 
-    public Client getClient(){
+    public Client getClient() {
         return this.client;
     }
 
-    public Integer themeID(){
-        try {
-            Map<Integer,String> themes = this.clientBD.afficheThemes(); 
-            for (int key : themes.keySet()){
-                if (themes.get(key).equals(this.theme)){
-                return key;
-                }
-            }
-            
-        } catch (SQLException e) {
-            this.appli.popUpPasDeThemes();
-        }
-        return null;
-    }
-
-    public void setLivreSelect(Livre livre){
+    public void setLivreSelect(Livre livre) {
         this.livreSelectionne = livre;
     }
 
-    public Livre getLivreSelect(){
+    public Livre getLivreSelect() {
         return this.livreSelectionne;
     }
 
-    public AppliLib getAppli(){
+    public AppliLib getAppli() {
         return this.appli;
     }
 
-    public Livre getLivreDyna(){
+    public Livre getLivreDyna() {
         return this.livreDyna.getLivre();
     }
 
