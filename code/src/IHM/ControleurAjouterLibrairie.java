@@ -32,9 +32,13 @@ public class ControleurAjouterLibrairie implements EventHandler<ActionEvent> {
             Alert alert = this.vue.popUpConfirmerLibrairie(nom, ville);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.OK) {
+                System.out.println(idmag);
                 this.adminBD.ajouteNouvelleLibrairie(nom, ville, idmag);
             }
-        } catch (SQLException e) {
+        }catch(NumberFormatException e){
+            this.vue.popUpNumberFormatExceptionIdLibrairie().show();
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
