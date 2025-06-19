@@ -2,13 +2,14 @@ import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 
 public class ControleurCreerCompteVendeur implements EventHandler<ActionEvent> {
-    private AppliLib appli;
 
-    public ControleurCreerCompteVendeur(AppliLib appli) {
-        this.appli = appli;
+    private MenuAdmin vue;
+
+    public ControleurCreerCompteVendeur(MenuAdmin vue){
+        this.vue = vue;
     }
 
     public void handle(ActionEvent event){
-
+        vue.setCenter(vue.afficherCreerVendeur());
     }
 }

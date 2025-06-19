@@ -12,7 +12,7 @@ public class ClientBD {
     private ConnexionMySQL laConnexion;
     private Statement st;
 
-    public ClientBD(ConnexionMySQL laConnexion) {
+    public ClientBD(ConnexionMySQL laConnexion) throws SQLException{
         this.laConnexion = laConnexion;
         try {
             List<String> data = new ArrayList<>();
@@ -25,9 +25,7 @@ public class ClientBD {
                 data.add(reader.nextLine());
             }
             laConnexion.connecter(data.get(0), data.get(1), data.get(2), data.get(3));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
+        }catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
