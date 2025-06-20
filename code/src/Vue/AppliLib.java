@@ -97,8 +97,6 @@ public class AppliLib extends Application {
         this.btnQuitte.setMinHeight(40);
         this.btnQuitte.setMinWidth(90);
 
-        //this.fenetreMajQte = new FenetreMajQte();
-        this.fenetreVerifDispo = new FenetreVerifDispo();
 
         this.creeCompte.setMinHeight(40);
         this.creeCompte.setMinWidth(90);

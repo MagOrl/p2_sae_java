@@ -16,7 +16,6 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
->>>>>>> main
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
