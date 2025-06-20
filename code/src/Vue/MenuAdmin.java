@@ -84,7 +84,7 @@ public class MenuAdmin extends BorderPane {
 
         Text txt = new Text("Livre Express");
         txt.setFont(Font.font("Arial", FontWeight.BOLD, 30));
-        ImageView logo = new ImageView("../img/logo_placeholder.png");
+        ImageView logo = new ImageView("../img/logo.png");
         logo.setFitHeight(48);
         logo.setFitWidth(48);
 
@@ -112,6 +112,7 @@ public class MenuAdmin extends BorderPane {
         vbMain.setAlignment(Pos.BASELINE_CENTER);
 
         this.cb = new ComboBox<>();
+        this.cb.setStyle(AppliLib.styleTextField);
         this.cb.setValue("Choisir une statistique");
         this.cb.getItems().addAll("Nombre de livres vendus par magasin par année",
                 "CA par thème pour une année",
@@ -135,7 +136,7 @@ public class MenuAdmin extends BorderPane {
 
         Text txt1 = new Text("Menu Administrateur");
         txt1.setFont(Font.font("Arial", FontWeight.BOLD, 30));
-        Text txt2 = new Text("Bienvenue !");
+        Text txt2 = new Text("Bienvenue "+adm.getNom()+" !");
         txt2.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
         vbMain.getChildren().addAll(txt1, txt2);

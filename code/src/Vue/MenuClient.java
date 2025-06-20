@@ -312,4 +312,15 @@ public class MenuClient extends BorderPane {
     public String getValRech() {
         return recheField.getText();
     }
+
+    public void setRed() {
+        this.lesMag.setStyle(AppliLib.styleTextField + "-fx-border-color: red;");
+        this.leCriter.setStyle(AppliLib.styleTextField + "-fx-border-color: red;");
+
+    }
+
+    public void setNormal() {
+        this.lesMag.setStyle(AppliLib.styleTextField);
+        this.leCriter.setStyle(AppliLib.styleTextField);
+    }
 }

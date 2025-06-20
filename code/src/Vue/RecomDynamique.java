@@ -49,7 +49,7 @@ public class RecomDynamique extends VBox {
         BorderPane dateEtPrix = new BorderPane();
         Text date = new Text(liv.getDatePubli());
         date.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
-        Text prix = new Text(liv.getPrix()+"");
+        Text prix = new Text(liv.getPrix()+" €");
         prix.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
         dateEtPrix.setLeft(date);
         dateEtPrix.setRight(prix);
