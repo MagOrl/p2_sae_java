@@ -97,7 +97,6 @@ public class AppliLib extends Application {
         this.btnQuitte.setMinHeight(40);
         this.btnQuitte.setMinWidth(90);
 
-
         this.creeCompte.setMinHeight(40);
         this.creeCompte.setMinWidth(90);
         this.quitteCrea.setMinHeight(40);
@@ -118,7 +117,6 @@ public class AppliLib extends Application {
         this.confirmCrea.setOnAction(new ControleurCreeCompte(this));
         this.changeInfoBD.setOnAction(new ControleurChangeInfoBD(this));
         this.quitteInfo.setOnAction(new ControleurQuitteCreaCompte(this));
-
 
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
@@ -181,6 +179,23 @@ public class AppliLib extends Application {
 
     public void afficheMenuGererStocksGlobaux(Administrateur adm) {
         this.scene.setRoot(new MenuGererStocksGlobaux(this, adm));
+    }
+
+    public void afficheMenuVendeur() {
+        this.scene.setRoot(new MenuVendeur((Vendeur) this.utilisateur, this, this.vendeurBD));
+    }
+
+    public void afficheMenuVendeur(Vendeur vend) {
+        this.scene.setRoot(new MenuVendeur(vend, this, this.vendeurBD));
+    }
+
+    public void afficheFenetreTransfererLivre(MenuVendeur menuVend) {
+        this.scene.setRoot(new FenetreTransfererLivre(this, menuVend, this.vendeurBD));
+
+    }
+
+    public void afficheFenetreMajQte(MenuVendeur menuV) {
+        this.scene.setRoot(new FenetreMajQte(this, this.vendeurBD, menuV));
     }
 
     public void quitte() {
@@ -299,7 +314,6 @@ public class AppliLib extends Application {
         alert.setContentText("La quantité doit être supérieure ou égale à zéro.");
         return alert;
     }
-
 
     public VendeurBD getVendeurBD() {
         return this.vendeurBD;
