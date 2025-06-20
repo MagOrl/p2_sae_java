@@ -14,46 +14,50 @@ public class ControleurRechercheLivreCli implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent arg0) {
-        
-        switch (this.vue.getValCrit()) {
-            case "Titre":
-                try {
-                    this.vue.setGpLivRech(new GridPaneResultatRech(
-                            this.modele.rechercheCritere("titre", "", this.vue.getValRech(), "",
-                                    this.modele.trouveLibrairie(this.vue.getLibActuelle())),
-                            0, vue, modele));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                this.vue.majVBoxCenter(this.vue.getGpLivRech());
-                break;
+        this.vue.setNormal();
+        if (this.vue.getValCrit() == null || this.vue.getLibActuelle() == null) {
+            this.vue.setRed();
+        } else {
+            switch (this.vue.getValCrit()) {
+                case "Titre":
+                    try {
+                        this.vue.setGpLivRech(new GridPaneResultatRech(
+                                this.modele.rechercheCritere("titre", "", this.vue.getValRech(), "",
+                                        this.modele.trouveLibrairie(this.vue.getLibActuelle())),
+                                0, vue, modele));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    this.vue.majVBoxCenter(this.vue.getGpLivRech());
+                    break;
 
-            case "Auteur":
-                try {
-                    this.vue.setGpLivRech(
-                            new GridPaneResultatRech(
-                                    this.modele.rechercheCritere("auteur", "", "", this.vue.getValRech(),
-                                            this.modele.trouveLibrairie(this.vue.getLibActuelle())),
-                                    0, vue, modele));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                this.vue.majVBoxCenter(this.vue.getGpLivRech());
-                break;
+                case "Auteur":
+                    try {
+                        this.vue.setGpLivRech(
+                                new GridPaneResultatRech(
+                                        this.modele.rechercheCritere("auteur", "", "", this.vue.getValRech(),
+                                                this.modele.trouveLibrairie(this.vue.getLibActuelle())),
+                                        0, vue, modele));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    this.vue.majVBoxCenter(this.vue.getGpLivRech());
+                    break;
 
-            case "ISBN":
-                try {
-                    this.vue.setGpLivRech(
-                            new GridPaneResultatRech(this.modele.rechercheCritere("isbn", this.vue.getValRech(), "",
-                                    "", this.modele.trouveLibrairie(this.vue.getLibActuelle())), 0, vue, modele));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                this.vue.majVBoxCenter(this.vue.getGpLivRech());
-                break;
+                case "ISBN":
+                    try {
+                        this.vue.setGpLivRech(
+                                new GridPaneResultatRech(this.modele.rechercheCritere("isbn", this.vue.getValRech(), "",
+                                        "", this.modele.trouveLibrairie(this.vue.getLibActuelle())), 0, vue, modele));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    this.vue.majVBoxCenter(this.vue.getGpLivRech());
+                    break;
 
-            default:
-                return;
+                default:
+                    return;
+            }
         }
         // } catch (NullPointerException e) {
         // this.vue.popPasDeLibrairie().show();
