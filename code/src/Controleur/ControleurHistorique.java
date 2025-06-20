@@ -3,6 +3,7 @@ import javafx.event.ActionEvent ;
 import javafx.scene.control.Button;
 
 
+
 public class ControleurHistorique implements EventHandler<ActionEvent>{
     
     private AppliLib appli;
@@ -11,12 +12,12 @@ public class ControleurHistorique implements EventHandler<ActionEvent>{
     public ControleurHistorique(AppliLib appli,MenuClient menuCli) {
         this.appli = appli;
         this.menuCli = menuCli;
+
     }
 
     @Override
     public void handle(ActionEvent event) { 
         this.appli.afficheMenuHistorique(this.menuCli);
-
     }
 
 }

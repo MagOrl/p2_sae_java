@@ -324,3 +324,4 @@ public class MenuClient extends BorderPane {
         this.leCriter.setStyle(AppliLib.styleTextField);
     }
 }
+

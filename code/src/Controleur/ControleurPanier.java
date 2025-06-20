@@ -15,3 +15,4 @@ public class ControleurPanier implements EventHandler<ActionEvent> {
         this.appli.afficheMenuPanier(menuCli);
     }
 }
+

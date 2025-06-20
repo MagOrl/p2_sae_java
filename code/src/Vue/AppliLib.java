@@ -17,6 +17,7 @@ public class AppliLib extends Application {
     private Button btnQuitte;
     private Button creeCompte;
     private Button connexion;
+
     private AdministrateurBD adminBD;
     private VendeurBD vendeurBD;
     private ClientBD clientBD;
@@ -95,6 +96,8 @@ public class AppliLib extends Application {
         this.connexion.setMinWidth(90);
         this.btnQuitte.setMinHeight(40);
         this.btnQuitte.setMinWidth(90);
+
+
         this.creeCompte.setMinHeight(40);
         this.creeCompte.setMinWidth(90);
         this.quitteCrea.setMinHeight(40);
@@ -120,6 +123,7 @@ public class AppliLib extends Application {
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
         this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
+
         this.quitteCrea.setSkin(new MyButtonSkin(this.quitteCrea));
         this.confirmCrea.setSkin(new MyButtonSkin(this.confirmCrea));
         this.changeInfoBD.setSkin(new MyButtonSkin(this.changeInfoBD));
@@ -266,6 +270,36 @@ public class AppliLib extends Application {
         alert.setTitle("Tout est bon " + prenom);
         return alert;
     }
+
+    public Alert popUpAjouteLivre() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Le livre a été ajouté avec succès :)");
+        alert.setTitle("Tout est bon !!");
+        return alert;
+    }
+
+    public Alert popUpModifQte() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "La quantité du livre a été changé avec succès :)");
+        alert.setTitle("Tout est bon !!");
+        return alert;
+    }
+
+    public Alert popUpTransferer() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Le transfert a été effectué avec succès :)");
+        alert.setTitle("Tout est bon !!");
+        return alert;
+    }
+
+    public Alert popUpQteInfAZero() {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Erreur de quantité");
+        alert.setHeaderText(null);
+        alert.setContentText("La quantité doit être supérieure ou égale à zéro.");
+        return alert;
+    }
+
 
     public VendeurBD getVendeurBD() {
         return this.vendeurBD;

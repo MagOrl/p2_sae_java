@@ -204,21 +204,21 @@ public class VendeurBD {
     return lesLibrairies;
   }
 
+
   /**
-   * Fonction qui va ajouter un nouveau livre à une librairie passée en paramètre
-   * 
-   * @param isbn      : l'identifiant du livre
-   * @param titre     : le titre du livre
-   * @param auteur    : l'auteur du livre
-   * @param editeur   : l'éditeur du livre
-   * @param theme     : le thème du livre
-   * @param nbpages   : le nombre de pages du livre
-   * @param datepubli : la date de publication du livre
-   * @param prix      : le prix du livre
-   * @param qte       : la quantité du livre à ajouter
-   * @param mag       : la librairie dans laquelle ajouter le livre
-   */
-  public void AjouterLivre(String isbn, String titre, String auteur, String editeur, String theme, String nbpages,
+     * Fonction qui va ajouter un nouveau livre à une librairie passée en paramètre
+     * @param isbn : l'identifiant du livre
+     * @param titre : le titre du livre
+     * @param auteur : l'auteur du livre
+     * @param editeur : l'éditeur du livre
+     * @param theme : le thème du livre
+     * @param nbpages : le nombre de pages du livre
+     * @param datepubli : la date de publication du livre
+     * @param prix : le prix du livre
+     * @param qte : la quantité du livre à ajouter 
+     * @param mag : la librairie dans laquelle ajouter le livre  
+     */
+  public void AjouterLivre(String isbn, String titre, String nbpages,
       String datepubli, String prix, String qte, Magasin mag) throws SQLException {
     Livre livre = new Livre(isbn, titre, Integer.parseInt(nbpages), datepubli, Double.parseDouble(prix),
         Integer.parseInt(qte));
@@ -238,7 +238,6 @@ public class VendeurBD {
     psPosseder.executeUpdate();
 
   }
-
   /**
    * Fonction qui va mettre à jour la quantité d'un livre que possède
    * une librairie passeé en paramètre
@@ -385,7 +384,6 @@ public class VendeurBD {
           psCommande.setString(4, cli.getIdentifiant());
           psCommande.setString(5, mag.getId() + "");
           psCommande.execute();
-          System.out.println("check 1");
 
           psDetailCommande.setInt(1, numcom);
           psDetailCommande.setInt(2, numlig);
@@ -393,7 +391,6 @@ public class VendeurBD {
           psDetailCommande.setDouble(4, livre.getPrix());
           psDetailCommande.setString(5, livre.getIsbn());
           psDetailCommande.execute();
-          System.out.println("check 2");
 
           majQteLivre(livre.getIsbn(), mag, -commande.get(livre));
           res = true;
