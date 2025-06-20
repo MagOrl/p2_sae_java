@@ -13,22 +13,49 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
 public class FenetreTransfererLivre extends VBox {
-
+    /**
+     * le bouton de transfert
+     */
     private Button btnTransf;
+    /**
+     * bouton pour retourner au menu vendeur
+     */
     private Button btnRetour;
+    /**
+     * le textfield de l'isbn
+     */
     private TextField isbn;
+    /**
+     * le textefield de la quantité
+     */
     private TextField qte;
+    /**
+     * l'application
+     */
     private AppliLib appli;
+    /**
+     * le modèle pour les requètes vendeur
+     */
     private VendeurBD vend;
+    /**
+     * Le menu vendeur
+     */
     private MenuVendeur menu;
 
-    public FenetreTransfererLivre(AppliLib appli,MenuVendeur menuV,VendeurBD vend) {
+    /**
+     * Constructeur qui initialise les attributs et initalise la fenetre
+     * 
+     * @param appli
+     * @param menuV
+     * @param vend
+     */
+    public FenetreTransfererLivre(AppliLib appli, MenuVendeur menuV, VendeurBD vend) {
         this.vend = vend;
         this.btnTransf = new Button("Transférer");
         this.btnRetour = new Button("Retour");
         this.menu = menuV;
         this.appli = appli;
-        
+
         this.btnTransf.setStyle(AppliLib.styleBouton);
         this.btnRetour.setStyle(AppliLib.styleBouton);
 
@@ -41,6 +68,11 @@ public class FenetreTransfererLivre extends VBox {
         this.getChildren().add(trans());
     }
 
+    /**
+     * la fenetre principale
+     * 
+     * @return
+     */
     public VBox trans() {
 
         VBox vb = new VBox(15);
@@ -73,15 +105,27 @@ public class FenetreTransfererLivre extends VBox {
         return vb;
     }
 
-
+    /**
+     * donne l'isbn du textefield
+     * 
+     * @return
+     */
     public String getIsbn() {
         return this.isbn.getText();
     }
 
+    /**
+     * donne la quantité du textfield
+     * 
+     * @return
+     */
     public int getQte() {
         return Integer.parseInt(this.qte.getText());
     }
 
+    /**
+     * reset les valeur du textfield
+     */
     public void resetTFTransferer() {
         this.isbn.setText("");
         this.qte.setText("");
