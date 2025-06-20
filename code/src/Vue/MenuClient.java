@@ -49,7 +49,6 @@ public class MenuClient extends BorderPane {
 
     private GridPaneResultatRech gp;
 
-
     public static String styleBoutonPage = "-fx-background-color:rgb(255, 255, 255);" +
             "-fx-border-radius: 50; " +
             "-fx-background-radius: 20;" +
@@ -124,12 +123,9 @@ public class MenuClient extends BorderPane {
         VBox left = new VBox(10);
         left.getChildren().addAll(titre, nomCli);
 
-        ImageView logo = new ImageView(new Image("../img/logo.png"));
-        logo.setFitHeight(96);
-        logo.setFitWidth(96);
         ImageView loupe = new ImageView(new Image("../img/loupe.png"));
-        loupe.setFitHeight(65);
-        loupe.setFitWidth(65);
+        loupe.setFitHeight(75);
+        loupe.setFitWidth(75);
         Button recherche = new Button("", loupe);
         recherche.setStyle(AppliLib.styleBoutonImg);
         recherche.setMinHeight(40);
@@ -141,7 +137,6 @@ public class MenuClient extends BorderPane {
         rech.getChildren().addAll(recherche, this.recheField, lesMag, leCriter);
 
         BorderPane center = new BorderPane();
-        center.setLeft(logo);
         HBox barreRecherche = new HBox(10);
 
         barreRecherche.getChildren().addAll(rech, lesMag);
@@ -152,7 +147,7 @@ public class MenuClient extends BorderPane {
 
         ImageView pan = new ImageView(new Image("../img/panier.png"));
         pan.setFitHeight(35);
-        pan.setFitWidth(35);
+        pan.setFitWidth(55);
         Button accesPanier = new Button("", pan);
         accesPanier.setStyle(AppliLib.styleBoutonImg);
         accesPanier.setMinHeight(40);
@@ -172,7 +167,7 @@ public class MenuClient extends BorderPane {
         blocA.getChildren().addAll(accesPanier, histori);
 
         Button deco = new Button("Déconnexion");
-        deco.setStyle(AppliLib.styleBouton);
+        deco.setStyle(AppliLib.styleBouton + "-fx-background-color:rgb(194, 60, 60);");
         deco.setMinHeight(40);
         deco.setMinWidth(90);
         deco.setSkin(new MyButtonSkin(deco));
