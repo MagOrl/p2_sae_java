@@ -35,7 +35,7 @@ public class MenuVendeur extends BorderPane {
     private TextField identifiant;
     private PasswordField mdp;
     private Text textLibrairie;
-    private Text dispoLivre; 
+    private Text dispoLivre;
     private VBox vbDisponibilite;
     private VBox vb0;
     private VBox vb1;
@@ -67,20 +67,18 @@ public class MenuVendeur extends BorderPane {
 
         this.btnTransferer.setStyle(AppliLib.styleBouton);
         this.btnMettreAJour.setStyle(AppliLib.styleBouton);
-        this.btnDeconnexion.setStyle(AppliLib.styleBouton);
+        this.btnDeconnexion.setStyle(AppliLib.styleBouton + "-fx-background-color:rgb(194, 60, 60);");
         this.btnAjouter.setStyle(AppliLib.styleBouton);
         this.btnAjouteCommande.setStyle(AppliLib.styleBouton);
         this.btnVerif.setStyle(AppliLib.styleBouton);
         this.btnCommander.setStyle(AppliLib.styleBouton);
 
-
-        this.btnTransferer.setOnAction(new ControleurTransfererLivre(appli,this));
-        this.btnMettreAJour.setOnAction(new ControleurMajQte(appli,this));
+        this.btnTransferer.setOnAction(new ControleurTransfererLivre(appli, this));
+        this.btnMettreAJour.setOnAction(new ControleurMajQte(appli, this));
         this.btnDeconnexion.setOnAction(new ControleurDeconnexion(appli));
         this.btnAjouter.setOnAction(new ControleurAjouterLivre(this.modele, this, this.appli));
         this.btnAjouteCommande.setOnAction(new ControleurAjouteCommande(this, modele));
         this.btnCommander.setOnAction(new ControleurCommanderV(this, this.modele));
-        
 
         this.btnTransferer.setSkin(new MyButtonSkin(btnTransferer));
         this.btnMettreAJour.setSkin(new MyButtonSkin(btnMettreAJour));
@@ -99,8 +97,6 @@ public class MenuVendeur extends BorderPane {
         this.gPDisponibilite = new GridPaneDisponibilite();
         this.gpCommande = new GridPaneCommande(this, this.modele);
 
-        
-
         this.setTop(top());
         this.setLeft(left());
         this.setCenter(center());
@@ -116,7 +112,7 @@ public class MenuVendeur extends BorderPane {
         txt.setFont(Font.font("Arial", 30));
         txt2.setFont(Font.font("Arial", 30));
         vb.getChildren().addAll(txt, txt2);
-        ImageView logo = new ImageView("../img/logo_placeholder.png");
+        ImageView logo = new ImageView("../img/logo.png");
         logo.setFitHeight(48);
         logo.setFitWidth(48);
 
@@ -138,8 +134,6 @@ public class MenuVendeur extends BorderPane {
 
     public VBox center() {
 
-
-
         HBox hb0 = new HBox(10);
         Text txt1 = new Text("Librairie :");
         txt1.setFont(Font.font("Arial", FontWeight.BOLD, 25));
@@ -149,7 +143,6 @@ public class MenuVendeur extends BorderPane {
 
         this.vb1.getChildren().add(hb0);
         this.vb1.setPadding(new Insets(20));
-
 
         HBox hb1 = new HBox(10);
         Text txtId = new Text("Identifiant Client :");
@@ -169,7 +162,7 @@ public class MenuVendeur extends BorderPane {
         HBox hb2 = new HBox(10);
         Text txtMdp = new Text("Mot de passe Client :");
         txtMdp.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        
+
         this.mdp.setFont(Font.font("Arial", 15));
         this.mdp.setStyle(AppliLib.styleTextField);
 
@@ -196,16 +189,13 @@ public class MenuVendeur extends BorderPane {
         this.btnVerif.disableProperty()
                 .bind(this.isbn2.textProperty().isEmpty().or(this.qte2.textProperty().isEmpty()));
 
-        
         this.btnVerif.setOnAction(new ControleurVerifDispo(this, this.modele));
-        
 
         hb4.getChildren().addAll(this.btnAjouteCommande, this.btnVerif);
 
         this.vb.getChildren().addAll(hb1, hb2, hb3, hb4);
         this.vb.setStyle(AppliLib.styleDefaultContainer);
         this.vb.setPadding(new Insets(20));
-
 
         this.dispoLivre.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
@@ -216,7 +206,8 @@ public class MenuVendeur extends BorderPane {
         Text commandeActuelle = new Text("Commande actuelle");
         commandeActuelle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
-        this.btnCommander.disableProperty().bind(this.identifiant.textProperty().isEmpty().or(this.mdp.textProperty().isEmpty()));
+        this.btnCommander.disableProperty()
+                .bind(this.identifiant.textProperty().isEmpty().or(this.mdp.textProperty().isEmpty()));
         this.vb2.setStyle(AppliLib.styleDefaultContainer);
         this.vb2.getChildren().addAll(commandeActuelle, this.btnCommander);
         this.vb2.setPadding(new Insets(20));
@@ -289,7 +280,7 @@ public class MenuVendeur extends BorderPane {
                         .or(this.qte.textProperty().isEmpty()).or(this.prix.textProperty().isEmpty()));
 
         vb.getChildren().addAll(hbIsbn, hbTitre, hbPage, hbPub, hbPrix, hbQte, this.btnAjouter);
-        
+
         vb.setStyle(AppliLib.styleDefaultContainer);
         vb.setPadding(new Insets(25));
 
@@ -332,38 +323,36 @@ public class MenuVendeur extends BorderPane {
         return Integer.parseInt(this.qte2.getText());
     }
 
-    public String getIdentifiant(){
+    public String getIdentifiant() {
         return this.identifiant.getText();
     }
 
-    public String getMdp(){
+    public String getMdp() {
         return this.mdp.getText();
     }
-    
 
-    public Vendeur getVendeur(){
+    public Vendeur getVendeur() {
         return this.vendeur;
     }
 
-    public void setDispo(String dispo){
+    public void setDispo(String dispo) {
         this.dispoLivre.setText(dispo);
     }
 
-    
-    public GridPaneCommande getGpCommande(){
+    public GridPaneCommande getGpCommande() {
         return this.gpCommande;
     }
 
-    public void majVbDisponibilite(GridPaneDisponibilite nouvGpDisponibilite){
-        this.gPDisponibilite = nouvGpDisponibilite; 
+    public void majVbDisponibilite(GridPaneDisponibilite nouvGpDisponibilite) {
+        this.gPDisponibilite = nouvGpDisponibilite;
         this.vbDisponibilite.getChildren().clear();
         this.vbDisponibilite.getChildren().addAll(this.dispoLivre, nouvGpDisponibilite);
     }
 
-    public void majVbCommande(GridPaneCommande nouvGpCommande){
-        this.gpCommande = nouvGpCommande; 
+    public void majVbCommande(GridPaneCommande nouvGpCommande) {
+        this.gpCommande = nouvGpCommande;
         this.vb2.getChildren().clear();
-         Text commandeActuelle = new Text("Commande actuelle");
+        Text commandeActuelle = new Text("Commande actuelle");
         commandeActuelle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         this.vb2.getChildren().addAll(commandeActuelle, nouvGpCommande, this.btnCommander);
     }
@@ -376,9 +365,6 @@ public class MenuVendeur extends BorderPane {
         this.qte.setText("");
         this.prix.setText("");
     }
-
-    
-
 
     public Alert popUpNumberFormatException() {
         Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -410,7 +396,5 @@ public class MenuVendeur extends BorderPane {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Une erreur est survenue lors de la recherche du livre");
         return alert;
     }
-
-
 
 }

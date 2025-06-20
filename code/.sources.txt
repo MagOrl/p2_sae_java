@@ -5,8 +5,10 @@
 ./src/Vue/MenuPanier.java
 ./src/Vue/MenuHistorique.java
 ./src/Vue/MenuClient.java
+./src/Vue/GridPaneDisponibilite.java
 ./src/Vue/MenuAdmin.java
 ./src/Vue/MenuVendeur.java
+./src/Vue/GridPaneCommande.java
 ./src/Vue/MenuInfosPersos.java
 ./src/Vue/GridPaneResultatRech.java
 ./src/Vue/LesGraphic.java
@@ -21,14 +23,12 @@
 ./src/modele/MauvaiseQuantiteException.java
 ./src/modele/Classification.java
 ./src/modele/VendeurBD.java
-./src/modele/GridPaneDisponibilite.java
 ./src/modele/Vendeur.java
 ./src/modele/ClientBD.java
 ./src/modele/Magasin.java
 ./src/modele/Administrateur.java
 ./src/modele/AdministrateurBD.java
 ./src/modele/Auteur.java
-./src/modele/GridPaneCommande.java
 ./src/modele/DetailCommande.java
 ./src/modele/QteInfAZeroException.java
 ./src/modele/TopDeLivreException.java
