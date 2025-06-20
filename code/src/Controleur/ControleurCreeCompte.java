@@ -25,7 +25,7 @@ public class ControleurCreeCompte implements EventHandler<ActionEvent> {
             this.app.getMenuCreaCompte().setPwdOnError(false);
             try {
                 System.out.println(listFields);
-                this.app.getClientBD().creeClient(listFields.get(1), listFields.get(4), listFields.get(5),
+                this.app.getClientBD().creeClient(listFields.get(0), listFields.get(4), listFields.get(5),
                         listFields.get(6), listFields.get(8), listFields.get(7), listFields.get(3), 
                         listFields.get(9),
                         listFields.get(1));

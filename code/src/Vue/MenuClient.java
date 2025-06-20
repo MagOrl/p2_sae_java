@@ -49,8 +49,6 @@ public class MenuClient extends BorderPane {
 
     private GridPaneResultatRech gp;
 
-    
-
     public static String styleBoutonPage = "-fx-background-color:rgb(255, 255, 255);" +
             "-fx-border-radius: 50; " +
             "-fx-background-radius: 20;" +
@@ -92,7 +90,6 @@ public class MenuClient extends BorderPane {
     }
 
     private Node lesBouton() {
-        // TODO Auto-generated method stub
         ImageView imgP = new ImageView("../img/boutonPrec.png");
         imgP.setFitWidth(20);
         imgP.setFitHeight(20);
@@ -126,12 +123,9 @@ public class MenuClient extends BorderPane {
         VBox left = new VBox(10);
         left.getChildren().addAll(titre, nomCli);
 
-        ImageView logo = new ImageView(new Image("../img/logo.png"));
-        logo.setFitHeight(96);
-        logo.setFitWidth(96);
         ImageView loupe = new ImageView(new Image("../img/loupe.png"));
-        loupe.setFitHeight(65);
-        loupe.setFitWidth(65);
+        loupe.setFitHeight(75);
+        loupe.setFitWidth(75);
         Button recherche = new Button("", loupe);
         recherche.setStyle(AppliLib.styleBoutonImg);
         recherche.setMinHeight(40);
@@ -143,7 +137,6 @@ public class MenuClient extends BorderPane {
         rech.getChildren().addAll(recherche, this.recheField, lesMag, leCriter);
 
         BorderPane center = new BorderPane();
-        center.setLeft(logo);
         HBox barreRecherche = new HBox(10);
 
         barreRecherche.getChildren().addAll(rech, lesMag);
@@ -154,7 +147,7 @@ public class MenuClient extends BorderPane {
 
         ImageView pan = new ImageView(new Image("../img/panier.png"));
         pan.setFitHeight(35);
-        pan.setFitWidth(35);
+        pan.setFitWidth(55);
         Button accesPanier = new Button("", pan);
         accesPanier.setStyle(AppliLib.styleBoutonImg);
         accesPanier.setMinHeight(40);
@@ -168,13 +161,13 @@ public class MenuClient extends BorderPane {
         histori.setMinHeight(40);
         histori.setMinWidth(90);
         histori.setSkin(new MyButtonSkin(histori));
-        accesPanier.setOnAction(new ControleurPanier(this.appli,this));
-        histori.setOnAction(new ControleurHistorique(this.appli,this));
+        accesPanier.setOnAction(new ControleurPanier(this.appli, this));
+        histori.setOnAction(new ControleurHistorique(this.appli, this));
         VBox blocA = new VBox(10);
         blocA.getChildren().addAll(accesPanier, histori);
 
         Button deco = new Button("Déconnexion");
-        deco.setStyle(AppliLib.styleBouton);
+        deco.setStyle(AppliLib.styleBouton + "-fx-background-color:rgb(194, 60, 60);");
         deco.setMinHeight(40);
         deco.setMinWidth(90);
         deco.setSkin(new MyButtonSkin(deco));
@@ -184,7 +177,7 @@ public class MenuClient extends BorderPane {
         infosPerso.setMinWidth(90);
         infosPerso.setSkin(new MyButtonSkin(infosPerso));
         deco.setOnAction(new ControleurDeconnexion(this.appli));
-        infosPerso.setOnAction(new ControleurInfosPersos(this.appli,this));
+        infosPerso.setOnAction(new ControleurInfosPersos(this.appli, this));
         VBox blocB = new VBox(10);
         blocB.getChildren().addAll(deco, infosPerso);
         HBox right = new HBox(10);
@@ -213,19 +206,19 @@ public class MenuClient extends BorderPane {
         blocObservable.setPadding(new Insets(20));
 
         HBox bottom = new HBox(10);
-        Button consulter = new Button("Consulter");
-        consulter.setOnAction(new ControleurConsulter(this));
+        Button consulter = new Button("Ajouter panier");
         consulter.setStyle(AppliLib.styleBouton);
         consulter.setMinHeight(40);
         consulter.setMinWidth(90);
         consulter.setSkin(new MyButtonSkin(consulter));
         bottom.getChildren().addAll(consulter);
         bottom.setAlignment(Pos.CENTER);
-
+        consulter.setOnAction(new ControleurConsulter(client, this.livreDyna, this.clientBD));
         left.setCenter(blocObservable);
         left.setBottom(bottom);
         left.setStyle(AppliLib.styleDefaultContainer);
         BorderPane.setAlignment(left, Pos.CENTER);
+
         return left;
     }
 
