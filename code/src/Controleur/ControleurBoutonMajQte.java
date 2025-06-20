@@ -22,7 +22,10 @@ public class ControleurBoutonMajQte implements EventHandler<ActionEvent>{
                 vue.resetTFMajQte();
                 vue.popUpLivreInexistant().show();
             }
-        }catch(NumberFormatException e){
+        }catch(NullPointerException e){
+            this.vue.popPasDeLibrairie().show();
+        }
+        catch(NumberFormatException e){
             vue.popUpNumberFormatException().show();
         }catch(QteInfAZeroException e){
             vue.popUpQteInfAZero().show();
