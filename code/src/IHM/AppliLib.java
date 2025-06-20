@@ -175,6 +175,10 @@ public class AppliLib extends Application {
         this.scene.setRoot(this.fenetreVerifDispo);
     }
 
+    //public void afficheMenuAdmin(Administrateur adm) {
+    //    this.scene.setRoot(new MenuAdmin(this.btnQuitte, adm, this));
+    //}
+
     public void afficheMenuCreaCompte() {
         this.scene.setRoot(this.menuCrea);
     }
@@ -265,6 +269,7 @@ public class AppliLib extends Application {
         alert.setContentText("La quantité doit être supérieure ou égale à zéro.");
         return alert;
     }
+
 
     public VendeurBD getVendeurBD() {
         return this.vendeurBD;

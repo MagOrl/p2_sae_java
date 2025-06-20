@@ -85,10 +85,15 @@ public class Livre {
       return false;
     }
     Livre tmp = (Livre) o;
-    return this.getIsbn() == tmp.getIsbn()
+    return this.getIsbn().equals(tmp.getIsbn())
         && this.getTitre().equals(tmp.getTitre())
         && this.getNbPages() == tmp.getNbPages()
         && this.getDatePubli().equals(tmp.getDatePubli())
         && this.getPrix() == tmp.getPrix();
+  }
+
+  @Override
+  public int hashCode() {
+      return this.isbn.hashCode();
   }
 }

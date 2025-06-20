@@ -384,7 +384,6 @@ public class VendeurBD {
           psCommande.setString(4, cli.getIdentifiant());
           psCommande.setString(5, mag.getId() + "");
           psCommande.execute();
-          System.out.println("check 1");
 
           psDetailCommande.setInt(1, numcom);
           psDetailCommande.setInt(2, numlig);
@@ -392,7 +391,6 @@ public class VendeurBD {
           psDetailCommande.setDouble(4, livre.getPrix());
           psDetailCommande.setString(5, livre.getIsbn());
           psDetailCommande.execute();
-          System.out.println("check 2");
 
           majQteLivre(livre.getIsbn(), mag, -commande.get(livre));
           res = true;
