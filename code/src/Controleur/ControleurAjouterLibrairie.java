@@ -8,14 +8,29 @@ import java.sql.SQLException;
 import javafx.event.ActionEvent;
 
 public class ControleurAjouterLibrairie implements EventHandler<ActionEvent> {
-
+    /**
+     * Le menu administrateur
+     */
     private MenuAdmin vue;
+    /**
+     * Le modeèle, pour accèder au requetes SQL
+     */
     private AdministrateurBD adminBD;
+    /**
+     * Le textefield ou l'ID du magasin est rentrée
+     */
     private TextField tfIdmag;
+    /**
+     * Le textefield ou le nom du magasin est rentrée
+     */
     private TextField tfNom;
+    /**
+     * Le textefield ou la ville du magasin est rentrée
+     */
     private TextField tfVille;
 
-    public ControleurAjouterLibrairie(MenuAdmin vue,AdministrateurBD adminBD, TextField tfIdmag, TextField tfNom, TextField tfVille){
+    public ControleurAjouterLibrairie(MenuAdmin vue, AdministrateurBD adminBD, TextField tfIdmag, TextField tfNom,
+            TextField tfVille) {
         this.vue = vue;
         this.adminBD = adminBD;
         this.tfNom = tfNom;
@@ -23,7 +38,7 @@ public class ControleurAjouterLibrairie implements EventHandler<ActionEvent> {
         this.tfIdmag = tfIdmag;
     }
 
-    public void handle(ActionEvent event){
+    public void handle(ActionEvent event) {
         String nom = tfNom.getText();
         String ville = tfVille.getText();
         String idmag = tfIdmag.getText();
@@ -35,10 +50,9 @@ public class ControleurAjouterLibrairie implements EventHandler<ActionEvent> {
                 System.out.println(idmag);
                 this.adminBD.ajouteNouvelleLibrairie(nom, ville, idmag);
             }
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             this.vue.popUpNumberFormatExceptionIdLibrairie().show();
-        } 
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
