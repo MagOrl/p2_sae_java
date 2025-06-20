@@ -86,7 +86,6 @@
 ./src/Controleur/ControlleurConnexion.java
 ./src/Controleur/ControleurTransferer.java
 ./src/Controleur/ControleurConsulter.java
-./src/Controleur/ControleurAfficherStats.java
 ./src/Controleur/ControleurPrix.java
 ./src/Controleur/ControleurTextFieldTel.java
 ./src/Controleur/ControleurAjouterLibrairie.java

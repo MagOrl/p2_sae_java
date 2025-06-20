@@ -8,16 +8,43 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class FenetreMajQte extends VBox {
-
+    /**
+     * Le bouton pour mettre à jour les données
+     */
     private Button btnMaj;
+    /**
+     * Le bouton de retour
+     */
     private Button btnRetour;
+    /**
+     * Le textfield ou l'ISBN est rentrer
+     */
     private TextField isbn;
+    /**
+     * Le textfield ou la quantité est rentrer
+     */
     private TextField qte;
+    /**
+     * le modèle pour les requètes vendeur
+     */
     private VendeurBD modele;
+    /**
+     * la vue de l'application
+     */
     private AppliLib appli;
+    /**
+     * le menu vendeur
+     */
     private MenuVendeur menu;
 
-    public FenetreMajQte(AppliLib appli,VendeurBD modele,MenuVendeur menu) {
+    /**
+     * Constructeur qui initialise les attributs
+     * 
+     * @param appli
+     * @param modele
+     * @param menu
+     */
+    public FenetreMajQte(AppliLib appli, VendeurBD modele, MenuVendeur menu) {
 
         this.appli = appli;
         this.modele = modele;
@@ -32,13 +59,17 @@ public class FenetreMajQte extends VBox {
         this.btnMaj.setSkin(new MyButtonSkin(this.btnMaj));
         this.btnRetour.setSkin(new MyButtonSkin(this.btnRetour));
 
-
-        this.btnMaj.setOnAction(new ControleurMaj(this.modele,this, this.appli,this.menu));
+        this.btnMaj.setOnAction(new ControleurMaj(this.modele, this, this.appli, this.menu));
         this.btnRetour.setOnAction(new ControleurRetourVendeur(this.appli));
 
         this.getChildren().add(maj());
     }
 
+    /**
+     * la fenetre de mise à jour
+     * 
+     * @return
+     */
     public VBox maj() {
 
         VBox vb = new VBox(15);
@@ -71,18 +102,30 @@ public class FenetreMajQte extends VBox {
         return vb;
     }
 
+    /**
+     * donne l'isbn du textfield
+     * 
+     * @return
+     */
     public int getIsbn() {
         return Integer.parseInt(isbn.getText());
     }
 
+    /**
+     * donne la quantité du textfield
+     * 
+     * @return
+     */
     public int getQte() {
         return Integer.parseInt(this.qte.getText());
     }
 
+    /**
+     * remet les textfield à vide
+     */
     public void resetTFMaj() {
         this.isbn.setText("");
         this.qte.setText("");
     }
-    
 
 }
