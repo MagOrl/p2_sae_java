@@ -71,7 +71,7 @@ public class AppliLib extends Application {
 
         } catch (SQLException e) {
             System.err.println("pas bonne base de données");
-        } 
+        }
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
@@ -111,13 +111,11 @@ public class AppliLib extends Application {
         this.btnQuitte.setOnAction(new ControlleurQuitter(this));
         this.connexion.setOnAction(new ControlleurConnexion(this));
         this.creeCompte.setOnAction(new ControleurCreationCompte(this));
-        this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
-        this.connexion.setSkin(new MyButtonSkin(this.connexion));
-        this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
         this.quitteCrea.setOnAction(new ControleurQuitteCreaCompte(this));
         this.confirmCrea.setOnAction(new ControleurCreeCompte(this));
         this.changeInfoBD.setOnAction(new ControleurChangeInfoBD(this));
         this.quitteInfo.setOnAction(new ControleurQuitteCreaCompte(this));
+
 
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
@@ -187,7 +185,7 @@ public class AppliLib extends Application {
 
     public Alert popUpQuitte() {
         Alert alert = new Alert(Alert.AlertType.WARNING,
-                "Votre panier est plein.", ButtonType.YES);
+                "êtes vous sûr de vouloir quitter ?", ButtonType.YES);
         alert.setTitle("Panier plein");
         return alert;
     }

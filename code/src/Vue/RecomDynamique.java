@@ -36,7 +36,6 @@ public class RecomDynamique extends VBox {
      */
     public RecomDynamique(List<Livre> lesRecomm) {
         super();
-        this.livre = new Livre();
         this.actionTemps = new ControleurTextDynamique(this,lesRecomm);
         this.keyFrame = new KeyFrame(Duration.seconds(10), this.actionTemps);
         this.timeline = new Timeline(this.keyFrame);

@@ -49,7 +49,6 @@ public class MenuClient extends BorderPane {
 
     private GridPaneResultatRech gp;
 
-    
 
     public static String styleBoutonPage = "-fx-background-color:rgb(255, 255, 255);" +
             "-fx-border-radius: 50; " +
@@ -92,7 +91,6 @@ public class MenuClient extends BorderPane {
     }
 
     private Node lesBouton() {
-        // TODO Auto-generated method stub
         ImageView imgP = new ImageView("../img/boutonPrec.png");
         imgP.setFitWidth(20);
         imgP.setFitHeight(20);
@@ -168,8 +166,8 @@ public class MenuClient extends BorderPane {
         histori.setMinHeight(40);
         histori.setMinWidth(90);
         histori.setSkin(new MyButtonSkin(histori));
-        accesPanier.setOnAction(new ControleurPanier(this.appli,this));
-        histori.setOnAction(new ControleurHistorique(this.appli,this));
+        accesPanier.setOnAction(new ControleurPanier(this.appli, this));
+        histori.setOnAction(new ControleurHistorique(this.appli, this));
         VBox blocA = new VBox(10);
         blocA.getChildren().addAll(accesPanier, histori);
 
@@ -184,7 +182,7 @@ public class MenuClient extends BorderPane {
         infosPerso.setMinWidth(90);
         infosPerso.setSkin(new MyButtonSkin(infosPerso));
         deco.setOnAction(new ControleurDeconnexion(this.appli));
-        infosPerso.setOnAction(new ControleurInfosPersos(this.appli,this));
+        infosPerso.setOnAction(new ControleurInfosPersos(this.appli, this));
         VBox blocB = new VBox(10);
         blocB.getChildren().addAll(deco, infosPerso);
         HBox right = new HBox(10);
@@ -213,19 +211,19 @@ public class MenuClient extends BorderPane {
         blocObservable.setPadding(new Insets(20));
 
         HBox bottom = new HBox(10);
-        Button consulter = new Button("Consulter");
-        consulter.setOnAction(new ControleurConsulter(this));
+        Button consulter = new Button("Ajouter panier");
         consulter.setStyle(AppliLib.styleBouton);
         consulter.setMinHeight(40);
         consulter.setMinWidth(90);
         consulter.setSkin(new MyButtonSkin(consulter));
         bottom.getChildren().addAll(consulter);
         bottom.setAlignment(Pos.CENTER);
-
+        consulter.setOnAction(new ControleurConsulter(client, this.livreDyna, this.clientBD));
         left.setCenter(blocObservable);
         left.setBottom(bottom);
         left.setStyle(AppliLib.styleDefaultContainer);
         BorderPane.setAlignment(left, Pos.CENTER);
+
         return left;
     }
 

@@ -12,48 +12,34 @@ import java.util.Map;
 
 import org.w3c.dom.Text;
 
-import javafx.event.ActionEvent ;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 
+public class ControleurConsulter implements EventHandler<ActionEvent> {
 
-public class ControleurConsulter implements EventHandler<ActionEvent>{
-    
-    private MenuClient menu;
+    private Client cli;
+    private ClientBD cliBD;
+    private RecomDynamique livDyna;
 
-    public ControleurConsulter(MenuClient menu) {
-        this.menu = menu;
+    public ControleurConsulter(Client cli, RecomDynamique liv, ClientBD cliBD) {
+        this.cli = cli;
+        this.livDyna = liv;
+        this.cliBD = cliBD;
     }
 
     @Override
-    public void handle(ActionEvent event) { 
-        BorderPane center = new BorderPane();
-        Livre livre = this.menu.getLivreDyna();
-
-        VBox recommande = new VBox(10);
-        
-        Button leRecommande = new Button(livre.toString());
-        leRecommande.setOnAction(new ControleurSelectLivre(this.menu,livre));
-        leRecommande.setStyle(AppliLib.styleBouton);
-        leRecommande.setMinHeight(40);
-        leRecommande.setMinWidth(90);
-        leRecommande.setSkin(new MyButtonSkin(leRecommande));
-        recommande.getChildren().add(leRecommande);
-        recommande.setAlignment(Pos.CENTER);
-        
-        VBox bottom = new VBox(10);
-        Button ajouter = new Button("Ajouter au panier");
-        //ajouter.setOnAction(new ControleurAjouterPanier(this.clientBD));
-        ajouter.setStyle(AppliLib.styleBouton);
-        ajouter.setMinHeight(40);
-        ajouter.setMinWidth(90);
-        ajouter.setSkin(new MyButtonSkin(ajouter));
-        bottom.getChildren().add(ajouter);
-        bottom.setAlignment(Pos.CENTER);
-
-        center.setCenter(recommande);
-        center.setBottom(bottom);
-        center.setPadding(new Insets(20));
-        BorderPane.setAlignment(center, Pos.CENTER);
-        this.menu.setCenter(center);
+    public void handle(ActionEvent event) {
+        if (livDyna.getLivre() != null) {
+            try {
+                this.cli.addPanier(this.cliBD.trouveMagasin(this.livDyna.getLivre()), this.livDyna.getLivre(),
+                        this.livDyna.getLivre().getQte());
+            } catch (TopDeLivreException e) {
+                e.printStackTrace();
+            } catch (MauvaiseQuantiteException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
