@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ClientBD {
@@ -166,42 +167,54 @@ public class ClientBD {
      *         moment" si l'utilisateur n'a toujours pas fait de commandes
      * @throws SQLException
      */
-    public String afficheHistoriqueCommande(Client cli) throws SQLException {
+    public Map<String, List<String>> historiqueCommande(Client cli) throws SQLException {
         this.st = laConnexion.createStatement();
+        Map<String, List<String>> historique = new HashMap<>();
+        List<String> listeCommande = new ArrayList<>();
+        String key = "";
         ResultSet rs = this.st.executeQuery(
                 "select numcom,numlig,datecom, enligne, livraison,titre,qte,prixvente FROM COMMANDE NATURAL JOIN DETAILCOMMANDE NATURAL JOIN LIVRE WHERE idcli = "
                         + cli.getNumCompte() + " ORDER BY datecom");
         if (!rs.next()) {
-            return "Aucune commande effectuer pour le moment";
+            return historique;
         }
         rs.beforeFirst();
         int numcomSave = -1;
-        String res = "";
         int cpt = 0;
+        int nblig = nbLigneRequetes(rs);
         while (rs.next()) {
+            --nblig;
             String enligne = rs.getString("enLigne").equals("O") ? "en ligne" : "en magasin";
-            String livraison = rs.getString("livraison").equals("M") ? "récuperer au magasin" : "livrer au domicile";
+            String livraison = rs.getString("livraison").equals("M") ? "récuperé en magasin" : "livré à domicile";
             if (rs.getInt("numcom") == numcomSave) {
-                res += "\n" + rs.getString("numlig") + "  " + rs.getString("titre") + "  " + rs.getInt("prixvente")
-                        + "€  quantité : " + rs.getInt("qte");
+                listeCommande.add(rs.getString("numlig") + ". Livre : " + rs.getString("titre") + " | Prix : "
+                        + rs.getInt("prixvente")
+                        + "€ | Quantité : " + rs.getInt("qte"));
                 cpt = cpt + (rs.getInt("prixvente") * rs.getInt("qte"));
             } else {
                 if (numcomSave != -1) {
-                    res += "\nprix total : " + cpt + " €";
+                    listeCommande.add("Prix total : " + cpt + " €");
+                    historique.put(key, listeCommande);
+                    listeCommande = new ArrayList<>();
                     cpt = 0;
                 }
                 numcomSave = rs.getInt("numcom");
-                res += "\n \nLa commande " + rs.getInt("numcom") + "\n"
-                        + "le " + rs.getString("datecom") + " " + enligne + " " + livraison + "\n";
-                res += rs.getString("numlig") + "  " + rs.getString("titre") + "  " + rs.getInt("prixvente")
-                        + "€  quantité : " + rs.getInt("qte");
+                key = "Commande " + rs.getInt("numcom") + "\n"
+                        + "Effectuée " + rs.getString("datecom") + " " + enligne + " et " + livraison;
+                listeCommande.add(rs.getString("numlig") + ". Livre : " + rs.getString("titre") + " | Prix : "
+                        + rs.getInt("prixvente")
+                        + "€ | Quantité : " + rs.getInt("qte"));
                 cpt = cpt + (rs.getInt("prixvente") * rs.getInt("qte"));
             }
+            if (nblig<=0) {
+                historique.put(key, listeCommande); // fix car ne prennait pas la dernière val 
+            }
         }
+        
         rs.close();
-        res += "\nprix total : " + cpt + " €";
-        return res;
+        return historique;
     }
+
 
     /**
      * permet d'afficher les themes des livres
@@ -272,7 +285,7 @@ public class ClientBD {
         while (rs.next()) {
             ++res;
         }
-        rs.first();
+        rs.beforeFirst();
         return res;
     }
 
@@ -319,7 +332,6 @@ public class ClientBD {
                 ps3.setDouble(4, livreMag.get(idmag).get(i).getPrix());
                 ps3.setString(5, livreMag.get(idmag).get(i).getIsbn());
                 ps3.executeUpdate();
-
             }
         }
         livreMag.clear();
@@ -429,7 +441,6 @@ public class ClientBD {
                                 + " group by isbn order by nbLiv DESC");
         List<List<Livre>> catalogue = new ArrayList<>();
         int taille = nbLigneRequetes(rs);
-        System.out.println(taille);
         for (int i = 0; i < taille; ++i) {
             catalogue.add(new ArrayList<>());
             for (int y = 0; y < 10; ++y) {
@@ -448,5 +459,87 @@ public class ClientBD {
         }
         return catalogue;
 
+    }
+
+    public List<List<Livre>> rechercheCritere(String critere, String isbn, String titre, String auteur, Magasin mag)
+            throws SQLException {
+        List<List<Livre>> res = new ArrayList<>();
+        this.st = laConnexion.createStatement();
+        String requete = "select * from LIVRE natural join POSSEDER";
+        switch (critere) {
+            case "isbn":
+                requete += " where isbn = '" + isbn + "'";
+                break;
+
+            case "auteur":
+                requete += " natural join ECRIRE natural join AUTEUR where idmag = '" + mag.getId()
+                        + "' and (nomauteur like '%"
+                        + auteur + "%' or levenshtein('" + auteur + "', nomauteur) between 0 and 3) order by nomauteur";
+                break;
+
+            case "titre":
+                requete += " where idmag = '" + mag.getId() + "' and (titre like '%" + titre + "%' or levenshtein('"
+                        + titre
+                        + "', titre) between 0 and 3) order by titre";
+                break;
+
+            default:
+                return res;
+        }
+        ResultSet rs = this.st.executeQuery(requete);
+        int tailleR = nbLigneRequetes(rs);
+        for (int i = 0; i < tailleR; ++i) {
+            res.add(new ArrayList<>());
+            for (int y = 0; y < 10; ++y) {
+                if (rs.next()) {
+                    res.get(i).add(new Livre(rs.getString("isbn"), rs.getString("titre"), rs.getInt("nbpages"),
+                            rs.getString("datepubli"), rs.getDouble("prix"), rs.getInt("qte")));
+                }
+            }
+        }
+        rs.close();
+        tailleR = res.size() - 1;
+        while (tailleR >= 0) {
+            if (res.get(tailleR).isEmpty())
+                res.remove(res.get(tailleR));
+            --tailleR;
+        }
+        return res;
+    }
+
+    /**
+     * Fonction qui à partir d'un nom de librairie va trouver la librairie
+     * correspondante
+     * 
+     * @param nommag : le nom de la librairie à trouver
+     * @return Magasin : la librairie correspondante (null si aucune n'a été trouvé
+     *         pour ce nom de librairie)
+     */
+    public Magasin trouveLibrairie(String nommag) throws SQLException {
+        Magasin mag = null;
+        this.st = laConnexion.createStatement();
+        ResultSet rs = this.st.executeQuery("select idmag, villemag from MAGASIN where nommag =" + '"' + nommag + '"');
+        while (rs.next()) {
+            mag = new Magasin(rs.getInt("idmag"), nommag, rs.getString("villemag"));
+        }
+        return mag;
+    }
+
+    /**
+     * Fonction qui à partir d'un nom de librairie va trouver la librairie
+     * correspondante
+     * 
+     * @param idmag : idmag de la librairie à trouver
+     * @return Magasin : la librairie correspondante (null si aucune n'a été trouvé
+     *         pour ce nom de librairie)
+     */
+    public Magasin trouveLibrairie(int idmag) throws SQLException {
+        Magasin mag = null;
+        this.st = laConnexion.createStatement();
+        ResultSet rs = this.st.executeQuery("select * from MAGASIN where idmag =" + '"' + idmag + '"');
+        while (rs.next()) {
+            mag = new Magasin(idmag, rs.getString("nommag"), rs.getString("villemag"));
+        }
+        return mag;
     }
 }

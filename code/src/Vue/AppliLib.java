@@ -1,10 +1,8 @@
 
 import java.sql.SQLException;
-import java.util.List;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -12,7 +10,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.shape.Circle;
 
 public class AppliLib extends Application {
 
@@ -20,14 +17,12 @@ public class AppliLib extends Application {
     private Button btnQuitte;
     private Button creeCompte;
     private Button connexion;
-    private MenuAcceuil menuAcc;
-    private FenetreTransfererLivre fenetreTransfererLivre;
-    private FenetreVerifDispo fenetreVerifDispo;
 
     private AdministrateurBD adminBD;
     private VendeurBD vendeurBD;
     private ClientBD clientBD;
     private Personne utilisateur;
+
     private ConnexionMySQL connexionSQL;
     private ComboBox<String> nomMag;
     private MenuCreaCompte menuCrea;
@@ -35,6 +30,7 @@ public class AppliLib extends Application {
     private Button quitteCrea;
     private Button changeInfoBD;
     private Button quitteInfo;
+    private MenuAcceuil menuAcc;
 
     public static String styleBouton = "-fx-background-color:rgb(120, 120, 120);" +
             "-fx-border-radius: 50; " +
@@ -44,7 +40,9 @@ public class AppliLib extends Application {
             "-fx-text-fill: white;";
     public static String styleBanniere = "-fx-border-radius: 15;" +
             "-fx-border-color:rgb(0, 0, 0);" +
+            "-fx-border-width: 3;" + "-fx-background-color: #0b7f94;" + "-fx-border-insets: -2.5px;" +
             "-fx-border-width: 3;" + "-fx-background-color: #0b7f94;" + "-fx-border-insets: -2.5px;";
+
     public static String styleDefaultContainer = "-fx-background-color: #5d9b7d;" +
             "-fx-border-radius: 20; " +
             "-fx-background-radius: 20;" +
@@ -56,10 +54,11 @@ public class AppliLib extends Application {
             "    -fx-border-radius: 15;\n" +
             "    -fx-border-color: black;";
 
+    public static String styleBoutonImg = "-fx-background-color: transparent;";
+
     @Override
     public void init() {
         this.nomMag = new ComboBox<>();
-
         try {
             this.connexionSQL = new ConnexionMySQL();
         } catch (ClassNotFoundException e) {
@@ -77,6 +76,8 @@ public class AppliLib extends Application {
         this.btnQuitte = new Button("Quitter");
         this.connexion = new Button("Connexion");
         this.creeCompte = new Button("Créer compte");
+        this.btnQuitte.setStyle(styleBouton);
+
         this.confirmCrea = new Button("Confirmer");
         this.quitteCrea = new Button("Quitter");
         this.changeInfoBD = new Button("Paramètre");
@@ -120,6 +121,7 @@ public class AppliLib extends Application {
         this.changeInfoBD.setOnAction(new ControleurChangeInfoBD(this));
         this.quitteInfo.setOnAction(new ControleurQuitteCreaCompte(this));
 
+
         this.btnQuitte.setSkin(new MyButtonSkin(this.btnQuitte));
         this.connexion.setSkin(new MyButtonSkin(this.connexion));
         this.creeCompte.setSkin(new MyButtonSkin(this.creeCompte));
@@ -138,7 +140,7 @@ public class AppliLib extends Application {
     public void start(Stage stg) {
         this.scene = new Scene(this.menuAcc);
         stg.setScene(this.scene);
-        stg.setTitle("Menu principale");
+        stg.setTitle("Menu principal");
         stg.show();
     }
 
@@ -146,38 +148,30 @@ public class AppliLib extends Application {
         this.scene.setRoot(this.menuAcc);
     }
 
-    public void afficheMenuVendeur(Vendeur vend) {
-        this.scene.setRoot(new MenuVendeur(vend, this, this.vendeurBD));
-    }
-
     public void afficheMenuClient() {
-        // A implementer
+        this.scene.setRoot(new MenuClient(this));
     }
 
-    public void afficheInfosPersos() {
-        // A implementer
+    public void retourMenuClient(MenuClient menuCli) {
+        this.scene.setRoot(menuCli);
     }
 
-    public void afficheHistorique() {
+    public void afficheMenuInfosPersos(MenuClient menuCli) {
 
+        this.scene.setRoot(new MenuInfosPersos(this, this.utilisateur, menuCli));
     }
 
-    public void afficheFenetreMajQte(MenuVendeur mVend) {
-        this.scene.setRoot(new FenetreMajQte(this,this.vendeurBD,mVend));
+    public void afficheMenuHistorique(MenuClient menuCli) {
+        this.scene.setRoot(new MenuHistorique(this, menuCli, (Client) this.utilisateur));
     }
 
-    public void afficheFenetreTransfererLivre(MenuVendeur mVend) {
-        this.scene.setRoot(new FenetreTransfererLivre(this, mVend,this.vendeurBD));
-    }
-    
-
-    public void afficheFenetreVerifDispo() {
-        this.scene.setRoot(this.fenetreVerifDispo);
+    public void afficheMenuPanier(MenuClient menuCli) {
+        this.scene.setRoot(new MenuPanier(this, (Client) this.utilisateur, menuCli));
     }
 
-    //public void afficheMenuAdmin(Administrateur adm) {
-    //    this.scene.setRoot(new MenuAdmin(this.btnQuitte, adm, this));
-    //}
+    public void afficheMenuAdmin(Administrateur adm) {
+        this.scene.setRoot(new MenuAdmin(this.btnQuitte, adm, this));
+    }
 
     public void afficheMenuCreaCompte() {
         this.scene.setRoot(this.menuCrea);
@@ -187,14 +181,18 @@ public class AppliLib extends Application {
         this.scene.setRoot(new MenuChangeInfoBD(this.quitteInfo));
     }
 
+    public void afficheMenuGererStocksGlobaux(Administrateur adm) {
+        this.scene.setRoot(new MenuGererStocksGlobaux(this, adm));
+    }
+
     public void quitte() {
         Platform.exit();
     }
 
     public Alert popUpQuitte() {
         Alert alert = new Alert(Alert.AlertType.WARNING,
-                "Êtes vous sûr de quitter ?", ButtonType.YES, ButtonType.NO);
-        alert.setTitle("Attention");
+                "êtes vous sûr de vouloir quitter ?", ButtonType.YES);
+        alert.setTitle("Panier plein");
         return alert;
     }
 
@@ -212,11 +210,45 @@ public class AppliLib extends Application {
         return alert;
     }
 
-    public Alert popUpDeconnexion() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation de déconnexion");
-        alert.setHeaderText("Voulez-vous vraiment vous déconnecter ?");
-        alert.setContentText("Cliquez sur OK pour vous déconnecter, ou Annuler pour rester.");
+    public Alert popUpPasDeRecommandations() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de recommandations pour vous.", ButtonType.YES);
+        alert.setTitle("Aucune recommandation");
+        return alert;
+    }
+
+    public Alert popUpPasDeThemes() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de thêmes existants.", ButtonType.YES);
+        alert.setTitle("Aucun thême");
+        return alert;
+    }
+
+    public Alert popUpPasDeMagasins() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de magasins existants.", ButtonType.YES);
+        alert.setTitle("Aucun magasin");
+        return alert;
+    }
+
+    public Alert popUpPasDeCommandes() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Pas de commandes enregistrées.", ButtonType.YES);
+        alert.setTitle("Aucune commande");
+        return alert;
+    }
+
+    public Alert popUpPanierPlein() {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Votre panier est plein.", ButtonType.YES);
+        alert.setTitle("Panier plein");
+        return alert;
+    }
+
+    public Alert popUpSurDeCommender() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Voulez vous finaliser votre transaction ?", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Panier plein");
         return alert;
     }
 
@@ -273,6 +305,14 @@ public class AppliLib extends Application {
 
     public VendeurBD getVendeurBD() {
         return this.vendeurBD;
+    }
+
+    public Alert popUpDeconnexion() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de déconnexion");
+        alert.setHeaderText("Voulez-vous vraiment vous déconnecter ?");
+        alert.setContentText("Cliquez sur OK pour vous déconnecter, ou Annuler pour rester.");
+        return alert;
     }
 
     public AdministrateurBD getAdminBD() {

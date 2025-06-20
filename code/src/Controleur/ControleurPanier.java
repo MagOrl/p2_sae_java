@@ -1,16 +1,18 @@
-// import javafx.event.EventHandler;
-// import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 
-// public class ControleurPanier implements EventHandler<ActionEvent> {
+public class ControleurPanier implements EventHandler<ActionEvent> {
 
-//     // private 
+    private AppliLib appli;
+    private MenuClient menuCli;
 
-//     // public ControleurPanier(){
-        
-//     // }
+    public ControleurPanier(AppliLib appli, MenuClient menuCli) {
+        this.appli = appli;
+        this.menuCli = menuCli;
+    }
 
+    public void handle(ActionEvent event) {
+        this.appli.afficheMenuPanier(menuCli);
+    }
+}
 
-//     // public void handle(ActionEvent event){
-
-//     // }
-// }

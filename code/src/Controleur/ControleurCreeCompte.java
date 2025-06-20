@@ -24,8 +24,10 @@ public class ControleurCreeCompte implements EventHandler<ActionEvent> {
         } else {
             this.app.getMenuCreaCompte().setPwdOnError(false);
             try {
-                this.app.getClientBD().creeClient(listFields.get(0), listFields.get(3), listFields.get(4),
-                        listFields.get(5), listFields.get(7), listFields.get(6), listFields.get(2), listFields.get(8),
+                System.out.println(listFields);
+                this.app.getClientBD().creeClient(listFields.get(0), listFields.get(4), listFields.get(5),
+                        listFields.get(6), listFields.get(8), listFields.get(7), listFields.get(3), 
+                        listFields.get(9),
                         listFields.get(1));
                 this.app.popUpCompteCree(listFields.get(4)).showAndWait();
             } catch (SQLException e) {

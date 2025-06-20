@@ -4,11 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.List;
 
 public class AdministrateurBD {
@@ -29,6 +32,8 @@ public class AdministrateurBD {
         data.add(reader.nextLine());
       }
       laConnexion.connecter(data.get(0), data.get(1), data.get(2), data.get(3));
+    } catch (SQLException e) {
+      e.printStackTrace();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
@@ -175,31 +180,15 @@ public class AdministrateurBD {
    * 
    * @param nommag   : le nom de la librairie
    * @param villemag : la ville de la librairie
+   * @param idmag    : l'id de la librairie
    */
-  public void ajouteNouvelleLibrairie(String nommag, String villemag) throws SQLException {
-    Magasin magasin = new Magasin(idmagMax(), nommag, villemag);
-    PreparedStatement ps = this.connexion.prepareStatement("insert into MAGASIN values(?,?,?)");
+  public void ajouteNouvelleLibrairie(String nommag, String villemag, String idmag) throws SQLException {
+    Magasin magasin = new Magasin(Integer.parseInt(idmag), nommag, villemag);
+    PreparedStatement ps = this.connexion.prepareStatement("insert ignore into MAGASIN values(?,?,?)");
     ps.setInt(1, magasin.getId());
     ps.setString(2, magasin.getNom());
     ps.setString(3, magasin.getVille());
     ps.executeUpdate();
-  }
-
-  /**
-   * Fonction qui va créer un nouvel identifiant de librairie maximum,
-   * par rapport au numéro maximum déjà présent
-   * 
-   * @return String : le nouvel identifiant de librairie maximum
-   */
-  public int idmagMax() throws SQLException {
-    Integer idMax = 0;
-    this.st = connexion.createStatement();
-    ResultSet rs = this.st.executeQuery("select max(idmag) as idMax from MAGASIN");
-    while (rs.next()) {
-      idMax = rs.getInt("idMax") + 1;
-    }
-    rs.close();
-    return idMax;
   }
 
   /**
@@ -251,8 +240,8 @@ public class AdministrateurBD {
    * @param qte       : la quantité du livre à ajouter
    * @param mag       : la librairie dans laquelle ajouter le livre
    */
-  public void AjouterLivre(String isbn, String titre, String auteur, String editeur, String theme, String nbpages,
-      String datepubli, String prix, String qte, Magasin mag) throws SQLException {
+  public void AjouterLivre(String isbn, String titre, String nbpages, String datepubli, String prix, String qte,
+      Magasin mag) throws SQLException {
     Livre livre = new Livre(isbn, titre, Integer.parseInt(nbpages), datepubli, Double.parseDouble(prix),
         Integer.parseInt(qte));
 
@@ -268,6 +257,7 @@ public class AdministrateurBD {
     psPosseder.setInt(1, mag.getId());
     psPosseder.setString(2, isbn);
     psPosseder.setInt(3, Integer.parseInt(qte));
+    psPosseder.executeUpdate();
 
     // PreparedStatement ps
     // System.out.println("Une erreur est survenue lors de l'ajout du livre veuillez
@@ -288,8 +278,7 @@ public class AdministrateurBD {
     if (!rs.next()) {
       return false;
     }
-    PreparedStatement ps = this.connexion
-        .prepareStatement(("UPDATE POSSEDER SET qte = 0 where isbn = ? and idmag = ?"));
+    PreparedStatement ps = this.connexion.prepareStatement(("DELETE FROM POSSEDER where isbn = ? and idmag = ?"));
     ps.setString(1, isbn);
     ps.setInt(2, mag.getId());
     ps.executeUpdate();
@@ -329,6 +318,128 @@ public class AdministrateurBD {
   }
 
   /**
+   * permet d'avoir le nombre de ligne que fait une requète
+   * 
+   * @param rs
+   * @return le nombre de lignes
+   * @throws SQLException
+   */
+  public int nbLigneRequetes(ResultSet rs) throws SQLException {
+    int res = 0;
+    while (rs.next()) {
+      ++res;
+    }
+    rs.beforeFirst();
+    return res;
+  }
+
+  public List<List<Livre>> rechercheCritere(String critere, String isbn, String titre, String auteur, Magasin mag)
+      throws SQLException {
+    List<List<Livre>> res = new ArrayList<>();
+    this.st = connexion.createStatement();
+    String requete = "select * from LIVRE natural join POSSEDER";
+    switch (critere) {
+      case "isbn":
+        requete += " where isbn = '" + isbn + "'";
+        break;
+
+      case "auteur":
+        requete += " natural join ECRIRE natural join AUTEUR where idmag = '" + mag.getId() + "' and (nomauteur like '%"
+            + auteur + "%' or levenshtein('" + auteur + "', nomauteur) between 0 and 3) order by nomauteur";
+        break;
+
+      case "titre":
+        requete += " where idmag = '" + mag.getId() + "' and (titre like '%" + titre + "%' or levenshtein('" + titre
+            + "', titre) between 0 and 3) order by titre";
+        break;
+
+      default:
+        return res;
+    }
+    ResultSet rs = this.st.executeQuery(requete);
+    int tailleR = nbLigneRequetes(rs);
+    for (int i = 0; i < tailleR; ++i) {
+      res.add(new ArrayList<>());
+      for (int y = 0; y < 10; ++y) {
+        if (rs.next()) {
+          res.get(i).add(new Livre(rs.getString("isbn"), rs.getString("titre"), rs.getInt("nbpages"),
+              rs.getString("datepubli"), rs.getDouble("prix"), rs.getInt("qte")));
+
+        }
+      }
+    }
+    rs.close();
+    tailleR = res.size() - 1;
+    while (tailleR >= 0) {
+      if (res.get(tailleR).isEmpty())
+        res.remove(res.get(tailleR));
+      --tailleR;
+    }
+
+    return res;
+  }
+
+  public List<List<Livre>> afficheStock(Magasin mag) {
+    int cpt = 0;
+    List<List<Livre>> res = new ArrayList<>();
+    try {
+      this.st = connexion.createStatement();
+      ResultSet rs = this.st.executeQuery(
+          "select isbn, titre, nbpages, datepubli, prix, qte from POSSEDER natural join LIVRE where idmag = "
+              + mag.getId() + " order by titre");
+      List<Livre> page = new ArrayList<>();
+      while (rs.next()) {
+        Livre livre = new Livre(rs.getString("isbn"), rs.getString("titre"), rs.getInt("nbpages"),
+            rs.getString("datepubli"), rs.getDouble("prix"), rs.getInt("qte"));
+        page.add(livre);
+        cpt++;
+        if (cpt == 10) {
+          res.add(page);
+          page = new ArrayList<>();
+          cpt = 0;
+        }
+      }
+    } catch (SQLException e) {
+      System.out.println("Une erreur est survenue lors de la recherche");
+    }
+    return res;
+
+  }
+
+  /**
+   * Fonction qui va ajouter un nouveau livre à une librairie passée en paramètre
+   * 
+   * @param isbn      : l'identifiant du livre
+   * @param titre     : le titre du livre
+   * @param auteur    : l'auteur du livre
+   * @param editeur   : l'éditeur du livre
+   * @param theme     : le thème du livre
+   * @param nbpages   : le nombre de pages du livre
+   * @param datepubli : la date de publication du livre
+   * @param prix      : le prix du livre
+   * @param qte       : la quantité du livre à ajouter
+   * @param mag       : la librairie dans laquelle ajouter le livre
+   */
+  public void AjouterLivre(String isbn, String titre, String auteur, String editeur, String theme, String nbpages,
+      String datepubli, String prix, String qte, Magasin mag) throws SQLException {
+    Livre livre = new Livre(isbn, titre, Integer.parseInt(nbpages), datepubli, Double.parseDouble(prix),
+        Integer.parseInt(qte));
+
+    PreparedStatement psLivre = this.connexion.prepareStatement("insert ignore into LIVRE values(?,?,?,?,?)");
+    psLivre.setString(1, livre.getIsbn());
+    psLivre.setString(2, livre.getTitre());
+    psLivre.setInt(3, livre.getNbPages());
+    psLivre.setString(4, (livre.getDatePubli()));
+    psLivre.setDouble(5, livre.getPrix());
+    psLivre.executeUpdate();
+
+    PreparedStatement psPosseder = this.connexion.prepareStatement("insert into POSSEDER values(?,?,?)");
+    psPosseder.setInt(1, mag.getId());
+    psPosseder.setString(2, isbn);
+    psPosseder.setInt(3, Integer.parseInt(qte));
+  }
+
+  /**
    * Fonction qui va afficher tout les livres que possède un librairie
    * 
    * @param mag : la librairie dont il faut afficher le stock
@@ -339,7 +450,7 @@ public class AdministrateurBD {
         "select isbn, titre, nbpages, datepubli, prix, qte from LIVRE natural join POSSEDER natural join MAGASIN where idmag = "
             + mag.getId());
     if (!rs.next()) {
-      System.out.println("------------------------------------------------------------");
+      System.out.println("--------------------------------------------------------");
       System.out.println("La libraire actuelle (" + mag.getNom() + ") ne contient aucun livre");
       System.out.println("------------------------------------------------------------");
     }
@@ -354,31 +465,17 @@ public class AdministrateurBD {
 
   }
 
-  /**
-   * Fonction qui va afficher le nombre de livre vendus par magasins, par année
-   */
-  public void requeteNbLivresMagAnnee() throws SQLException {
-    String anneePrec = null;
+  public HashMap<String, HashMap<String, Number>> requeteNbVendMagAnne() throws SQLException {
     this.st = connexion.createStatement();
     ResultSet rs = this.st.executeQuery(
         "select distinct nommag as Magasin, YEAR(datecom) as annee, sum(qte) as qte from MAGASIN natural join COMMANDE natural join DETAILCOMMANDE group by Magasin, annee order by annee");
-
-    System.out.println("\n");
-    System.out.println("Nombre de livres vendus par magasins par anneé");
+    HashMap<String, HashMap<String, Number>> p = new HashMap<>();
     while (rs.next()) {
-      if (anneePrec == null || !anneePrec.equals(rs.getString("annee"))) {
-        System.out.println("---------------------------------------------------------------------");
-        System.out.println("Année  " + rs.getString("annee"));
-
-      }
-      System.out.println("-----------------------------------------");
-      System.out.println("Magasin " + rs.getString("Magasin"));
-      System.out.println(rs.getString("qte") + " livres vendus");
-
-      anneePrec = rs.getString("annee");
+      p.putIfAbsent(rs.getString("annee"), new HashMap<String, Number>());
+      p.get(rs.getString("annee")).put(rs.getString("Magasin"), rs.getInt("qte"));
     }
-    System.out.println("-----------------------------------------");
-    System.out.println("---------------------------------------------------------------------");
+    rs.close();
+    return p;
   }
 
   /**
@@ -387,21 +484,15 @@ public class AdministrateurBD {
    * 
    * @param annee : l'annee à analyser
    */
-  public void requeteCAThemeAnnee(int annee) throws SQLException {
+  public ArrayList<Map.Entry<String, Integer>> requeteCAThemeAnnee() throws SQLException {
     this.st = connexion.createStatement();
     ResultSet rs = this.st.executeQuery(
-        "with CA2024 as (select sum(qte*prixvente) as total from DETAILCOMMANDE natural join COMMANDE  where YEAR(datecom) = "
-            + annee
-            + ") select nomclass as Theme, ROUND((sum(qte*prixvente)/Total)*100) as total from CA2024 natural join DETAILCOMMANDE natural join COMMANDE natural join LIVRE natural join THEMES natural join CLASSIFICATION where YEAR(datecom) = "
-            + annee + " group by LEFT(LPAD(iddewey,3,'0'),1) order by nomclass");
-
-    System.out.println("\n");
-    System.out.println("Pourcentage du chiffre d'affaire par thème en " + annee);
+        "Select nomclass as Theme, sum(prixvente*qte) as Montant From COMMANDE Natural Join DETAILCOMMANDE Natural Join LIVRE Natural Join THEMES Natural Join CLASSIFICATION Where Year(datecom) = 2025 Group by Floor(iddewey / 100) * 100");
+    ArrayList<Map.Entry<String, Integer>> listo = new ArrayList<>();
     while (rs.next()) {
-      System.out.println("-----------------------------------");
-      System.out.println(rs.getString("Theme") + " " + rs.getString("total") + "%");
+      listo.add(new AbstractMap.SimpleEntry<>(rs.getString("Theme"), rs.getInt("montant")));
     }
-    System.out.println("-----------------------------------");
+    return listo;
   }
 
   /**
@@ -410,31 +501,16 @@ public class AdministrateurBD {
    * 
    * @param annee : l'annee à analyser
    */
-  public void requeteEvoCAMag(int annee) throws SQLException {
-    int cptMois = 0;
+  public HashMap<String, HashMap<String, Number>> requeteEvoCAMag() throws SQLException {
     this.st = connexion.createStatement();
+    HashMap<String, HashMap<String, Number>> listo = new HashMap<>();
     ResultSet rs = this.st.executeQuery(
-        "select MONTH(datecom) as mois, nommag as Magasin, sum(qte*prix) as CA from MAGASIN natural join COMMANDE natural join DETAILCOMMANDE natural join LIVRE where YEAR(datecom) = "
-            + annee + " group by nommag, MONTH(datecom)");
-    List<String> mois = Arrays.asList("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout",
-        "Septembre", "Octobre", "Novembre", "Décembre");
-    System.out.println("\n");
-    System.out.println("Evolution des chiffres d'affaire par magasin et par mois pour l'année " + annee);
+        "Select MONTH(datecom) as mois, nommag as Magasin, sum(qte*prixvente) as CA From MAGASIN Natural Join COMMANDE Natural Join DETAILCOMMANDE Where YEAR(datecom) = 2024 Group by mois, Magasin");
     while (rs.next()) {
-      if (cptMois == 12) {
-        cptMois = 0;
-      }
-      if (cptMois == 0) {
-        System.out.println("-----------------------------------------");
-        System.out.println("Magasin " + rs.getString("Magasin"));
-      }
-      System.out.println("-----------");
-      System.out.println("Mois de " + mois.get(cptMois) + " chiffre d'affaire : " + rs.getInt("CA") + " euros");
-
-      cptMois++;
+      listo.putIfAbsent(rs.getString("Magasin"), new HashMap<String, Number>());
+      listo.get(rs.getString("Magasin")).put(rs.getString("mois"), rs.getInt("CA"));
     }
-    System.out.println("-----------------------------------------");
-    System.out.println("---------------------------------------------------------------------");
+    return listo;
 
   }
 
@@ -442,50 +518,33 @@ public class AdministrateurBD {
    * Fonction qui va afficher la comparaison entre le nombre de ventes en lignes
    * et le nombre de ventes en magasin par année
    */
-  public void requeteCompVenteLMAnnee() throws SQLException {
-    String anneePrec = null;
+  public HashMap<String, HashMap<String, Number>> requeteCompVenteLMAnnee() throws SQLException {
     this.st = connexion.createStatement();
+    HashMap<String, HashMap<String, Number>> listo = new HashMap<>();
     ResultSet rs = this.st.executeQuery(
-        "select YEAR(datecom) as annee, enligne as typevente, sum(qte*prix) as montant from COMMANDE natural join DETAILCOMMANDE natural join LIVRE where YEAR(datecom)<>2025 group by annee, typevente");
-    System.out.println("\n");
-    System.out.println("Comparaison chiffre d'affaire entre ventes en ligne et ventes en magasin");
-    System.out.println("------------------------------------------------------------");
-    while (rs.next()) {
-      if (anneePrec == null || !anneePrec.equals(rs.getString("annee"))) {
-        System.out.println("----------------------------------------------");
-        System.out.println("Année  " + rs.getString("annee"));
-        System.out.println("-----------------------------");
+        "select YEAR(datecom) as annee, enligne as typevente, sum(qte*prix) as montant from COMMANDE natural join DETAILCOMMANDE natural join LIVRE where YEAR(datecom)<>2025 group by annee, typevente order by annee DESC");
 
-      }
-      if (rs.getString("typevente").equals("O")) {
-        System.out.println("Ventes en ligne : " + rs.getInt("montant") + " euros");
-      } else {
-        System.out.println("Ventes en Magasin : " + rs.getInt("montant") + " euros");
-      }
-      System.out.println("--------------------------------");
-      anneePrec = rs.getString("annee");
+    while (rs.next()) {
+      listo.putIfAbsent(rs.getString("typevente"), new HashMap<String, Number>());
+      listo.get(rs.getString("typevente")).put(rs.getString("annee"), rs.getInt("montant"));
 
     }
-    System.out.println("------------------------------------------------------------");
+    return listo;
   }
 
   /**
    * Fonction qui va afficher les dix éditeurs le plus importants en nombre
    * d'auteurs
    */
-  public void requeteDixeditPlusImportants() throws SQLException {
+  public ArrayList<Map.Entry<String, Integer>> requeteDixeditPlusImportants() throws SQLException {
     this.st = connexion.createStatement();
     ResultSet rs = this.st.executeQuery(
         "select nomedit as Editeur, count(idauteur) as nbauteurs from EDITEUR natural join EDITER natural join LIVRE natural join ECRIRE natural join AUTEUR group by nomedit order by nbauteurs desc limit 10");
-    int cpt = 1;
-    System.out.println("\n");
-    System.out.println("Les Dix éditeurs les plus importants en nombre d'auteur");
+    ArrayList<Map.Entry<String, Integer>> listo = new ArrayList<>();
     while (rs.next()) {
-      System.out.println("----------------------------------");
-      System.out.println(cpt + ". " + rs.getString("Editeur") + " " + rs.getInt("nbauteurs") + " auteurs");
-      cpt++;
+      listo.add(new AbstractMap.SimpleEntry<>(rs.getString("Editeur"), rs.getInt("nbauteurs")));
     }
-    System.out.println("----------------------------------");
+    return listo;
   }
 
   /**
@@ -494,66 +553,50 @@ public class AdministrateurBD {
    * 
    * @param auteur : l'auteur à analyser
    */
-  public void requeteOrigineClientAuteur(String auteur) throws SQLException {
+  public ArrayList<Map.Entry<String, Integer>> requeteOrigineClientAuteur() throws SQLException {
     this.st = connexion.createStatement();
+    ArrayList<Map.Entry<String, Integer>> listo = new ArrayList<>();
     ResultSet rs = this.st.executeQuery(
-        "select villecli as ville, sum(qte) as qte from CLIENT natural join COMMANDE natural join DETAILCOMMANDE natural join LIVRE natural join ECRIRE natural join AUTEUR where nomauteur = '"
-            + auteur + "' group by villecli");
+        "select villecli as ville, sum(qte) as qte from CLIENT natural join COMMANDE natural join DETAILCOMMANDE natural join LIVRE natural join ECRIRE natural join AUTEUR where nomauteur = 'René Goscinny'  group by villecli");
 
-    System.out.println("\n");
-    System.out.println("Origine des clients ayant acheté des livres de " + auteur);
     while (rs.next()) {
-      System.out.println("--------------------");
-      if (rs.getInt("qte") > 1) {
-        System.out.println(rs.getString("ville") + ": " + rs.getString("qte") + " clients");
-      } else {
-        System.out.println(rs.getString("ville") + ": " + rs.getString("qte") + " client");
-      }
+      listo.add(new AbstractMap.SimpleEntry<>(rs.getString("ville"), rs.getInt("qte")));
     }
-    System.out.println("--------------------");
+    return listo;
   }
 
   /**
    * Fonction qui va afficher la valeur du stock de chaque magasin du réseau
    */
-  public void requeteValeurStockMag() throws SQLException {
+  public ArrayList<Map.Entry<String, Integer>> requeteValeurStockMag() throws SQLException {
     this.st = connexion.createStatement();
+    ArrayList<Map.Entry<String, Integer>> listo = new ArrayList<>();
     ResultSet rs = this.st.executeQuery(
         "select nommag as Magasin, sum(qte*prix) as total from MAGASIN natural join POSSEDER natural join LIVRE group by nommag");
-
-    System.out.println("\n");
-    System.out.println("Valeur du stock par magasin");
-    System.out.println("--------------------------------");
     while (rs.next()) {
-      System.out.println("------------");
-      System.out.println("Magasin " + rs.getString("Magasin") + " possède " + rs.getInt("total") + " livres");
+      listo.add(new AbstractMap.SimpleEntry<>(rs.getString("Magasin"), rs.getInt("total")));
     }
-    System.out.println("------------");
-    System.out.println("--------------------------------");
+    return listo;
   }
 
   /**
    * Fonction qui va afficher l'évolution du chiffre d'affaire par client chaque
    * ann
    */
-  public void requeteEvoCAClient() throws SQLException {
+  public HashMap<String, HashMap<String, Number>> requeteEvoCAClient() throws SQLException {
     this.st = connexion.createStatement();
     ResultSet rs = this.st.executeQuery(
         "with MaxCAParClient as (select idcli, YEAR(datecom) as annee, sum(qte*prixvente) as CA from CLIENT natural join COMMANDE natural join DETAILCOMMANDE natural join LIVRE group by YEAR(datecom), idcli) select annee, max(CA) as maximum, min(CA) as minimum, avg(CA) as moyenne from MaxCAParClient group by annee");
-
-    System.out.println("\n");
-    System.out.println("Evolution du chiffre d'affaire par client par année");
-    System.out.println("--------------------------------------------------");
+    HashMap<String, HashMap<String, Number>> p = new HashMap<>();
     while (rs.next()) {
-      System.out.println("--------------");
-      System.out.println("Annee " + rs.getString("annee"));
-      System.out.println("-------------");
-      System.out.println("Chiffre d'affaire maximum : " + rs.getDouble("maximum") + " euros");
-      System.out.println("Chiffre d'affaire moyen : " + rs.getDouble("moyenne") + " euros");
-      System.out.println("Chiffre d'affaire minimum : " + rs.getDouble("minimum") + " euros");
-    }
-    System.out.println("--------------");
-    System.out.println("--------------------------------------------------");
-  }
+      p.putIfAbsent("maximum", new HashMap<String, Number>());
+      p.putIfAbsent("minimum", new HashMap<String, Number>());
+      p.putIfAbsent("moyenne", new HashMap<String, Number>());
+      p.get("maximum").put(rs.getString("annee"), rs.getInt(2));
+      p.get("minimum").put(rs.getString("annee"), rs.getInt(3));
+      p.get("moyenne").put(rs.getString("annee"), rs.getInt(4));
 
+    }
+    return p;
+  }
 }

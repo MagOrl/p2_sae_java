@@ -5,3 +5,4 @@ find -name "*.java" > .sources.txt
 javac -d bin/ --module-path /usr/share/openjfx/lib/ --add-modules javafx.controls @.sources.txt
 #java -cp bin/:/usr/share/java/mariadb-java-client.jar:img --module-path /usr/share/openjfx/lib/ --add-modules javafx.controls AppliLib
 java -cp bin/:/usr/share/java/mariadb-java/mariadb-java-client-3.3.2.jar:img/ --module-path /usr/share/openjfx/lib/ --add-modules javafx.controls AppliLib
+
